@@ -4,7 +4,7 @@ public class ComputerDBException extends RuntimeException {
 
     /**
      */
-    private static final long serialVersionUID = -5131754047126066742L;
+    private static final long serialVersionUID = -1L;
 
     /**
      */

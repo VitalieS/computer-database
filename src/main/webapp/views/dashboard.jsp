@@ -19,14 +19,15 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
+			<a class="navbar-brand" href="dashboard"> Application - Computer
+				Database </a>
 		</div>
 	</header>
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${numComputers} Computers found</h1>
-			
+			<h1 id="homeTitle">${numComputers}Computers found</h1>
+
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -78,7 +79,8 @@
 					<c:forEach items="${listeComputers}" var="computer">
 						<tr>
 							<td class="editMode" style="display: none"><input
-								type="checkbox" class="cb" value="<c:out value="${computer.computerId}"/>" /></td>
+								type="checkbox" class="cb"
+								value="<c:out value="${computer.computerId}"/>" /></td>
 							<td><c:out value="${computer.computerName}" /></td>
 							<td><c:out value="${computer.introducedDate}" /></td>
 							<td><c:out value="${computer.discontinuedDate}" /></td>
@@ -95,7 +97,7 @@
 		<div class="container text-center">
 			<ul class="pagination">
 				<ex:Page index="${index}" nbPage="${numPage}"></ex:Page>
-				
+
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">

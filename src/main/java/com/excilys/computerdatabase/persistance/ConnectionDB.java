@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 
 /**
@@ -41,7 +40,6 @@ public enum ConnectionDB {
      * @throws ClassNotFoundException
      */
     public Connection getConnection() throws ConfigurationException {
-        Configuration config;
         Connection connection = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -57,7 +55,7 @@ public enum ConnectionDB {
 
             String username = PropertiesManager.config.getString("username");
             String password = PropertiesManager.config.getString("password");
-            System.out.println("Test to connect to the database : " + database
+            System.out.println("Connecting to the database : " + database
                     + " with username : " + username);
             String url = new String(typeconn + ":" + typedb + "://" + host + ":"
                     + port + "/" + database + param);
