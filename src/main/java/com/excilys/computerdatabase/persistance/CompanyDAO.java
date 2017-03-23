@@ -1,12 +1,14 @@
 package main.java.com.excilys.computerdatabase.persistance;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
-import main.java.com.excilys.computerdatabase.model.Company;
+import org.apache.commons.configuration.ConfigurationException;
+
+import main.java.com.excilys.computerdatabase.model.entities.Company;
 
 /**
  * @author Vitalie SOVA
@@ -18,61 +20,59 @@ public enum CompanyDAO {
     /**
      * @return companyList - The list of companies
      * @throws SQLException - The SQL exception
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException 
+     * @throws InstantiationException 
      */
-    public ArrayList<Company> getCompaniesList() throws SQLException {
-        ConnectionDB conDB = null;
-        // try {
+    public ArrayList<Company> getCompaniesList() throws SQLException, ConfigurationException {
+        Connection connection = ConnectionDB.CONNECTION.getConnection();
+        Statement statement = null;
+        ResultSet resultSet = null;
         ArrayList<Company> companyList = new ArrayList<Company>();
-
-        conDB = ConnectionDB.CONNECTION.getInstance();
-        conDB.executeQuerySelect("SELECT * FROM company");
-        ResultSet r = conDB.getResults();
-
-        while (r.next()) {
-            Company c = new Company(r.getLong("id"), r.getString("name"));
-            companyList.add(c);
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT * FROM company ORDER BY id ASC");
+            while (resultSet.next()) {
+                Company c = new Company(resultSet.getLong("id"), resultSet.getString("name"));
+                companyList.add(c);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionDB.CONNECTION.closeConnection(connection);
+            ConnectionDB.CONNECTION.closeStatement(statement);
+            ConnectionDB.CONNECTION.closeResulSet(resultSet);
         }
         return companyList;
-        /*
-         * } finally { // ConnectionDB.CONNECTION.closeConnexion(); }
-         */
     }
 
     /**
      * @param choiceId - The id of the selected company
      * @return company - The selected company object
      * @throws SQLException - The SQL exception
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException 
+     * @throws InstantiationException 
      */
-    public Company getCompanyById(Long choiceId) throws SQLException {
-        ConnectionDB conDB = ConnectionDB.CONNECTION.getInstance();
-
-        conDB.executeQuerySelect("SELECT * FROM company WHERE id = " + choiceId);
-
-        ResultSet r = conDB.getResults();
+    public Company getCompanyById(Long choiceId) throws SQLException, ConfigurationException  {
+        Connection connection = ConnectionDB.CONNECTION.getConnection();
+        Statement statement = null;
+        ResultSet resultSet = null;
         Company company = null;
-        if (r.next()) {
-            company = new Company(r.getLong("id"), r.getString("name"));
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT * FROM company WHERE id = " + choiceId);
+            while (resultSet.next()) {
+                company = new Company(resultSet.getLong("id"), resultSet.getString("name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionDB.CONNECTION.closeConnection(connection);
+            ConnectionDB.CONNECTION.closeStatement(statement);
+            ConnectionDB.CONNECTION.closeResulSet(resultSet);
         }
         return company;
-    }
-
-    /**
-     * @return count - The number of companies
-     * @throws SQLException - The SQL exception
-     */
-    public int getNumberOfCompanies() throws SQLException {
-        ConnectionDB conDB = ConnectionDB.CONNECTION.getInstance();
-
-        String query = "SELECT COUNT(*) AS nbOfCompanies FROM company";
-
-        conDB.executeQuerySelect(query);
-        ResultSet r = conDB.getResults();
-        int count = 0;
-        while (r.next()) {
-            count = r.getInt("nbOfCompanies");
-        }
-        System.out.println(count);
-        return count;
     }
 
     /**
@@ -81,25 +81,58 @@ public enum CompanyDAO {
      * @param idEnd
      *            - The id of the last company
      * @return listCompany - The list of companies in the selected range
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException 
+     * @throws InstantiationException 
      */
-    public ArrayList<Company> getCompanyInRange(long idBegin, long idEnd) {
-        String query = "select * from company limit ?,?";
+    public ArrayList<Company> getCompanyInRange(long idBegin, long idEnd) throws SQLException, ConfigurationException  {
+        Connection connection = ConnectionDB.CONNECTION.getConnection();
+        Statement statement = null;
+        ResultSet resultSet = null;
         ArrayList<Company> listCompany = new ArrayList<>();
-        try (Connection conn = ConnectionDB.CONNECTION.getConnection();
-                PreparedStatement selectPStatement = conn
-                        .prepareStatement(query);) {
-            selectPStatement.setLong(1, idBegin);
-            selectPStatement.setLong(2, idEnd);
-            try (ResultSet rs = selectPStatement.executeQuery()) {
-                while (rs.next()) {
-                    listCompany.add(new Company(rs.getLong("id"),
-                            rs.getString("name")));
-                }
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT * FROM company ORDER BY id ASC LIMIT ?,?");
+            while (resultSet.next()) {
+                listCompany.add(new Company(resultSet.getLong("id"), resultSet.getString("name")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            ConnectionDB.CONNECTION.closeConnection(connection);
+            ConnectionDB.CONNECTION.closeStatement(statement);
+            ConnectionDB.CONNECTION.closeResulSet(resultSet);
         }
         return listCompany;
+    }
+
+    /**
+     * @return count - The number of companies
+     * @throws SQLException - The SQL exception
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException 
+     * @throws InstantiationException 
+     */
+    public int getNumberOfCompanies() throws SQLException, ConfigurationException {
+        Connection connection = ConnectionDB.CONNECTION.getConnection();
+        Statement statement = null;
+        ResultSet resultSet = null;
+        int count = 0;
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT COUNT(*) AS nbOfCompanies FROM company");
+            while (resultSet.next()) {
+                count = resultSet.getInt("nbOfCompanies");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionDB.CONNECTION.closeConnection(connection);
+            ConnectionDB.CONNECTION.closeStatement(statement);
+            ConnectionDB.CONNECTION.closeResulSet(resultSet);
+        }
+        return count;
     }
 
 }

@@ -8,7 +8,6 @@ import java.sql.Statement;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
 
 /**
  * @author Vitalie SOVA
@@ -17,128 +16,81 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 public enum ConnectionDB {
     CONNECTION;
 
-    // TODO Delete this and implement without
-    public ConnectionDB connectionDAO;
-    public Connection connection;
+    /*public Connection connection;
     public Statement statement;
     public ResultSet results;
-
+     */
     /**
      * @return The instance
+     *//*
+     * protected ConnectionDB getInstance() { return CONNECTION; }
      */
-    protected ConnectionDB getInstance() {
-        connectionDAO = CONNECTION;
-        return connectionDAO = CONNECTION;
-        // return CONNECTION;
-    }
-
-    /**
+    /*
+     * ConnectionDB() { try { Class.forName("com.mysql.jdbc.Driver");
+     * getConnection(); } catch (ClassNotFoundException e) {
+     * e.printStackTrace(); }
      *
+     * }
      */
-    ConnectionDB() {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            getConnection();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     /**
      * @return The connection
+     * @throws ConfigurationException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     * @throws ClassNotFoundException
      */
-    protected Connection getConnection() {
+    public Connection getConnection() throws ConfigurationException {
         Configuration config;
+        Connection connection = null;
         try {
-            config = new PropertiesConfiguration("src/database.properties");
-            String typeconn = config.getString("typeconn");
-            String typedb = config.getString("typedb");
-            String host = config.getString("host");
-            String port = config.getString("port");
-            String database = config.getString("database");
-            String param = config.getString("param");
+            Class.forName("com.mysql.jdbc.Driver");
 
-            String username = config.getString("username");
-            String password = config.getString("password");
+            //config = new PropertiesConfiguration("database.properties");
+            PropertiesManager.load();
+            String typeconn = PropertiesManager.config.getString("typeconn");
+            String typedb = PropertiesManager.config.getString("typedb");
+            String host = PropertiesManager.config.getString("host");
+            String port = PropertiesManager.config.getString("port");
+            String database = PropertiesManager.config.getString("database");
+            String param = PropertiesManager.config.getString("param");
 
+            String username = PropertiesManager.config.getString("username");
+            String password = PropertiesManager.config.getString("password");
             System.out.println("Test to connect to the database : " + database
                     + " with username : " + username);
             String url = new String(typeconn + ":" + typedb + "://" + host + ":"
                     + port + "/" + database + param);
             connection = DriverManager.getConnection(url, username, password);
 
-        } catch (ConfigurationException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
+            throw new ComputerDBException("ConnectionDB can not be instantiated", e);
         }
         return connection;
     }
 
-    /**
-     * @param query - The SQL query
-     */
-    public void executeQuerySelect(String query) {
-        try {
-            statement = connection.createStatement();
-            results = statement.executeQuery(query);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
-     * @param query - The SQL query
+     * @throws SQLException
+     *             - The SQL exception
      */
-    public void executeQueryDataManipulation(String query) {
-        try {
-            statement = connection.createStatement();
-            int results = statement.executeUpdate(query,
-                    Statement.RETURN_GENERATED_KEYS);
-            if (results == 1) {
-                System.out.println("Succes");
-            } else {
-                System.out.println("Fail");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * @return The results
-     */
-    public ResultSet getResults() {
-        return results;
-    }
-
-    /**
-     * @return The statement
-     */
-    public Statement getStatement() {
-        return statement;
-    }
-
-    /**
-     * @throws SQLException - The SQL exception
-     */
-    public void closeConnexion() throws SQLException {
-        /*
-         * if (connection != null) { //statement.close(); connection.close(); //
-         * results.close(); }
-         */
-
-        if (connectionDAO != null) {
-            statement.close();
+    public void closeConnection(Connection connection) throws SQLException {
+        if (connection != null && !connection.isClosed()) {
             connection.close();
-            // results.close();
-            // CONNECTION = null;
         }
         System.out.println("Connection to database closed");
-        if (connection.isClosed() && results.isClosed()
-                && statement.isClosed()) {
-            System.out.println("Not connected");
+    }
+
+    public void closeStatement(Statement st) throws SQLException {
+        if (st != null) {
+            st.close();
+        }
+    }
+
+    public void closeResulSet(ResultSet rs) throws SQLException {
+        if (rs != null) {
+            rs.close();
         }
     }
 }

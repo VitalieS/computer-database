@@ -6,12 +6,14 @@ import static org.junit.Assert.assertNull;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.apache.commons.configuration.ConfigurationException;
 import org.junit.Test;
 
-import main.java.com.excilys.computerdatabase.model.Computer;
-import main.java.com.excilys.computerdatabase.service.ComputerService;
+import main.java.com.excilys.computerdatabase.model.entities.Computer;
+import main.java.com.excilys.computerdatabase.persistance.ComputerDAO;
 
 /**
  * @author Vitalie SOVA
@@ -19,17 +21,18 @@ import main.java.com.excilys.computerdatabase.service.ComputerService;
  */
 public class ComputerDAOTest {
 
-    private ComputerService computerService = new ComputerService();
-
     /**
      * Test - getComputerList
      *
      * @throws SQLException
+     * @throws ClassNotFoundException
+     * @throws ConfigurationException
      */
     @Test
-    public void testGetComputerList() throws SQLException {
-        int nb = computerService.getNumberOfComputers();
-        ArrayList<Computer> list = computerService.getComputerList();
+    public void testGetComputerList()
+            throws SQLException, ClassNotFoundException, ConfigurationException {
+        int nb = ComputerDAO.ComputerDao.getNumberOfComputers();
+        ArrayList<Computer> list = ComputerDAO.ComputerDao.getComputerList();
         assertEquals(nb, list.size());
     }
 
@@ -37,30 +40,29 @@ public class ComputerDAOTest {
      * Test - getComputerById when the Id exists
      *
      * @throws SQLException
+     * @throws ClassNotFoundException
+     * @throws ConfigurationException
      */
     @Test
-    public void testGetComputerByIDExistant() throws SQLException {
-        Computer c = computerService.getComputerById(Long.valueOf(10));
+    public void testGetComputerByIDExistant()
+            throws SQLException, ClassNotFoundException, ConfigurationException {
+        Computer c = ComputerDAO.ComputerDao.getComputerById(Long.valueOf(10));
         assertNotNull(c);
-        // We can test with a random ID between 1 and the number of computers,
-        // but the test can fail when it tests a deleted entry.
-        /*
-         * int randomID = ThreadLocalRandom.current().nextInt(1,
-         * ComputerDAO.getNumberOfComputers()); Computer c1 =
-         * ComputerDAO.getComputerById(Long.valueOf(randomID));
-         * assertNotNull(c1);
-         */
+
     }
 
     /**
      * Test - getComputerById when the Id is negative
      *
      * @throws SQLException
+     * @throws ClassNotFoundException
+     * @throws ConfigurationException
      */
     @Test
-    public void testGetComputerByIDNegative() throws SQLException {
+    public void testGetComputerByIDNegative()
+            throws SQLException, ClassNotFoundException, ConfigurationException {
         int randomNegative = ThreadLocalRandom.current().nextInt(-500, -1 + 1);
-        Computer c = computerService
+        Computer c = ComputerDAO.ComputerDao
                 .getComputerById(Long.valueOf(randomNegative));
         assertNull(c);
     }
@@ -69,98 +71,101 @@ public class ComputerDAOTest {
      * Test - Crate a new computer
      *
      * @throws SQLException
+     * @throws ClassNotFoundException
+     * @throws ConfigurationException
      */
     @Test
-    public void testCreate() throws SQLException {
+    public void testCreateComputer()
+            throws SQLException, ClassNotFoundException, ConfigurationException {
         Computer c = new Computer("New computer Insert");
-        int numberofComputers = computerService.getNumberOfComputers();
-
-        Long newId = computerService.createComputer(c);
-
-        assertNotNull(computerService.getComputerById(newId));
+        int numberofComputers = ComputerDAO.ComputerDao.getNumberOfComputers();
+        Long newId = ComputerDAO.ComputerDao.createComputer(c);
+        assertNotNull(ComputerDAO.ComputerDao.getComputerById(newId));
         assertEquals(numberofComputers + 1,
-                computerService.getNumberOfComputers());
-        computerService.deleteComputer(newId);
-    }
-
-    /**
-     * Test - Delete a computer
-     *
-     * @throws SQLException
-     */
-    @Test
-    public void testDelete() throws SQLException {
-        Computer c = new Computer("New Computer Delete");
-        int numberofComputers = computerService.getNumberOfComputers();
-        Long newId = computerService.createComputer(c);
-
-        computerService.deleteComputer(newId);
-
-        assertNull(computerService.getComputerById(newId));
-        assertEquals(numberofComputers, computerService.getNumberOfComputers());
+                ComputerDAO.ComputerDao.getNumberOfComputers());
+        ComputerDAO.ComputerDao.deleteComputer(newId);
     }
 
     /**
      * Test - Update a computer
      *
      * @throws SQLException
+     * @throws ClassNotFoundException
+     * @throws ConfigurationException
      */
     @Test
-    public void testUpdate() throws SQLException {
+    public void testUpdateComputer()
+            throws SQLException, ClassNotFoundException, ConfigurationException {
         // Je cree un nouveau ordinateur que j'insere dans la base de donnee
         Computer c = new Computer("New Computer Update");
-        Long newId = computerService.createComputer(c);
-        int numberofComputers = computerService.getNumberOfComputers();
+        Long newId = ComputerDAO.ComputerDao.createComputer(c);
+        int numberofComputers = ComputerDAO.ComputerDao.getNumberOfComputers();
 
         // Je modifie cet ordinateur
         Computer c1 = new Computer("New ComputerUpdate");
-        computerService.updateComputer(newId, c1);
+        ComputerDAO.ComputerDao.updateComputer(newId, c1);
 
-        assertNotNull(computerService.getComputerById(newId));
-        assertEquals(numberofComputers, computerService.getNumberOfComputers());
+        assertNotNull(ComputerDAO.ComputerDao.getComputerById(newId));
+        assertEquals(numberofComputers,
+                ComputerDAO.ComputerDao.getNumberOfComputers());
 
         // Je supprime cet ordinateur
-        computerService.deleteComputer(newId);
+        ComputerDAO.ComputerDao.deleteComputer(newId);
+    }
 
+    /**
+     * Test - Delete a computer
+     *
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     * @throws ConfigurationException
+     */
+    @Test
+    public void testDeleteComputer()
+            throws SQLException, ClassNotFoundException, ConfigurationException {
+        Computer c = new Computer("New Computer Delete");
+        int numberofComputers = ComputerDAO.ComputerDao.getNumberOfComputers();
+
+        Long newId = ComputerDAO.ComputerDao.createComputer(c);
+
+        ComputerDAO.ComputerDao.deleteComputer(newId);
+
+        assertNull(ComputerDAO.ComputerDao.getComputerById(newId));
+        assertEquals(numberofComputers,
+                ComputerDAO.ComputerDao.getNumberOfComputers());
     }
 
     /**
      * Test - getNumberOfComputers
      *
      * @throws SQLException
+     * @throws ClassNotFoundException
+     * @throws ConfigurationException
      */
     @Test
-    public void testGetNumberOfComputers() throws SQLException {
+    public void testGetNumberOfComputers()
+            throws SQLException, ClassNotFoundException, ConfigurationException {
         Computer c = new Computer("New Computer Test Number");
-        int nb = computerService.getNumberOfComputers();
-        Long newC = computerService.createComputer(c);
-        computerService.deleteComputer(newC);
-        int newNb = computerService.getNumberOfComputers();
+        int nb = ComputerDAO.ComputerDao.getNumberOfComputers();
+        Long newC = ComputerDAO.ComputerDao.createComputer(c);
+        ComputerDAO.ComputerDao.deleteComputer(newC);
+        int newNb = ComputerDAO.ComputerDao.getNumberOfComputers();
         assertEquals(nb, newNb);
     }
 
-    /**
-     * Test - Creation of Computer Objects
-     *
-     * @throws SQLException
-     */
     @Test
-    public void testCreateComputerObject() {
-        // Bean pattern
-        Computer c1 = new Computer("Test Create Bean");
-        c1.setComputerId(Long.valueOf(5));
-        c1.setCompanyId(Long.valueOf(8));
-        assertNotNull(c1);
+    public void testgetComputerInRange() throws SQLException, ConfigurationException {
+        ArrayList<Computer> haha;
+        haha = ComputerDAO.ComputerDao.getComputerInRange(1, 10);
+        assertEquals(10, haha.size());
+    }
 
-        // Telescope pattern
-        Computer c2 = new Computer("Test Create Telescope Computer", null, null,
-                Long.valueOf(5));
-        assertNotNull(c2);
-
-        // Builder pattern
-        Computer c3 = new Computer.ComputerBuilder()
-                .name("Test Create Build Computer").id(Long.valueOf(5)).build();
-        assertNotNull(c3);
+    @Test
+    public void testgetComputerInRangeNb()
+            throws SQLException, ClassNotFoundException, ConfigurationException {
+        List<Computer> haha;
+        haha = ComputerDAO.ComputerDao.getComputerInRangeNb(10, 45);
+        assertEquals(10, haha.size());
     }
 
 }

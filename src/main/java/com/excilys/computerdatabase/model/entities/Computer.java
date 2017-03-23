@@ -1,4 +1,4 @@
-package main.java.com.excilys.computerdatabase.model;
+package main.java.com.excilys.computerdatabase.model.entities;
 
 import java.time.LocalDate;
 
@@ -7,7 +7,7 @@ import java.time.LocalDate;
  *
  * @author Vitalie SOVA
  */
-public class Computer extends Entity {
+public class Computer {
 
     private Long computerId; // optional
     private String computerName; // required
@@ -104,7 +104,6 @@ public class Computer extends Entity {
      * @param computerId
      *            - The computer id
      */
-    @Override
     public void setComputerId(Long computerId) {
         this.computerId = computerId;
     }

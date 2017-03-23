@@ -1,12 +1,14 @@
-package main.java.com.excilys.computerdatabase.presentation;
+package main.java.com.excilys.computerdatabase.presentation.cliui;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import main.java.com.excilys.computerdatabase.model.Company;
-import main.java.com.excilys.computerdatabase.model.Page;
+import org.apache.commons.configuration.ConfigurationException;
+
+import main.java.com.excilys.computerdatabase.model.entities.Company;
+import main.java.com.excilys.computerdatabase.model.entities.Page;
 import main.java.com.excilys.computerdatabase.service.CompanyService;
 
 /**
@@ -15,26 +17,21 @@ import main.java.com.excilys.computerdatabase.service.CompanyService;
  */
 public class CompanyView {
 
-    /**
-     *
-     */
     private static CompanyService companyService = new CompanyService();
-    // private DateTimeFormatter DATE_FORMAT =
-    // DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     /**
      * @throws SQLException - The SQL exception
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
      */
-    protected void showCompaniesList() throws SQLException {
+    protected void showCompaniesList() throws SQLException, ConfigurationException {
         ArrayList<Company> companyList = companyService.getCompaniesList();
         for (Company e : companyList) {
             System.out.println(e.toString());
         }
     }
 
-    /**
-     *
-     */
     protected void showCompaniesDetails() {
         @SuppressWarnings("resource")
         // TODO Manage scanner leak
@@ -55,12 +52,14 @@ public class CompanyView {
 
     /**
      * @throws SQLException - The SQL exception
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
      */
-    protected void showCompaniesListPageCallingAll() throws SQLException {
-        Page<Company> pageCompany = new Page<>(
-                companyService.getCompaniesList());
+    protected void showCompaniesListPageCallingAll() throws SQLException, ConfigurationException {
+        Page<Company> pageCompany = new Page<>(companyService.getCompaniesList());
         System.out.println(
-                "There are currently " + pageCompany.getNbPage() + " pages");
+                "There are currently " + pageCompany.getNumPage() + " pages");
         Scanner keyboardShowPage = new Scanner(System.in);
         System.out.print("Which page do you want to list ? ");
         int pageNb = keyboardShowPage.nextInt();

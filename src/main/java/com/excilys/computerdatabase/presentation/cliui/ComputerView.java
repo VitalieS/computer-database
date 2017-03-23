@@ -1,4 +1,4 @@
-package main.java.com.excilys.computerdatabase.presentation;
+package main.java.com.excilys.computerdatabase.presentation.cliui;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import main.java.com.excilys.computerdatabase.model.Computer;
-import main.java.com.excilys.computerdatabase.model.Page;
+import org.apache.commons.configuration.ConfigurationException;
+
+import main.java.com.excilys.computerdatabase.model.entities.Computer;
+import main.java.com.excilys.computerdatabase.model.entities.Page;
 import main.java.com.excilys.computerdatabase.service.ComputerService;
 
 /**
@@ -17,17 +19,17 @@ import main.java.com.excilys.computerdatabase.service.ComputerService;
  */
 public class ComputerView {
 
-    /**
-     *
-     */
-    private static ComputerService computerService = new ComputerService();
     private DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     /**
      * @throws SQLException - The SQL exception
+     * @throws ConfigurationException
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
      */
-    protected void showComputersList() throws SQLException {
-        ArrayList<Computer> computerList = computerService.getComputerList();
+    protected void showComputersList() throws SQLException, ConfigurationException {
+        ArrayList<Computer> computerList = ComputerService.INSTANCE.getComputerList();
         for (Computer c : computerList) {
             System.out.println(c.toString());
         }
@@ -44,8 +46,7 @@ public class ComputerView {
         int number;
         try {
             number = Integer.parseInt(keyboardComputerId.nextLine());
-            Computer computer = computerService
-                    .getComputerById(Long.valueOf(number));
+            Computer computer = ComputerService.INSTANCE.getComputerById(Long.valueOf(number));
             System.out.println("Computer found:" + computer.toString());
             return; // this will escape the while loop
         } catch (Exception e) {
@@ -56,10 +57,13 @@ public class ComputerView {
 
     /**
      * @throws SQLException - The SQL exception
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
      */
     @SuppressWarnings("resource")
     // TODO Manage scanner leak
-    protected void createComputer() throws SQLException {
+    protected void createComputer() throws SQLException, ConfigurationException {
         Scanner keyboardNewComputername = new Scanner(System.in);
         System.out.println("What's the new computer name?");
         String newName = keyboardNewComputername.nextLine();
@@ -96,24 +100,27 @@ public class ComputerView {
 
         System.out.println(c.toString());
 
-        Long key = computerService.createComputer(c);
-        Computer addedCompany = computerService.getComputerById(key);
+        Long key = ComputerService.INSTANCE.createComputer(c);
+        Computer addedCompany = ComputerService.INSTANCE.getComputerById(key);
         System.out.println(addedCompany.toString());
     }
 
     /**
      * @throws SQLException - The SQL exception
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
      */
     @SuppressWarnings("resource")
     // TODO Manage scanner leak
-    protected void updateComputer() throws SQLException {
+    protected void updateComputer() throws SQLException, ConfigurationException {
         Scanner keyboardID = new Scanner(System.in);
         System.out.println("Which computer do you want to modify ?");
         int numberID;
         Computer computer;
         try {
             numberID = Integer.parseInt(keyboardID.nextLine());
-            computer = computerService.getComputerById(Long.valueOf(numberID));
+            computer = ComputerService.INSTANCE.getComputerById(Long.valueOf(numberID));
             System.out.println("This is the computer you want to edit:");
             System.out.println(computer.toString());
         } catch (Exception e) {
@@ -162,9 +169,8 @@ public class ComputerView {
         }
 
         System.out.println(c1.toString());
-        computerService.updateComputer(Long.valueOf(numberID), c1);
-        System.out.println(computerService
-                .getComputerById(Long.valueOf(numberID)).toString());
+        ComputerService.INSTANCE.updateComputer(Long.valueOf(numberID), c1);
+        System.out.println(ComputerService.INSTANCE.getComputerById(Long.valueOf(numberID)).toString());
     }
 
     /**
@@ -179,12 +185,11 @@ public class ComputerView {
         int numberDelete;
         try {
             numberDelete = Integer.parseInt(keyboardDelete.nextLine());
-            computerDelete = computerService
-                    .getComputerById(Long.valueOf(numberDelete));
+            computerDelete = ComputerService.INSTANCE.getComputerById(Long.valueOf(numberDelete));
             System.out.println("This is the computer you want to delete");
             System.out.println(computerDelete.toString());
             // TODO Confirm deletion
-            computerService.deleteComputer(Long.valueOf(numberDelete));
+            ComputerService.INSTANCE.deleteComputer(Long.valueOf(numberDelete));
         } catch (Exception e) {
             System.out.println("That is not a valid id. Try again.");
             return;
@@ -193,12 +198,15 @@ public class ComputerView {
 
     /**
      * @throws SQLException - The SQL exception
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
      */
-    protected void showComputersListPageCallingAll() throws SQLException {
+    protected void showComputersListPageCallingAll() throws SQLException, ConfigurationException {
         Page<Computer> pageComputers = new Page<>(
-                computerService.getComputerList());
+                ComputerService.INSTANCE.getComputerList());
         System.out.println(
-                "There are currently " + pageComputers.getNbPage() + " pages");
+                "There are currently " + pageComputers.getNumPage() + " pages");
         Scanner keyboardShowPage = new Scanner(System.in);
         System.out.print("Which page do you want to list ? ");
         int pageNb = keyboardShowPage.nextInt();
@@ -231,8 +239,10 @@ public class ComputerView {
 
     /**
      * @throws SQLException - The SQL exception
+     * @throws IllegalAccessException
+     * @throws InstantiationException
      */
-    public void showComputersListPage() throws SQLException {
+    public void showComputersListPage() throws SQLException, ConfigurationException {
         // System.out.println("There are currently " + pageComputers.getNbPage()
         // + " pages");
         Scanner keyboardShowPage = new Scanner(System.in);
@@ -248,7 +258,7 @@ public class ComputerView {
         System.out.println(idEnd);
 
         Page<Computer> pageComputers = new Page<>(
-                computerService.getComputerInRange(idBegin, idEnd));
+                ComputerService.INSTANCE.getComputerInRange(idBegin, idEnd));
         List<Computer> newPages = pageComputers.getPage((int) idBegin,
                 (int) idEnd);
         for (Computer c : newPages) {

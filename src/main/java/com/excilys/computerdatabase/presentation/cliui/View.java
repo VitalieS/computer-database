@@ -1,7 +1,9 @@
-package main.java.com.excilys.computerdatabase.presentation;
+package main.java.com.excilys.computerdatabase.presentation.cliui;
 
 import java.sql.SQLException;
 import java.util.Scanner;
+
+import org.apache.commons.configuration.ConfigurationException;
 
 /**
  * @author Vitalie SOVA
@@ -15,8 +17,11 @@ public class View {
      * @param args - Arguments main
      * @throws SQLException
      *             - The SQL exception
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
      */
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, ConfigurationException {
 
         System.out.println("Welcome, master !");
         System.out.println("What do you want to do today ?");
@@ -72,6 +77,8 @@ public class View {
                 case 12 :
                     System.out.println("Good bye !");
                     break inputloop;
+                case 13 :
+                    break;
                 default :
                     System.out.println("Invalid option, try again!");
                     break;
