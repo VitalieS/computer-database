@@ -39,12 +39,10 @@ public enum ComputerService {
     }
 
     /**
-     * @param newComputer
-     *            - The new computer object
+     * @param newComputer - The new computer object
      * @return generatedKey - The generated key
      */
-    public long createComputer(Computer newComputer)
-    /*throws SQLException, ConfigurationException */ {
+    public long createComputer(Computer newComputer) {
         long generatedKey = compDAO.createComputer(newComputer);
         return generatedKey;
     }
@@ -54,51 +52,30 @@ public enum ComputerService {
      *            - The id
      * @param computer
      *            - The computer
-     * @throws SQLException
-     *             - The SQL Exception
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
      */
-    public void updateComputer(Long id, Computer computer)
-    /* throws SQLException, ConfigurationException */{
+    public void updateComputer(Long id, Computer computer){
         compDAO.updateComputer(id, computer);
     }
 
     /**
      * @param idToDelete
      *            - The id of the computer to delete
-     * @throws SQLException
-     *             - The SQL Exception
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
      */
-    public void deleteComputer(long idToDelete)
-    /*  throws SQLException, ConfigurationException */{
-        //System.out.println("Exists ?" + ComputerService.INSTANCE.getComputerById(idToDelete).toString());
+    public void deleteComputer(long idToDelete) {
         compDAO.deleteComputer(idToDelete);
     }
 
-    public void deleteComputers(List<Long> recuperationListSuppresionRequestPost)
-    /* throws SQLException, ConfigurationException*/ {
+    public void deleteComputers(List<Long> recuperationListSuppresionRequestPost) {
         for (Long idToDelete : recuperationListSuppresionRequestPost) {
-            System.out.println("J'essaie de supprimer" + idToDelete);
             compDAO.deleteComputer(idToDelete);
         }
     }
 
     /**
      * @return nbOfComputers - The number of computers
-     * @throws SQLException
-     *             - The SQL Exception
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
      */
     public int getNumberOfComputers() {
-        int nbOfComputers = compDAO.getNumberOfComputers();
-        return nbOfComputers;
+        return compDAO.getNumberOfComputers();
     }
 
     /**
@@ -107,17 +84,12 @@ public enum ComputerService {
      * @param idEnd
      *            - The id of the last computer
      * @return listAllComputer - An ArrayList of all computers
-     * @throws SQLException
-     *             - The SQL Exception
-     * @throws IllegalAccessException
-     * @throws InstantiationException
      */
     public ArrayList<Computer> getComputerInRange(long idBegin, long idEnd) {
         ArrayList<Computer> listAllComputer = new ArrayList<>();
         compDAO.getComputerInRange(idBegin, idEnd).forEach(computer -> {
             listAllComputer.add(computer);
         });
-        // System.out.println("List of computers in range:" + listAllComputer);
         return listAllComputer;
     }
 
@@ -137,8 +109,7 @@ public enum ComputerService {
     }
 
     public int pageNumber() throws SQLException, ConfigurationException {
-        return ComputerDAO.ComputerDao.getNumberOfComputers()
-                / Page.elementsByPage;
+        return ComputerDAO.ComputerDao.getNumberOfComputers() / Page.elementsByPage;
     }
 
     public static int maxPages(int nbId) {

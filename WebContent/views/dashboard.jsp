@@ -29,16 +29,13 @@
 				<div class="pull-left">
 					<form id="searchForm" action="dashboard" method="GET"
 						class="form-inline">
-						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name" /> <input
-							type="submit" id="searchsubmit" value="Filter by name"
-							class="btn btn-primary" />
+						<input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" /> 
+						<input type="submit" id="searchsubmit" value="Filter by name" class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="addComputer">Add
-						Computer</a> <a class="btn btn-default" id="editComputer"
-						href="#" onclick="$.fn.toggleEditMode();">Edit</a>
+					<a class="btn btn-success" id="addComputer" href="addComputer">Add Computer</a> 
+					<a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
 			</div>
 		</div>
@@ -53,13 +50,14 @@
 					<tr>
                         <!-- Variable declarations for passing labels as parameters -->
                         <!-- Table header for Computer Name -->
-                        <th class="editMode" style="width: 60px; height: 22px;"><input
-                            type="checkbox" id="selectall" /> <span
-                            style="vertical-align: top;"> - <a href="#"
-                                id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
-                                    class="fa fa-trash-o fa-lg"></i>
-                            </a>
-                        </span></th>
+                        <th class="editMode" style="width: 60px; height: 22px;">
+                            <input type="checkbox" id="selectall" /> 
+                            <span style="vertical-align: top;"> - 
+                                <a href="#" id="deleteSelected" onclick="$.fn.deleteSelected();"> 
+                                <i class="fa fa-trash-o fa-lg"></i> 
+                                </a>
+                            </span>
+                        </th>
                         <th>Computer name</th>
                         <th>Introduced date</th>
                         <!-- Table header for Discontinued Date -->
@@ -67,18 +65,18 @@
                         <!-- Table header for Company -->
                         <th>Company</th>
 					</tr>
-                   
-				</thead>
+    			</thead>
+				
 				<!-- Browse attribute computers -->
 				<tbody id="results">
 					<c:forEach var="elem" items="${requestScope.computerList}">
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="${elem.getComputerId()}"></td>    
-							<!-- <td><a href="editComputer" onclick=""></a> <c:out
-									value="${elem.getComputerName()}" /></td> -->
 							<td><a href='editComputer?computerId=<c:out value="${elem.computerId}"/>'
-                            onclick=""><c:out value="${elem.computerName}" /></a></td>
+                                   onclick=""><c:out value="${elem.computerName}" />
+                                </a>
+                             </td>
 							<td><c:out value="${elem.getIntroducedDate()}" /></td>
 							<td><c:out value="${elem.getDiscontinuedDate()}" /></td>
 							<td><c:out value="${elem.getCompanyId()}" /></td>
@@ -92,14 +90,12 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<c:url var="searchUri" value="/dashboard?page=##" />
-			<pagination:display maxLinks="10" currentPage="${currentPage}"
-				maxPages="${maxPage}" uri="${searchUri}" />
+			<pagination:display maxLinks="10" currentPage="${currentPage}" maxPages="${maxPage}" uri="${searchUri}" />
 			<div class="btn-group btn-group-sm pull-right" role="group">
 				<form action="dashboard" method="GET">
-					<input type="submit" name="submit" value="10"
-						class="btn btn-default"> <input type="submit"
-						name="submit" value="50" class="btn btn-default"> <input
-						type="submit" name="submit" value="100" class="btn btn-default">
+					<input type="submit" name="submit" value="10" class="btn btn-default"> 
+					<input type="submit" name="submit" value="50" class="btn btn-default"> 
+					<input type="submit" name="submit" value="100" class="btn btn-default">
 				</form>
 			</div>
 		</div>

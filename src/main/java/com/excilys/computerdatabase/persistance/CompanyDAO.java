@@ -6,8 +6,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import org.apache.commons.configuration.ConfigurationException;
-
 import com.excilys.computerdatabase.model.entities.Company;
 
 /**
@@ -19,13 +17,10 @@ public enum CompanyDAO {
 
     /**
      * @return companyList - The list of companies
-     * @throws SQLException - The SQL exception
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
      */
-    public ArrayList<Company> getCompaniesList() /*throws SQLException, ConfigurationException*/ {
-        Connection connection = ConnectionDB.CONNECTION.getConnection();
+    public ArrayList<Company> getCompaniesList() {
+        Connection connection = ConnectionHikari.CONNECTION.getConnection();
+        // Connection connection = ConnectionDB.CONNECTION.getConnection();
         Statement statement = null;
         ResultSet resultSet = null;
         ArrayList<Company> companyList = new ArrayList<Company>();
@@ -39,9 +34,10 @@ public enum CompanyDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            ConnectionDB.CONNECTION.closeConnection(connection);
+            ConnectionHikari.CONNECTION.close(resultSet, statement);
+            /* ConnectionDB.CONNECTION.closeConnection(connection);
             ConnectionDB.CONNECTION.closeStatement(statement);
-            ConnectionDB.CONNECTION.closeResulSet(resultSet);
+            ConnectionDB.CONNECTION.closeResulSet(resultSet); */
         }
         return companyList;
     }
@@ -49,13 +45,10 @@ public enum CompanyDAO {
     /**
      * @param choiceId - The id of the selected company
      * @return company - The selected company object
-     * @throws SQLException - The SQL exception
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
      */
-    public Company getCompanyById(Long choiceId) /*throws SQLException, ConfigurationException */ {
-        Connection connection = ConnectionDB.CONNECTION.getConnection();
+    public Company getCompanyById(Long choiceId) {
+        Connection connection = ConnectionHikari.CONNECTION.getConnection();
+        // Connection connection = ConnectionDB.CONNECTION.getConnection();
         Statement statement = null;
         ResultSet resultSet = null;
         Company company = null;
@@ -68,9 +61,10 @@ public enum CompanyDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            ConnectionDB.CONNECTION.closeConnection(connection);
+            ConnectionHikari.CONNECTION.close(resultSet, statement);
+            /* ConnectionDB.CONNECTION.closeConnection(connection);
             ConnectionDB.CONNECTION.closeStatement(statement);
-            ConnectionDB.CONNECTION.closeResulSet(resultSet);
+            ConnectionDB.CONNECTION.closeResulSet(resultSet); */
         }
         return company;
     }
@@ -81,13 +75,10 @@ public enum CompanyDAO {
      * @param idEnd
      *            - The id of the last company
      * @return listCompany - The list of companies in the selected range
-     * @throws SQLException
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
      */
-    public ArrayList<Company> getCompanyInRange(long idBegin, long idEnd) throws SQLException, ConfigurationException  {
-        Connection connection = ConnectionDB.CONNECTION.getConnection();
+    public ArrayList<Company> getCompanyInRange(long idBegin, long idEnd) {
+        Connection connection = ConnectionHikari.CONNECTION.getConnection();
+        // Connection connection = ConnectionDB.CONNECTION.getConnection();
         Statement statement = null;
         ResultSet resultSet = null;
         ArrayList<Company> listCompany = new ArrayList<>();
@@ -100,22 +91,20 @@ public enum CompanyDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            ConnectionDB.CONNECTION.closeConnection(connection);
+            ConnectionHikari.CONNECTION.close(resultSet, statement);
+            /* ConnectionDB.CONNECTION.closeConnection(connection);
             ConnectionDB.CONNECTION.closeStatement(statement);
-            ConnectionDB.CONNECTION.closeResulSet(resultSet);
+            ConnectionDB.CONNECTION.closeResulSet(resultSet); */
         }
         return listCompany;
     }
 
     /**
      * @return count - The number of companies
-     * @throws SQLException - The SQL exception
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
      */
-    public int getNumberOfCompanies() throws SQLException, ConfigurationException {
-        Connection connection = ConnectionDB.CONNECTION.getConnection();
+    public int getNumberOfCompanies() {
+        Connection connection = ConnectionHikari.CONNECTION.getConnection();
+        // Connection connection = ConnectionDB.CONNECTION.getConnection();
         Statement statement = null;
         ResultSet resultSet = null;
         int count = 0;
@@ -128,9 +117,10 @@ public enum CompanyDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            ConnectionDB.CONNECTION.closeConnection(connection);
+            ConnectionHikari.CONNECTION.close(resultSet, statement);
+            /* ConnectionDB.CONNECTION.closeConnection(connection);
             ConnectionDB.CONNECTION.closeStatement(statement);
-            ConnectionDB.CONNECTION.closeResulSet(resultSet);
+            ConnectionDB.CONNECTION.closeResulSet(resultSet); */
         }
         return count;
     }

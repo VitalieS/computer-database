@@ -9,8 +9,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.configuration.ConfigurationException;
-
 import com.excilys.computerdatabase.model.entities.Computer;
 
 /**
@@ -20,41 +18,40 @@ import com.excilys.computerdatabase.model.entities.Computer;
 public enum ComputerDAO {
     ComputerDao;
 
+
     /**
      * @return computerList - The list of computers
-     * @throws SQLException
-     *             - The SQL exception
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
      */
     public ArrayList<Computer> getComputerList() {
         ArrayList<Computer> computerList = new ArrayList<Computer>();
-        Connection connection = ConnectionDB.CONNECTION.getConnection();
+        Connection connection = ConnectionHikari.CONNECTION.getConnection();
+        // Connection connection = ConnectionDB.CONNECTION.getConnection();
         Statement statement = null;
-        ResultSet r = null;
+        ResultSet resultSet = null;
         try {
             statement = connection.createStatement();
-            r = statement.executeQuery("SELECT * FROM computer");
-            while (r.next()) {
+            resultSet = statement.executeQuery("SELECT * FROM computer");
+            while (resultSet.next()) {
                 Computer c = new Computer.ComputerBuilder()
-                        .name(r.getString("name")).id(r.getLong("id"))
-                        .company(r.getLong("company_id")).build();
-                if (r.getString("introduced") != null) {
-                    c.setIntroducedDate(r.getDate("introduced").toLocalDate());
+                        .name(resultSet.getString("name")).id(resultSet.getLong("id"))
+                        .company(resultSet.getLong("company_id")).build();
+                if (resultSet.getDate("introduced") != null) {
+                    System.out.println(resultSet.getString("introduced"));
+                    System.out.println(resultSet.getDate("introduced"));
+                    c.setIntroducedDate(resultSet.getDate("introduced").toLocalDate());
                 }
-                if (r.getString("discontinued") != null) {
-                    c.setDiscontinuedDate(
-                            r.getDate("discontinued").toLocalDate());
+                if (resultSet.getDate("discontinued") != null) {
+                    c.setDiscontinuedDate(resultSet.getDate("discontinued").toLocalDate());
                 }
                 computerList.add(c);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            ConnectionDB.CONNECTION.closeConnection(connection);
+            ConnectionHikari.CONNECTION.close(resultSet, statement);
+            /* ConnectionDB.CONNECTION.closeConnection(connection);
             ConnectionDB.CONNECTION.closeStatement(statement);
-            ConnectionDB.CONNECTION.closeResulSet(r);
+            ConnectionDB.CONNECTION.closeResulSet(resultSet);*/
         }
         System.out.println("Is it null ?" + computerList);
         return computerList;
@@ -65,14 +62,10 @@ public enum ComputerDAO {
      * @param choiceId
      *            - The id of the selected computer
      * @return computer - The selected computer object
-     * @throws SQLException
-     *             - The SQL exception
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
      */
     public Computer getComputerById(Long choiceId) {
-        Connection connection = ConnectionDB.CONNECTION.getConnection();
+        Connection connection = ConnectionHikari.CONNECTION.getConnection();
+        // Connection connection = ConnectionDB.CONNECTION.getConnection();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         Computer computer = null;
@@ -98,26 +91,20 @@ public enum ComputerDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            ConnectionDB.CONNECTION.closeConnection(connection);
+            ConnectionHikari.CONNECTION.close(resultSet, preparedStatement);
+            /* ConnectionDB.CONNECTION.closeConnection(connection);
             ConnectionDB.CONNECTION.closeStatement(preparedStatement);
-            ConnectionDB.CONNECTION.closeResulSet(resultSet);
+            ConnectionDB.CONNECTION.closeResulSet(resultSet);*/
         }
         return computer;
 
     }
 
     /**
-     * @param c
-     *            - The computer object to create
+     * @param c - The computer object to create
      * @return generatedKey - The generated Key
-     * @throws SQLException
-     *             - The SQL exception
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
      */
-    public Long createComputer(Computer c)
-    /* throws SQLException, ConfigurationException*/ {
+    public Long createComputer(Computer c) {
         String query = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES(";
         if (c.getComputerName() == null) {
             query += null + ", ";
@@ -140,7 +127,8 @@ public enum ComputerDAO {
             query += c.getCompanyId() + ")";
         }
 
-        Connection connection = ConnectionDB.CONNECTION.getConnection();
+        Connection connection = ConnectionHikari.CONNECTION.getConnection();
+        // Connection connection = ConnectionDB.CONNECTION.getConnection();
         Statement statement = null;
         ResultSet resultSet = null;
         Long generatedkey = null;
@@ -163,26 +151,19 @@ public enum ComputerDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            ConnectionDB.CONNECTION.closeConnection(connection);
+            ConnectionHikari.CONNECTION.close(resultSet, statement);
+            /* ConnectionDB.CONNECTION.closeConnection(connection);
             ConnectionDB.CONNECTION.closeStatement(statement);
-            ConnectionDB.CONNECTION.closeResulSet(resultSet);
+            ConnectionDB.CONNECTION.closeResulSet(resultSet);*/
         }
         return generatedkey;
     }
 
     /**
-     * @param id
-     *            - The id of the computer to update
-     * @param c
-     *            - The computer object to update with
-     * @throws SQLException
-     *             - The SQL exception
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
+     * @param id - The id of the computer to update
+     * @param c - The computer object to update with
      */
-    public void updateComputer(Long id, Computer c)
-    /* throws SQLException, ConfigurationException*/ {
+    public void updateComputer(Long id, Computer c) {
         String query = "UPDATE computer SET name = '" + c.getComputerName()
         + "', introduced = ";
         if (c.getIntroducedDate() == null) {
@@ -200,7 +181,8 @@ public enum ComputerDAO {
         } else {
             query += c.getCompanyId() + " WHERE id = " + id;
         }
-        Connection connection = ConnectionDB.CONNECTION.getConnection();
+        Connection connection = ConnectionHikari.CONNECTION.getConnection();
+        // Connection connection = ConnectionDB.CONNECTION.getConnection();
         Statement statement = null;
         try {
             statement = connection.createStatement();
@@ -214,24 +196,20 @@ public enum ComputerDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            ConnectionDB.CONNECTION.closeConnection(connection);
-            ConnectionDB.CONNECTION.closeStatement(statement);
+            ConnectionHikari.CONNECTION.close(statement);
+            /* ConnectionDB.CONNECTION.closeConnection(connection);
+            ConnectionDB.CONNECTION.closeStatement(statement);*/
         }
 
     }
 
     /**
-     * @param id
-     *            - The id of the computer to delete
-     * @throws SQLException
-     *             - The SQL exception
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
+     * @param id - The id of the computer to delete
      */
-    public void deleteComputer(Long id) /*throws SQLException*/ {
+    public void deleteComputer(Long id) {
         String query = "DELETE FROM computer WHERE id = " + id;
-        Connection connection = ConnectionDB.CONNECTION.getConnection();
+        Connection connection = ConnectionHikari.CONNECTION.getConnection();
+        // Connection connection = ConnectionDB.CONNECTION.getConnection();
         Statement statement = null;
         try {
             statement = connection.createStatement();
@@ -245,23 +223,18 @@ public enum ComputerDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            ConnectionDB.CONNECTION.closeConnection(connection);
-            ConnectionDB.CONNECTION.closeStatement(statement);
+            ConnectionHikari.CONNECTION.close(statement);
+            /* ConnectionDB.CONNECTION.closeConnection(connection);
+            ConnectionDB.CONNECTION.closeStatement(statement);*/
         }
     }
 
     /**
      * @return count - The number of computers
-     * @throws SQLException
-     *             - The SQL exception
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
-     * @throws ConfigurationException
      */
     public int getNumberOfComputers() {
-        Connection connection = null;
-        connection = ConnectionDB.CONNECTION.getConnection();
+        Connection connection = ConnectionHikari.CONNECTION.getConnection();
+        // Connection connection = ConnectionDB.CONNECTION.getConnection();
         Statement statement = null;
         ResultSet resultSet = null;
         int count = 0;
@@ -275,61 +248,52 @@ public enum ComputerDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            ConnectionDB.CONNECTION.closeConnection(connection);
-
+            ConnectionHikari.CONNECTION.close(resultSet, statement);
+            /* ConnectionDB.CONNECTION.closeConnection(connection);
             ConnectionDB.CONNECTION.closeStatement(statement);
-            ConnectionDB.CONNECTION.closeResulSet(resultSet);
+            ConnectionDB.CONNECTION.closeResulSet(resultSet);*/
         }
         return count;
     }
 
     /**
-     * @param idBegin
-     *            - The id of the first computer
-     * @param idEnd
-     *            - The id of the last computer
+     * @param idBegin - The id of the first computer
+     * @param idEnd - The id of the last computer
      * @return listComputer - The list of companies in the selected range
-     * @throws IllegalAccessException
-     * @throws InstantiationException
-     * @throws ConfigurationException
      */
     public ArrayList<Computer> getComputerInRange(long idBegin, long idEnd) {
         String query = "SELECT * FROM computer LIMIT ?,?";
         ArrayList<Computer> listComputer = new ArrayList<>();
-        try (Connection conn = ConnectionDB.CONNECTION.getConnection();
-                PreparedStatement selectPStatement = conn
-                        .prepareStatement(query);) {
+        try (Connection connection = ConnectionHikari.CONNECTION.getConnection();
+                // Connection connection = ConnectionDB.CONNECTION.getConnection();
+                PreparedStatement selectPStatement = connection.prepareStatement(query);) {
             selectPStatement.setLong(1, idBegin);
             selectPStatement.setLong(2, idEnd);
-            System.out.println(idBegin);
-            System.out.println(idEnd);
-            try (ResultSet rs = selectPStatement.executeQuery()) {
-                while (rs.next()) {
+            try (ResultSet resultSet = selectPStatement.executeQuery()) {
+                while (resultSet.next()) {
                     LocalDate getIntroduced;
-                    if (rs.getTimestamp(3) != null) {
-                        getIntroduced = rs.getTimestamp(3).toLocalDateTime()
-                                .toLocalDate();
+                    if (resultSet.getTimestamp(3) != null) {
+                        getIntroduced = resultSet.getTimestamp(3).toLocalDateTime().toLocalDate();
                     } else {
                         getIntroduced = null;
                     }
                     LocalDate getDiscontinued;
-                    if (rs.getTimestamp(4) != null) {
-                        getDiscontinued = rs.getTimestamp(4).toLocalDateTime()
-                                .toLocalDate();
+                    if (resultSet.getTimestamp(4) != null) {
+                        getDiscontinued = resultSet.getTimestamp(4).toLocalDateTime().toLocalDate();
                     } else {
                         getDiscontinued = null;
                     }
                     listComputer.add(new Computer.ComputerBuilder()
-                            .id(Long.valueOf(rs.getInt(1)))
-                            .name(rs.getString(2)).introducedDate(getIntroduced)
+                            .id(Long.valueOf(resultSet.getInt(1)))
+                            .name(resultSet.getString(2)).introducedDate(getIntroduced)
                             .discontinuedDate(getDiscontinued)
-                            .company(Long.valueOf(rs.getInt(5))).build());
+                            .company(Long.valueOf(resultSet.getInt(5))).build());
                 }
+                ConnectionHikari.CONNECTION.close(resultSet, selectPStatement);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("nonnb " + listComputer);
         return listComputer;
     }
 
@@ -337,62 +301,61 @@ public enum ComputerDAO {
         List<Computer> computers = new ArrayList<>();
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        ResultSet rs = null;
+        ResultSet resultSet = null;
         try {
-            connection = ConnectionDB.CONNECTION.getConnection();
+            connection = ConnectionHikari.CONNECTION.getConnection();
+            // connection = ConnectionDB.CONNECTION.getConnection();
             preparedStatement = connection.prepareStatement(
                     "SELECT c.id as id ,c.name as name ,c.introduced as introduced ,c.discontinued as discontinued ,company.id as company_id ,company.name as company_name FROM computer as c LEFT JOIN company ON c.company_id=company.id ORDER BY c.id ASC LIMIT ?,?");
             preparedStatement.setLong(1, idFirst);
             preparedStatement.setInt(2, number);
-            rs = preparedStatement.executeQuery();
-            while (rs.next()) {
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
                 LocalDate getIntroduced;
-                if (rs.getTimestamp(3) != null) {
-                    getIntroduced = rs.getTimestamp(3).toLocalDateTime()
+                if (resultSet.getTimestamp(3) != null) {
+                    getIntroduced = resultSet.getTimestamp(3).toLocalDateTime()
                             .toLocalDate();
                 } else {
                     getIntroduced = null;
                 }
                 LocalDate getDiscontinued;
-                if (rs.getTimestamp(4) != null) {
-                    getDiscontinued = rs.getTimestamp(4).toLocalDateTime()
+                if (resultSet.getTimestamp(4) != null) {
+                    getDiscontinued = resultSet.getTimestamp(4).toLocalDateTime()
                             .toLocalDate();
                 } else {
                     getDiscontinued = null;
                 }
                 computers.add(new Computer.ComputerBuilder()
-                        .id(Long.valueOf(rs.getInt(1))).name(rs.getString(2))
+                        .id(Long.valueOf(resultSet.getInt(1))).name(resultSet.getString(2))
                         .introducedDate(getIntroduced)
                         .discontinuedDate(getDiscontinued)
-                        .company(Long.valueOf(rs.getInt(5))).build());
+                        .company(Long.valueOf(resultSet.getInt(5))).build());
             }
         } catch (SQLException e) {
-            System.out.println("Hmmmmm");
             e.printStackTrace();
         } catch (NullPointerException e) {
-            System.out.println("Nullpoint again");
-
+            e.printStackTrace();
         } finally {
-            ConnectionDB.CONNECTION.closeConnection(connection);
+            ConnectionHikari.CONNECTION.close(resultSet, preparedStatement);
+            /* ConnectionDB.CONNECTION.closeConnection(connection);
             ConnectionDB.CONNECTION.closeStatement(preparedStatement);
-            ConnectionDB.CONNECTION.closeResulSet(rs);
+            ConnectionDB.CONNECTION.closeResulSet(resultSet); */
         }
         System.out.println("nb " + computers);
         return computers;
     }
 
     public int countPages(int nbId) {
-        Connection connection = null;
-        connection = ConnectionDB.CONNECTION.getConnection();
-
+        Connection connection = ConnectionHikari.CONNECTION.getConnection();
+        // Connection connection = ConnectionDB.CONNECTION.getConnection();
         int maxId = 0;
         int nbPages = 0;
         try {
-            ResultSet result = connection.createStatement()
-                    .executeQuery("SELECT COUNT(*) AS count FROM computer");
-            result.next();
-            maxId = result.getInt("count");
-            result.close();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) AS count FROM computer");
+            resultSet.next();
+            maxId = resultSet.getInt("count");
+            resultSet.close();
             if (nbId != 0) {
                 if (maxId % nbId == 0) {
                     nbPages = maxId / nbId;
@@ -400,9 +363,11 @@ public enum ComputerDAO {
                     nbPages = maxId / nbId + 1;
                 }
             }
+            ConnectionHikari.CONNECTION.close(resultSet, statement);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return nbPages;
     }
 

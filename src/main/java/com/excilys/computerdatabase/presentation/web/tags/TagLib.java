@@ -34,15 +34,13 @@ public class TagLib extends SimpleTagSupport {
         try {
             out.write("<ul class=\"pagination\">");
             if (currentPage > 1) {
-                out.write(constructLink(currentPage - 1, "&laquo;",
-                        "paginatorPrev"));
+                out.write(constructLink(currentPage - 1, "&laquo;", "paginatorPrev"));
             }
             for (int i = pgStart; i < pgEnd; i++) {
                 out.write(constructLink(i));
             }
             if (!lastPage) {
-                out.write(constructLink(currentPage + 1, "&raquo;",
-                        "paginatorNext paginatorLast"));
+                out.write(constructLink(currentPage + 1, "&raquo;", "paginatorNext paginatorLast"));
             }
             out.write("</ul>");
         } catch (java.io.IOException ex) {
@@ -61,9 +59,7 @@ public class TagLib extends SimpleTagSupport {
             link.append(className);
             link.append("\"");
         }
-        link.append(">").append("<a href=\"")
-        .append(uri.replace("##", String.valueOf(page))).append("\">")
-        .append(text).append("</a></li>");
+        link.append(">").append("<a href=\"").append(uri.replace("##", String.valueOf(page))).append("\">").append(text).append("</a></li>");
         return link.toString();
     }
 

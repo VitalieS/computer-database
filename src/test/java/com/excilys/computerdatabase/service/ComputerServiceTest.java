@@ -44,14 +44,6 @@ public class ComputerServiceTest {
     public void testGetComputerByIDExistant() throws SQLException, ClassNotFoundException, ConfigurationException {
         Computer c = ComputerService.INSTANCE.getComputerById(Long.valueOf(50));
         assertNotNull(c);
-        // We can test with a random ID between 1 and the number of computers,
-        // but the test can fail when it tests a deleted entry.
-        /*
-         * int randomID = ThreadLocalRandom.current().nextInt(1,
-         * ComputerDAO.getNumberOfComputers()); Computer c1 =
-         * ComputerDAO.getComputerById(Long.valueOf(randomID));
-         * assertNotNull(c1);
-         */
     }
 
     /**
@@ -165,22 +157,20 @@ public class ComputerServiceTest {
         assertNotNull(c1);
 
         // Telescope pattern
-        Computer c2 = new Computer("Test Create Telescope Computer", null, null,
-                Long.valueOf(5));
+        Computer c2 = new Computer("Test Create Telescope Computer", null, null, Long.valueOf(5));
         assertNotNull(c2);
 
         // Builder pattern
-        Computer c3 = new Computer.ComputerBuilder()
-                .name("Test Create Build Computer").id(Long.valueOf(5)).build();
+        Computer c3 = new Computer.ComputerBuilder().name("Test Create Build Computer").id(Long.valueOf(5)).build();
         assertNotNull(c3);
     }
 
     @Test
     public void testgetComputerInRange() throws SQLException, ConfigurationException {
-        ArrayList<Computer> haha;
-        haha = ComputerService.INSTANCE.getComputerInRange(1, 10);
-        System.out.println(haha);
-        assertEquals(10, haha.size());
+        ArrayList<Computer> listOfComputers;
+        listOfComputers = ComputerService.INSTANCE.getComputerInRange(1, 10);
+        System.out.println(listOfComputers);
+        assertEquals(10, listOfComputers.size());
     }
 
 }

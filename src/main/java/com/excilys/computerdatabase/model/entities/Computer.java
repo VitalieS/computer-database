@@ -20,7 +20,7 @@ public class Computer {
      * Instantiates a new Computer.
      */
     public Computer() {
-
+        super();
     }
 
     /**
@@ -36,14 +36,10 @@ public class Computer {
     /**
      * Instantiates a new Computer.
      *
-     * @param computerName
-     *            - The computer name
-     * @param introducedDate
-     *            - The introduced date
-     * @param discontinuedDate
-     *            - The discontinued date
-     * @param companyId
-     *            - The company id
+     * @param computerName - The computer name
+     * @param introducedDate - The introduced date
+     * @param discontinuedDate - The discontinued date
+     * @param companyId - The company id
      */
     public Computer(String computerName, LocalDate introducedDate,
             LocalDate discontinuedDate, Long companyId) {
@@ -101,8 +97,7 @@ public class Computer {
     /**
      * Sets computerId.
      *
-     * @param computerId
-     *            - The computer id
+     * @param computerId - The computer id
      */
     public void setComputerId(Long computerId) {
         this.computerId = computerId;
@@ -111,8 +106,7 @@ public class Computer {
     /**
      * Sets computerName.
      *
-     * @param computerName
-     *            - The computer name
+     * @param computerName - The computer name
      */
     public void setComputerName(String computerName) {
         this.computerName = computerName;
@@ -271,7 +265,7 @@ public class Computer {
         public ComputerBuilder introducedDate(String introducedDate) {
             DateTimeFormatter form = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate introducedDateLD = LocalDate.parse(introducedDate, form);
-            this.introducedDate = introducedDateLD ;
+            this.introducedDate = introducedDateLD;
             return this;
         }
 

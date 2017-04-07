@@ -1,11 +1,8 @@
 package com.excilys.computerdatabase.presentation.cliui;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
-import org.apache.commons.configuration.ConfigurationException;
 
 import com.excilys.computerdatabase.model.entities.Company;
 import com.excilys.computerdatabase.model.entities.Page;
@@ -18,12 +15,9 @@ import com.excilys.computerdatabase.service.CompanyService;
 public class CompanyView {
 
     /**
-     * @throws SQLException - The SQL exception
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
+     *
      */
-    protected void showCompaniesList() throws SQLException, ConfigurationException {
+    protected void showCompaniesList() {
         ArrayList<Company> companyList = CompanyService.INSTANCE.getCompaniesList();
         for (Company e : companyList) {
             System.out.println(e.toString());
@@ -48,15 +42,11 @@ public class CompanyView {
     }
 
     /**
-     * @throws SQLException - The SQL exception
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
+     *
      */
-    protected void showCompaniesListPageCallingAll() throws SQLException, ConfigurationException {
+    protected void showCompaniesListPageCallingAll() {
         Page<Company> pageCompany = new Page<>(CompanyService.INSTANCE.getCompaniesList());
-        System.out.println(
-                "There are currently " + pageCompany.getNumPage() + " pages");
+        System.out.println("There are currently " + pageCompany.getNumPage() + " pages");
         Scanner keyboardShowPage = new Scanner(System.in);
         System.out.print("Which page do you want to list ? ");
         int pageNb = keyboardShowPage.nextInt();
@@ -68,8 +58,7 @@ public class CompanyView {
 
         while (true) {
             Scanner seeNext = new Scanner(System.in);
-            System.out.print(
-                    "Write 0 if you want to go to the previous page or 1 if you want to go to the next one. \n");
+            System.out.print("Write 0 if you want to go to the previous page or 1 if you want to go to the next one. \n");
             int newpageNb = seeNext.nextInt();
             if (newpageNb == 1) {
                 List<Company> newPageNext = pageCompany.getNextPage();

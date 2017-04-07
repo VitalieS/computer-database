@@ -99,7 +99,6 @@ public class Company {
         return result;
     }
 
-
     /**
      * Builder pattern to instantiate a computer.
      *

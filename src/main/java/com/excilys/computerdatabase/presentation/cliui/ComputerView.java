@@ -1,13 +1,10 @@
 package com.excilys.computerdatabase.presentation.cliui;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
-import org.apache.commons.configuration.ConfigurationException;
 
 import com.excilys.computerdatabase.model.entities.Computer;
 import com.excilys.computerdatabase.model.entities.Page;
@@ -22,13 +19,9 @@ public class ComputerView {
     private DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     /**
-     * @throws SQLException - The SQL exception
-     * @throws ConfigurationException
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
+     *
      */
-    protected void showComputersList() throws SQLException, ConfigurationException {
+    protected void showComputersList() {
         ArrayList<Computer> computerList = ComputerService.INSTANCE.getComputerList();
         for (Computer c : computerList) {
             System.out.println(c.toString());
@@ -56,14 +49,11 @@ public class ComputerView {
     }
 
     /**
-     * @throws SQLException - The SQL exception
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
+     *
      */
     @SuppressWarnings("resource")
     // TODO Manage scanner leak
-    protected void createComputer() throws SQLException, ConfigurationException {
+    protected void createComputer() {
         Scanner keyboardNewComputername = new Scanner(System.in);
         System.out.println("What's the new computer name?");
         String newName = keyboardNewComputername.nextLine();
@@ -106,14 +96,11 @@ public class ComputerView {
     }
 
     /**
-     * @throws SQLException - The SQL exception
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
+     *
      */
     @SuppressWarnings("resource")
     // TODO Manage scanner leak
-    protected void updateComputer() throws SQLException, ConfigurationException {
+    protected void updateComputer() {
         Scanner keyboardID = new Scanner(System.in);
         System.out.println("Which computer do you want to modify ?");
         int numberID;
@@ -197,12 +184,9 @@ public class ComputerView {
     }
 
     /**
-     * @throws SQLException - The SQL exception
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
+     *
      */
-    protected void showComputersListPageCallingAll() throws SQLException, ConfigurationException {
+    protected void showComputersListPageCallingAll() {
         Page<Computer> pageComputers = new Page<>(
                 ComputerService.INSTANCE.getComputerList());
         System.out.println(
@@ -238,19 +222,12 @@ public class ComputerView {
     }
 
     /**
-     * @throws SQLException - The SQL exception
-     * @throws IllegalAccessException
-     * @throws InstantiationException
+     *
      */
-    public void showComputersListPage() throws SQLException, ConfigurationException {
-        // System.out.println("There are currently " + pageComputers.getNbPage()
-        // + " pages");
+    public void showComputersListPage() {
         Scanner keyboardShowPage = new Scanner(System.in);
         System.out.print("Which page do you want to list ? ");
         int pageNb = keyboardShowPage.nextInt();
-
-        // System.out.println("Access to company page n°" +
-        // pageComputers.getNbPage());
 
         long idBegin = pageNb * Page.elementsByPage;
         long idEnd = pageNb * Page.elementsByPage + Page.elementsByPage;

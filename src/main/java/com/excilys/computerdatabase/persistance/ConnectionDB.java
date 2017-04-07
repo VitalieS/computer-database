@@ -6,12 +6,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Vitalie SOVA
  *
  */
 public enum ConnectionDB {
     CONNECTION;
+
+    private org.slf4j.Logger LOG = LoggerFactory.getLogger(ConnectionDB.class);
 
     /**
      * @return The connection
@@ -29,12 +33,12 @@ public enum ConnectionDB {
             String database = PropertiesManager.config.getString("database");
             String param = PropertiesManager.config.getString("param");
 
+            String url = new String(typeconn + ":" + typedb + "://" + host + ":" + port + "/" + database + param);
             String username = PropertiesManager.config.getString("username");
             String password = PropertiesManager.config.getString("password");
-            System.out.println("Connecting to the database : " + database
-                    + " with username : " + username);
-            String url = new String(typeconn + ":" + typedb + "://" + host + ":"
-                    + port + "/" + database + param);
+
+            LOG.info("Connecting to the database : " + database + " with username : " + username);
+
             connection = DriverManager.getConnection(url, username, password);
 
         } catch (SQLException e) {
@@ -50,8 +54,7 @@ public enum ConnectionDB {
     }
 
     /**
-     * @throws SQLException
-     *             - The SQL exception
+     * @throws SQLException - The SQL exception
      */
     public void closeConnection(Connection connection) {
         try {
@@ -61,7 +64,7 @@ public enum ConnectionDB {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("Connection to database closed");
+        LOG.info("Connection to database closed");
     }
 
     public void closeStatement(Statement st) {

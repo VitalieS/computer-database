@@ -43,10 +43,13 @@
                             <div class="form-group">
                                 <label for="companyId">Company</label>
                                 <select class="form-control" id="companyId" >
-                                    <option value="${computerToEdit.getCompanyId()}"><c:out value="${companyOfTheEditedComputer.getName()}" /></option>
+                                    <option value="${computerToEdit.getCompanyId()}">
+                                        <c:out value="${companyOfTheEditedComputer.getName()}" />
+                                    </option>
                                     <c:forEach items="${companyList}" var="company">
                                         <option value="<c:out value="${company.getId()}"/>">
-                                            <c:out value="${company.getName()}" /></option>
+                                            <c:out value="${company.getName()}" />
+                                        </option>
                                     </c:forEach>
                                 </select>
                             </div>                          
@@ -62,8 +65,10 @@
             </div>
         </div>
     </section>
+    
 <script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/dashboard.js"></script>
+
 </body>
 </html>

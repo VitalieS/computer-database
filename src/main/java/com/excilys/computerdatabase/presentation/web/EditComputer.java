@@ -7,9 +7,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.excilys.computerdatabase.model.entities.Computer;
 import com.excilys.computerdatabase.service.CompanyService;
 import com.excilys.computerdatabase.service.ComputerService;
@@ -19,8 +16,6 @@ public class EditComputer extends HttpServlet {
     private static final long serialVersionUID = 5322583920825901807L;
 
     public static final String VUE = "/views/editComputer.jsp";
-
-    static final Logger LOGGER = LoggerFactory.getLogger(AddComputer.class);
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

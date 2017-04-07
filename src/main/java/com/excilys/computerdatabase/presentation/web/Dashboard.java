@@ -18,8 +18,7 @@ public class Dashboard extends HttpServlet {
     public static final String VUE = "/views/dashboard.jsp";
 
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("get");
         int nbId = 10;
         if (request.getParameter("submit") != null) {
@@ -42,16 +41,12 @@ public class Dashboard extends HttpServlet {
         } else {
             request.setAttribute("currentPage", 1);
         }
-
         request.setAttribute("maxPage", ComputerService.maxPages(nbId));
-
-        request.getServletContext().getRequestDispatcher(VUE).forward(request,
-                response);
+        request.getServletContext().getRequestDispatcher(VUE).forward(request, response);
     }
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("post");
         String idList = "";
         if (request.getParameter("selection") != null) {
@@ -64,6 +59,5 @@ public class Dashboard extends HttpServlet {
             ComputerService.INSTANCE.deleteComputer(id);
         }
         response.sendRedirect(getServletContext().getContextPath() + "/dashboard");
-
     }
 }

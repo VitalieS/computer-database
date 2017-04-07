@@ -23,14 +23,11 @@ public class ComputerTest {
         assertNotNull(c1);
 
         // Telescope pattern
-        Computer c2 = new Computer("Test Create Telescope Computer", null, null,
-                Long.valueOf(5));
+        Computer c2 = new Computer("Test Create Telescope Computer", null, null, Long.valueOf(5));
         assertNotNull(c2);
 
         // Builder pattern
-        Computer c3 = new Computer.ComputerBuilder()
-                .name("Test Create Build Computer").id(Long.valueOf(5)).build();
+        Computer c3 = new Computer.ComputerBuilder().name("Test Create Build Computer").id(Long.valueOf(5)).build();
         assertNotNull(c3);
-
     }
 }
