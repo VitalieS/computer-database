@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computerdatabase.model.entities.Company;
 import com.excilys.computerdatabase.model.entities.Page;
 import com.excilys.computerdatabase.service.CompanyService;
@@ -13,6 +15,8 @@ import com.excilys.computerdatabase.service.CompanyService;
  *
  */
 public class CompanyView {
+
+    private org.slf4j.Logger LOG = LoggerFactory.getLogger(CompanyView.class);
 
     /**
      *
@@ -46,9 +50,9 @@ public class CompanyView {
      */
     protected void showCompaniesListPageCallingAll() {
         Page<Company> pageCompany = new Page<>(CompanyService.INSTANCE.getCompaniesList());
-        System.out.println("There are currently " + pageCompany.getNumPage() + " pages");
+        LOG.info("There are currently " + pageCompany.getNumPage() + " pages");
         Scanner keyboardShowPage = new Scanner(System.in);
-        System.out.print("Which page do you want to list ? ");
+        LOG.info("Which page do you want to list ?");
         int pageNb = keyboardShowPage.nextInt();
 
         List<Company> newPage = pageCompany.getPageInRange(pageNb);

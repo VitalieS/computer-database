@@ -15,11 +15,8 @@ public class View {
      * The main method.
      *
      * @param args - Arguments main
-     * @throws SQLException
-     *             - The SQL exception
+     * @throws SQLException - The SQL exception
      * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
      */
     public static void main(String[] args) throws SQLException, ConfigurationException {
 

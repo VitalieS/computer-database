@@ -31,5 +31,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mysql-connector-java-5.1.41-bin.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jstl-1.2.jar"/>
+	<classpathentry kind="lib" path="/home/excilys/computer-database/computerdatabase/WebContent/WEB-INF/lib/HikariCP-2.6.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

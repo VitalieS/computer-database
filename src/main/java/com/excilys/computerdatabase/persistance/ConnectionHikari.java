@@ -1,10 +1,12 @@
 package com.excilys.computerdatabase.persistance;
 
-import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 
 import org.slf4j.LoggerFactory;
 
@@ -18,26 +20,31 @@ import com.zaxxer.hikari.HikariDataSource;
 public enum ConnectionHikari {
     CONNECTION;
 
-    private final String hiraki_properties = "/hikaridatabase.properties";
+    private final String resourceName = "hikaridatabase.properties";
+    HikariConfig config;
     private HikariDataSource hikariDataSource;
+
     private ThreadLocal<Connection> threadLocal;
 
     private org.slf4j.Logger LOG = LoggerFactory.getLogger(ConnectionHikari.class);
 
     /**
      * Default constructor.
+     * @throws ClassNotFoundException
      */
-    ConnectionHikari() {
+    ConnectionHikari()  {
         if (threadLocal == null) {
-            File f = new File(hiraki_properties);
-            if(f.exists() && !f.isDirectory()) {
-                LOG.error("Hikari properties file " + f.getAbsolutePath() + " was found");
-            } else {
-                LOG.error("Hikari properties file " + f.getAbsolutePath() + " was not found");
+            //final String resourceName = "hikaridatabase.properties";
+            ClassLoader loader = Thread.currentThread().getContextClassLoader();
+            Properties props = new Properties();
+            try (InputStream resourceStream = loader.getResourceAsStream(resourceName)) {
+                props.load(resourceStream);
+                props.list(System.out);
+                config = new HikariConfig(props);
+                hikariDataSource = new HikariDataSource(config);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
-            HikariConfig config = new HikariConfig(hiraki_properties);
-            hikariDataSource = new HikariDataSource(config);
             threadLocal = new ThreadLocal<>();
         }
     }
@@ -55,7 +62,7 @@ public enum ConnectionHikari {
             }
             return connection;
         } catch (SQLException e) {
-            LOG.debug(e.toString());
+            LOG.debug("Hmm" + e.toString());
             e.printStackTrace();
         }
         return threadLocal.get();
@@ -168,19 +175,4 @@ public enum ConnectionHikari {
         }
     }
 
-    /**
-     * Get autocommit value.
-     *
-     * @return autocommit.
-     */
-    public boolean isAutoCommit() {
-        boolean autoCommit = false;
-        try {
-            autoCommit = threadLocal.get().getAutoCommit();
-        } catch (SQLException e) {
-            LOG.debug(e.toString());
-            e.printStackTrace();
-        }
-        return autoCommit;
-    }
 }

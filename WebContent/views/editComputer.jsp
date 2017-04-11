@@ -26,7 +26,7 @@
                     <h1>Edit Computer</h1>
 
                     <form action="editComputer" method="POST">
-                        <input type="hidden" value="${requestScope.computer.computerId}" id="id"/>
+                        <input type="hidden" id="computerId" value="${requestScope.computer.computerId}" id="id"/>
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
@@ -34,11 +34,11 @@
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" placeholder="Introduced date" value="${computerToEdit.getIntroducedDate()}">
+                                <input type="date" class="form-control" id="introducedDate" placeholder="Introduced date" value="${computerToEdit.getIntroducedDate()}">
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" placeholder="Discontinued date" value="${computerToEdit.getDiscontinuedDate()}">
+                                <input type="date" class="form-control" id="discontinuedDate" placeholder="Discontinued date" value="${computerToEdit.getDiscontinuedDate()}">
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>

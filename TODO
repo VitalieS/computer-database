@@ -1,3 +1,2 @@
-1. Implement LOG4J/SLF4J logger
-2. CompanyDAO.java - Close Hikari connections on every function
-3. Implement search by (company), (computer) in web.
+1. CompanyDAO.java - Close Hikari connections on every function;
+2. Properly refactor the tests.

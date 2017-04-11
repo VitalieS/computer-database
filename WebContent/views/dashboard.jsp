@@ -22,14 +22,20 @@
 		</div>
 	</header>
 
-	<section id="main">
+    <section id="main">
 		<div class="container">
 			<h1 id="homeTitle">${requestScope.nbComputer} Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
-					<form id="searchForm" action="dashboard" method="GET"
-						class="form-inline">
-						<input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" /> 
+					<form id="searchForm" action="dashboard" method="GET" class="form-inline">
+					 <input type=hidden name="sortnew" value="${requestScope.sortnew}" />
+						<input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${requestScope.search}"/> 
+						<!-- If one day I will want to search by computer or by company -->
+						<!-- <select class="form-control" name="by">
+						    <option value='--' <c:if test="${by == '--'}"> selected</c:if>> --</option>
+                            <option value='computer' <c:if test="${by == 'computer'}"> selected</c:if>> Computers</option>
+                            <option value='computer' <c:if test="${by == 'computer'}"> selected</c:if>> Companies</option>
+                        </select>  -->
 						<input type="submit" id="searchsubmit" value="Filter by name" class="btn btn-primary" />
 					</form>
 				</div>
@@ -58,29 +64,36 @@
                                 </a>
                             </span>
                         </th>
+                        <!-- 
                         <th>Computer name</th>
-                        <th>Introduced date</th>
+                        <th>Introduced date</th> -->
                         <!-- Table header for Discontinued Date -->
-                        <th>Discontinued date</th>
+                        <!--<th>Discontinued date</th>-->
                         <!-- Table header for Company -->
-                        <th>Company</th>
-					</tr>
+                        <!-- <th>Company</th> -->
+                        <th><a href="${pageContext.request.contextPath}/dashboard?page=${currentPage}&submit=${submit}&sort=name&search=${requestScope.search}">Computer name</a></th>
+                        <th><a href="${pageContext.request.contextPath}/dashboard?page=${currentPage}&submit=${submit}&sort=introduced&search=${requestScope.search}">Introduced date</a></th>
+                        <!-- Table header for Discontinued Date -->
+                        <th><a href="${pageContext.request.contextPath}/dashboard?page=${currentPage}&submit=${submit}&sort=discontinued&search=${requestScope.search}">Discontinued date</a></th>
+                        <!-- Table header for Company -->
+                        <th><a href="${pageContext.request.contextPath}/dashboard?page=${currentPage}&submit=${submit}&sort=companyName&search=${requestScope.search}">Company</a></th>
+					   </tr>
     			</thead>
-				
-				<!-- Browse attribute computers -->
+                
+                <!-- Browse attribute computers -->
 				<tbody id="results">
-					<c:forEach var="elem" items="${requestScope.computerList}">
+					<c:forEach var="computer" items="${requestScope.computerList}">
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
-								class="cb" value="${elem.getComputerId()}"></td>    
-							<td><a href='editComputer?computerId=<c:out value="${elem.computerId}"/>'
-                                   onclick=""><c:out value="${elem.computerName}" />
+								class="cb" value="${computer.getComputerId()}"></td>    
+							<td><a href='editComputer?computerId=<c:out value="${computer.computerId}"/>'
+                                   onclick=""><c:out value="${computer.computerName}" />
                                 </a>
                              </td>
-							<td><c:out value="${elem.getIntroducedDate()}" /></td>
-							<td><c:out value="${elem.getDiscontinuedDate()}" /></td>
-							<td><c:out value="${elem.getCompanyId()}" /></td>
-						</tr>
+							<td><c:out value="${computer.getIntroducedDate()}" /></td>
+							<td><c:out value="${computer.getDiscontinuedDate()}" /></td>
+							<td><c:out value="${computer.getCompanyId()}" /></td>
+						</tr>						
 					</c:forEach>
 				</tbody>
 			</table>
@@ -89,7 +102,7 @@
 
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
-			<c:url var="searchUri" value="/dashboard?page=##" />
+            <c:url var="searchUri" value="/dashboard?page=##&submit=${requestScope.submit}&sort=${requestScope.sort}&search=${requestScope.search}" />
 			<pagination:display maxLinks="10" currentPage="${currentPage}" maxPages="${maxPage}" uri="${searchUri}" />
 			<div class="btn-group btn-group-sm pull-right" role="group">
 				<form action="dashboard" method="GET">

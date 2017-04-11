@@ -8,6 +8,7 @@ import org.apache.commons.configuration.ConfigurationException;
 
 import com.excilys.computerdatabase.model.entities.Computer;
 import com.excilys.computerdatabase.model.entities.Page;
+import com.excilys.computerdatabase.model.entities.Page.SortingBy;
 import com.excilys.computerdatabase.persistance.ComputerDAO;
 
 /**
@@ -93,13 +94,18 @@ public enum ComputerService {
         return listAllComputer;
     }
 
-    public List<Computer> getComputerInRangeNb(Long i, int elementsByPage) {
+    public List<Computer> getComputerInRangeNb(Long debut, int nbId) {
         List<Computer> listAllComputer = new ArrayList<>();
-        compDAO.getComputerInRangeNb(i, elementsByPage).forEach(computer -> {
-            listAllComputer.add(computer);
-        });
+        compDAO.getComputerInRangeNb(debut, nbId).forEach(computer -> { listAllComputer.add(computer); });
         return listAllComputer;
     }
+
+    public Object getComputerInRangeNb(Long debut, int nbId, SortingBy sort,
+            String search) {
+        List<Computer> listAllComputer = new ArrayList<>();
+        compDAO.getComputerInRangeNb(debut, nbId, sort, search).forEach(computer -> { listAllComputer.add(computer); });
+        return listAllComputer;
+    };
 
     public static List<Computer> listComputers(long debut, int nbItems) {
         List<Computer> liste = new ArrayList<Computer>();
@@ -112,10 +118,12 @@ public enum ComputerService {
         return ComputerDAO.ComputerDao.getNumberOfComputers() / Page.elementsByPage;
     }
 
-    public static int maxPages(int nbId) {
+    public static int countPages(int nbId) {
         ComputerDAO compDAO = ComputerDAO.ComputerDao;
         int nbPages = compDAO.countPages(nbId);
         return nbPages;
-    };
+    }
+
+
 
 }

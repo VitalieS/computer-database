@@ -10,25 +10,31 @@ public class Page<E> {
     private List<E> myPage;
     public static int elementsByPage = 10;
     private int currentPage = 0;
+    private SortingBy sort;
 
     /**
-     * @param newList - A list
+     * @param newList
+     *            - A list
      */
     public Page(List<E> newList) {
         myPage = newList;
+        setSort(SortingBy.ID);
     }
 
     /**
      * @param iStart - The id of the first item
-     * @param iEnd - The id of the last item
+     * @param iEnd
+     *            - The id of the last item
      * @return - The sublist of items between the given parameters
      */
+
     public List<E> getPage(int iStart, int iEnd) {
         return myPage.subList(iStart, iEnd);
     }
 
     /**
-     * @param idPage - The id of the page
+     * @param idPage
+     *            - The id of the page
      * @return - The sublist of the page
      */
     public List<E> getPageInRange(int idPage) {
@@ -37,7 +43,6 @@ public class Page<E> {
         if (iEnd > myPage.size()) {
             iEnd = myPage.size();
         }
-        System.out.println("Item from " + iStart + " to " + iEnd);
         currentPage = idPage;
         return myPage.subList(iStart, iEnd);
     }
@@ -73,4 +78,30 @@ public class Page<E> {
         return myPage.size() / elementsByPage;
     }
 
+    public SortingBy getSort() {
+        return sort;
+    }
+
+    public void setSort(SortingBy sort) {
+        this.sort = sort;
+    }
+
+    public enum SortingBy {
+        ID("id"),
+        NAME("name"),
+        INTRODUCED("introduced"),
+        DISCONTINUED("discontinued"),
+        COMPANY_NAME("company_name");
+
+        private final String text;
+
+        SortingBy(String text) {
+            this.text = text;
+        }
+
+        @Override
+        public String toString() {
+            return text;
+        }
+    }
 }

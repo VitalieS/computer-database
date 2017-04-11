@@ -234,10 +234,8 @@ public class ComputerView {
         System.out.println(idBegin);
         System.out.println(idEnd);
 
-        Page<Computer> pageComputers = new Page<>(
-                ComputerService.INSTANCE.getComputerInRange(idBegin, idEnd));
-        List<Computer> newPages = pageComputers.getPage((int) idBegin,
-                (int) idEnd);
+        Page<Computer> pageComputers = new Page<>(ComputerService.INSTANCE.getComputerInRange(idBegin, idEnd));
+        List<Computer> newPages = pageComputers.getPage((int) idBegin, (int) idEnd);
         for (Computer c : newPages) {
             System.out.println("Ha" + c.toString());
         }

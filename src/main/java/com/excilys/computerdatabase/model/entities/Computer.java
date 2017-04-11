@@ -148,11 +148,6 @@ public class Computer {
                 + this.computerName + ", introduced = " + this.introducedDate
                 + ", discontinued = " + this.discontinuedDate + ", company = "
                 + this.companyId + "]";
-        /*
-         * return "Computer Info :\n- Id : " + computerId + "\n- Name : " +
-         * computerName + "\n- iDate : " + introducedDate + "\n- dDate : " +
-         * discontinuedDate + "\n- Manufacturer : " + manufacturerId;
-         */
     }
 
     @Override

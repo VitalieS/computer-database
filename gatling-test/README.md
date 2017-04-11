@@ -1,15 +1,3 @@
-####################################
-# Akka Actor Config File #
-####################################
-
-akka {
-  scheduler {
-    tick-duration = 50ms
-  }
-}
-
-
-
 Webapp stress-test with Gatling
 =========================
 
