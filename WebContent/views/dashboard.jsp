@@ -28,7 +28,6 @@
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="dashboard" method="GET" class="form-inline">
-					 <input type=hidden name="sortnew" value="${requestScope.sortnew}" />
 						<input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${requestScope.search}"/> 
 						<!-- If one day I will want to search by computer or by company -->
 						<!-- <select class="form-control" name="by">
@@ -64,13 +63,6 @@
                                 </a>
                             </span>
                         </th>
-                        <!-- 
-                        <th>Computer name</th>
-                        <th>Introduced date</th> -->
-                        <!-- Table header for Discontinued Date -->
-                        <!--<th>Discontinued date</th>-->
-                        <!-- Table header for Company -->
-                        <!-- <th>Company</th> -->
                         <th><a href="${pageContext.request.contextPath}/dashboard?page=${currentPage}&submit=${submit}&sort=name&search=${requestScope.search}">Computer name</a></th>
                         <th><a href="${pageContext.request.contextPath}/dashboard?page=${currentPage}&submit=${submit}&sort=introduced&search=${requestScope.search}">Introduced date</a></th>
                         <!-- Table header for Discontinued Date -->

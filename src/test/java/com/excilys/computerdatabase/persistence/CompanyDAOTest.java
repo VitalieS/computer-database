@@ -42,9 +42,9 @@ public class CompanyDAOTest {
     public void testGetCompanyById() throws SQLException, ClassNotFoundException, ConfigurationException {
         ArrayList<Company> listAllCompany = CompanyDAO.CompanyDAO.getCompaniesList();
         Company randomCompany = listAllCompany.get((int) (Math.random() * listAllCompany.size()));
-        Long idToTest = randomCompany.getId();
+        Long idToTest = randomCompany.getCompanyId();
         Company selectCompany = CompanyDAO.CompanyDAO.getCompanyById(idToTest);
-        assert idToTest == selectCompany.getId();
+        assert idToTest == selectCompany.getCompanyId();
     }
 
     /**

@@ -45,9 +45,9 @@ public class CompanyServiceTest {
         ArrayList<Company> listAllCompany = CompanyService.INSTANCE.getCompaniesList();
         Company randomCompany = listAllCompany
                 .get((int) (Math.random() * listAllCompany.size()));
-        Long idToTest = randomCompany.getId();
+        Long idToTest = randomCompany.getCompanyId();
         Company selectCompany = CompanyService.INSTANCE.getCompanyById(idToTest);
-        assert idToTest == selectCompany.getId();
+        assert idToTest == selectCompany.getCompanyId();
     }
 
     /**
@@ -74,8 +74,8 @@ public class CompanyServiceTest {
     public void testCreateCompanyObject() throws SQLException {
         // Bean pattern
         Company c1 = new Company(Long.valueOf(42), "Test Create Bean");
-        c1.setId(Long.valueOf(5));
-        c1.setName("New Test Bean Create Company");
+        c1.setCompanyId(Long.valueOf(5));
+        c1.setCompanyName("New Test Bean Create Company");
         assertNotNull(c1);
     }
 

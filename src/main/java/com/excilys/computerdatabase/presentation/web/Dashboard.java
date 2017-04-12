@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.computerdatabase.model.entities.Page.SortingBy;
+import com.excilys.computerdatabase.model.entities.Page;
 import com.excilys.computerdatabase.service.ComputerService;
 
 
@@ -47,10 +47,9 @@ public class Dashboard extends HttpServlet {
         sort = null;
         if (request.getParameter("sort") != null) {
             sort = request.getParameter("sort");
-            System.out.println("Sort is" + sort);
         }
 
-        request.setAttribute("computerList", ComputerService.INSTANCE.getComputerInRangeNb(debut, nbId, getSort(request, sort), search));
+        request.setAttribute("computerList", ComputerService.INSTANCE.getComputerInRangeNb(debut, nbId, Page.SortingBy.getSort(sort), search));
         request.setAttribute("nbComputer", ComputerService.INSTANCE.getNumberOfComputers());
         request.setAttribute("search", search);
 
@@ -59,10 +58,10 @@ public class Dashboard extends HttpServlet {
         } else {
             request.setAttribute("currentPage", 1);
         }
-        System.out.println("Sending sort is" + sort);
         request.setAttribute("sort", sort);
         request.setAttribute("submit", nbId);
-        request.setAttribute("maxPage", ComputerService.countPages(nbId));
+        request.setAttribute("maxPage", ComputerService.getNumberOfPages(nbId));
+        //request.setAttribute("maxPage", ComputerService.countPages(nbId));
         request.getServletContext().getRequestDispatcher(VUE).forward(request, response);
     }
 
@@ -83,22 +82,4 @@ public class Dashboard extends HttpServlet {
         response.sendRedirect(getServletContext().getContextPath() + "/dashboard");
     }
 
-    private SortingBy getSort(HttpServletRequest request, String field) {
-        //String field = request.getParameter("sort");
-        if (field != null && !field.trim().isEmpty()) {
-            switch (field) {
-                case "id":
-                    return SortingBy.ID;
-                case "name":
-                    return SortingBy.NAME;
-                case "introduced":
-                    return SortingBy.INTRODUCED;
-                case "discontinued":
-                    return SortingBy.DISCONTINUED;
-                case "companyName":
-                    return SortingBy.COMPANY_NAME;
-            }
-        }
-        return null;
-    }
 }

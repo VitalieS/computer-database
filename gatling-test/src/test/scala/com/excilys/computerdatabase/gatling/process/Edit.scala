@@ -24,7 +24,7 @@ object Edit {
       .get(config.getString("application.baseUrl").get + "${computerURL}")
       .check(
         status.is(200),
-        css(config.getString("application.urls.idElement.edit.id").get, "value").saveAs("computer_id")
+       css(config.getString("application.urls.idElement.edit.id").get, "value").saveAs("computer_id")
       )
     )
     .exec(http("Edit: Edit Post")

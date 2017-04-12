@@ -3,6 +3,9 @@ package com.excilys.computerdatabase.model.entities;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This class is the object version of a Computer from the Database.
  *
@@ -16,6 +19,8 @@ public class Computer {
     private LocalDate discontinuedDate; // optional
     private Long companyId; // optional - can't use Company while we can't map objects
 
+    static final Logger LOG = LoggerFactory.getLogger(Computer.class);
+
     /**
      * Instantiates a new Computer.
      */
@@ -26,8 +31,7 @@ public class Computer {
     /**
      * Instantiates a new Computer.
      *
-     * @param computerName
-     *            - The computer name
+     * @param computerName - The computer name
      */
     public Computer(String computerName) {
         this.computerName = computerName;
@@ -41,8 +45,7 @@ public class Computer {
      * @param discontinuedDate - The discontinued date
      * @param companyId - The company id
      */
-    public Computer(String computerName, LocalDate introducedDate,
-            LocalDate discontinuedDate, Long companyId) {
+    public Computer(String computerName, LocalDate introducedDate, LocalDate discontinuedDate, Long companyId) {
         this.computerName = computerName;
         this.introducedDate = introducedDate;
         this.discontinuedDate = discontinuedDate;
@@ -100,6 +103,7 @@ public class Computer {
      * @param computerId - The computer id
      */
     public void setComputerId(Long computerId) {
+        LOG.info("Setting the computer id");
         this.computerId = computerId;
     }
 
@@ -109,16 +113,17 @@ public class Computer {
      * @param computerName - The computer name
      */
     public void setComputerName(String computerName) {
+        LOG.info("Setting the computer name");
         this.computerName = computerName;
     }
 
     /**
      * Sets introducedDate.
      *
-     * @param introducedDate
-     *            - The introduced date
+     * @param introducedDate - The introduced date
      */
     public void setIntroducedDate(LocalDate introducedDate) {
+        LOG.info("Setting the introduced date");
         this.introducedDate = introducedDate;
     }
 
@@ -129,16 +134,17 @@ public class Computer {
      *            - the discontinued date
      */
     public void setDiscontinuedDate(LocalDate discontinuedDate) {
+        LOG.info("Setting the discontinued date");
         this.discontinuedDate = discontinuedDate;
     }
 
     /**
      * Sets companyId.
      *
-     * @param companyId
-     *            - the company id
+     * @param companyId - The company id
      */
     public void setCompanyId(Long companyId) {
+        LOG.info("Setting the company id");
         this.companyId = companyId;
     }
 
@@ -218,20 +224,19 @@ public class Computer {
         private Long companyId;
 
         /**
+         * Builder constructor. The name of the computer is required.
+         * @param computerName - The name of the computer
+         */
+        public ComputerBuilder(String computerName) {
+            this.computerName = computerName;
+        }
+
+        /**
          * @param computerId - The computer id
          * @return The computer with the id
          */
         public ComputerBuilder id(Long computerId) {
             this.computerId = computerId;
-            return this;
-        }
-
-        /**
-         * @param computerName - The computer name
-         * @return The computer with the name
-         */
-        public ComputerBuilder name(String computerName) {
-            this.computerName = computerName;
             return this;
         }
 
@@ -279,7 +284,7 @@ public class Computer {
          * @param companyId - The company id
          * @return The computer with the company id
          */
-        public ComputerBuilder company(Long companyId) {
+        public ComputerBuilder companyId(Long companyId) {
             this.companyId = companyId;
             return this;
         }

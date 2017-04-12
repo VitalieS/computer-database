@@ -21,8 +21,7 @@ import com.excilys.computerdatabase.model.entities.Page;
 public enum ComputerDAO {
     ComputerDao;
 
-    private org.slf4j.Logger LOG = LoggerFactory
-            .getLogger(ConnectionHikari.class);
+    private org.slf4j.Logger LOG = LoggerFactory.getLogger(ComputerDAO.class);
 
     /**
      * @return computerList - The list of computers
@@ -37,10 +36,9 @@ public enum ComputerDAO {
             statement = connection.createStatement();
             resultSet = statement.executeQuery("SELECT * FROM computer");
             while (resultSet.next()) {
-                Computer c = new Computer.ComputerBuilder()
-                        .name(resultSet.getString("name"))
+                Computer c = new Computer.ComputerBuilder(resultSet.getString("name"))
                         .id(resultSet.getLong("id"))
-                        .company(resultSet.getLong("company_id")).build();
+                        .companyId(resultSet.getLong("company_id")).build();
                 if (resultSet.getDate("introduced") != null) {
                     c.setIntroducedDate(
                             resultSet.getDate("introduced").toLocalDate());
@@ -65,8 +63,7 @@ public enum ComputerDAO {
     }
 
     /**
-     * @param choiceId
-     *            - The id of the selected computer
+     * @param choiceId - The id of the selected computer
      * @return computer - The selected computer object
      */
     public Computer getComputerById(Long choiceId) {
@@ -81,10 +78,9 @@ public enum ComputerDAO {
             preparedStatement.setLong(1, choiceId);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                computer = new Computer.ComputerBuilder()
-                        .name(resultSet.getString("name"))
+                computer = new Computer.ComputerBuilder(resultSet.getString("name"))
                         .id(resultSet.getLong("id"))
-                        .company(resultSet.getLong("company_id")).build();
+                        .companyId(resultSet.getLong("company_id")).build();
                 if (resultSet.getString("introduced") != null) {
                     computer.setIntroducedDate(
                             resultSet.getDate("introduced").toLocalDate());
@@ -109,8 +105,7 @@ public enum ComputerDAO {
     }
 
     /**
-     * @param c
-     *            - The computer object to create
+     * @param c - The computer object to create
      * @return generatedKey - The generated Key
      */
     public Long createComputer(Computer c) {
@@ -309,12 +304,11 @@ public enum ComputerDAO {
                     } else {
                         getDiscontinued = null;
                     }
-                    listComputer.add(new Computer.ComputerBuilder()
+                    listComputer.add(new Computer.ComputerBuilder(resultSet.getString(2))
                             .id(Long.valueOf(resultSet.getInt(1)))
-                            .name(resultSet.getString(2))
                             .introducedDate(getIntroduced)
                             .discontinuedDate(getDiscontinued)
-                            .company(Long.valueOf(resultSet.getInt(5)))
+                            .companyId(Long.valueOf(resultSet.getInt(5)))
                             .build());
                 }
                 ConnectionHikari.CONNECTION.close(resultSet, selectPStatement);
@@ -353,16 +347,14 @@ public enum ComputerDAO {
                 } else {
                     getDiscontinued = null;
                 }
-                computers.add(new Computer.ComputerBuilder()
+                computers.add(new Computer.ComputerBuilder(resultSet.getString(2))
                         .id(Long.valueOf(resultSet.getInt(1)))
-                        .name(resultSet.getString(2))
                         .introducedDate(getIntroduced)
                         .discontinuedDate(getDiscontinued)
-                        .company(Long.valueOf(resultSet.getInt(5))).build());
+                        .companyId(Long.valueOf(resultSet.getInt(5))).build());
             }
 
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
             ConnectionHikari.CONNECTION.close(resultSet, preparedStatement);
@@ -392,8 +384,7 @@ public enum ComputerDAO {
             + " ,company.id as " + COMPANY_ID + " ,company.name as " + COMPANY_NAME
             + " FROM computer as c LEFT JOIN company ON c.company_id=company.id WHERE c.name LIKE ? OR company.name like ? LIMIT ?,?";
 
-    public List<Computer> getComputerInRangeNb(long idFirst, int number,
-            Page.SortingBy sort, String search) {
+    public List<Computer> getComputerInRangeNb(long idFirst, int number, Page.SortingBy sort, String search) {
         List<Computer> computers = new ArrayList<>();
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -430,12 +421,11 @@ public enum ComputerDAO {
                 } else {
                     getDiscontinued = null;
                 }
-                computers.add(new Computer.ComputerBuilder()
+                computers.add(new Computer.ComputerBuilder(resultSet.getString(2))
                         .id(Long.valueOf(resultSet.getInt(1)))
-                        .name(resultSet.getString(2))
                         .introducedDate(getIntroduced)
                         .discontinuedDate(getDiscontinued)
-                        .company(Long.valueOf(resultSet.getInt(5))).build());
+                        .companyId(Long.valueOf(resultSet.getInt(5))).build());
             }
 
         } catch (SQLException e) {
@@ -459,8 +449,7 @@ public enum ComputerDAO {
         int nbPages = 0;
         try {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement
-                    .executeQuery("SELECT COUNT(*) AS count FROM computer");
+            ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) AS count FROM computer");
             resultSet.next();
             maxId = resultSet.getInt("count");
             resultSet.close();

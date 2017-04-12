@@ -1,5 +1,8 @@
 package com.excilys.computerdatabase.model.entities;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This class is the object version of a Company from the Database.
  *
@@ -9,6 +12,8 @@ public class Company {
 
     private Long companyId;
     private String companyName;
+
+    static final Logger LOG = LoggerFactory.getLogger(Computer.class);
 
     /**
      * Instantiates a new company.
@@ -26,7 +31,7 @@ public class Company {
      *
      * @return companyId - The company id
      */
-    public Long getId() {
+    public Long getCompanyId() {
         return companyId;
     }
 
@@ -35,7 +40,7 @@ public class Company {
      *
      * @return companyName - The company name
      */
-    public String getName() {
+    public String getCompanyName() {
         return companyName;
     }
 
@@ -44,7 +49,7 @@ public class Company {
      *
      * @param companyId - The company id
      */
-    public void setId(Long companyId) {
+    public void setCompanyId(Long companyId) {
         this.companyId = companyId;
     }
 
@@ -53,7 +58,7 @@ public class Company {
      *
      * @param companyName - The company name
      */
-    public void setName(String companyName) {
+    public void setCompanyName(String companyName) {
         this.companyName = companyName;
     }
 

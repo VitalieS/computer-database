@@ -4,27 +4,22 @@ import java.util.List;
 
 /**
  * @author Vitalie SOVA
- *
  */
 public class Page<E> {
     private List<E> myPage;
     public static int elementsByPage = 10;
     private int currentPage = 0;
-    private SortingBy sort;
 
     /**
-     * @param newList
-     *            - A list
+     * @param newList - A list
      */
     public Page(List<E> newList) {
         myPage = newList;
-        setSort(SortingBy.ID);
     }
 
     /**
      * @param iStart - The id of the first item
-     * @param iEnd
-     *            - The id of the last item
+     * @param iEnd - The id of the last item
      * @return - The sublist of items between the given parameters
      */
 
@@ -33,8 +28,7 @@ public class Page<E> {
     }
 
     /**
-     * @param idPage
-     *            - The id of the page
+     * @param idPage - The id of the page
      * @return - The sublist of the page
      */
     public List<E> getPageInRange(int idPage) {
@@ -78,14 +72,6 @@ public class Page<E> {
         return myPage.size() / elementsByPage;
     }
 
-    public SortingBy getSort() {
-        return sort;
-    }
-
-    public void setSort(SortingBy sort) {
-        this.sort = sort;
-    }
-
     public enum SortingBy {
         ID("id"),
         NAME("name"),
@@ -102,6 +88,24 @@ public class Page<E> {
         @Override
         public String toString() {
             return text;
+        }
+
+        public static SortingBy getSort(String sort) {
+            if (sort != null && !sort.trim().isEmpty()) {
+                switch (sort) {
+                    case "id":
+                        return SortingBy.ID;
+                    case "name":
+                        return SortingBy.NAME;
+                    case "introduced":
+                        return SortingBy.INTRODUCED;
+                    case "discontinued":
+                        return SortingBy.DISCONTINUED;
+                    case "companyName":
+                        return SortingBy.COMPANY_NAME;
+                }
+            }
+            return null;
         }
     }
 }

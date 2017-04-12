@@ -28,6 +28,9 @@ public class CompanyView {
         }
     }
 
+    /**
+     *
+     */
     protected void showCompaniesDetails() {
         @SuppressWarnings("resource")
         // TODO Manage scanner leak

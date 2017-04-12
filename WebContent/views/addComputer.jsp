@@ -24,11 +24,21 @@
 	</header>
 
 	<section id="main">
+	
+	   <c:if test="${not empty exception}">
+            <div class="container">
+                <div class="alert alert-danger">
+                    <strong>Danger!</strong> <c:out value="${exception}" />
+                </div>
+            </div>
+        </c:if>
+    
+    
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1>Add Computer</h1>
-					<form action="addComputer?action=newComputer" method="POST">
+					<form action="addComputer?action=newComputer" method="POST" id="addComputerForm">
 						<fieldset>
 							<div class="form-group">
 								<label for="computerName">Computer name</label> <input
@@ -37,24 +47,24 @@
 							</div>
 
 							<div class="form-group">
-								<label for="introduced">Introduced date</label> <input
+								<label for="introducedDate">Introduced date</label> <input
 									type="date" class="form-control" name="introducedDate"
-									id="introduced" placeholder="Introduced date">
+									id="introducedDate" placeholder="Introduced date">
 							</div>
-
+							
 							<div class="form-group">
-								<label for="discontinued">Discontinued date</label> <input
+								<label for="discontinuedDate">Discontinued date</label> <input
 									type="date" class="form-control" name="discontinuedDate"
-									id="discontinued" placeholder="Discontinued date">
+									id="discontinuedDate" placeholder="Discontinued date">
 							</div>
 
 							<div class="form-group">
 								<label for="companyId">Company</label> <select
 									class="form-control" name="companyId" id="companyId">
-									<option value="0">--</option>
+									<!-- <option value="0">--</option> -->
 									<c:forEach items="${companyList}" var="company">
-										<option value="<c:out value="${company.getId()}"/>">
-											<c:out value="${company.getName()}" /></option>
+										<option value="<c:out value="${company.getCompanyId()}"/>">
+											<c:out value="${company.getCompanyName()}" /></option>
 									</c:forEach>
 								</select>
 							</div>
@@ -73,6 +83,8 @@
 <script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/dashboard.js"></script>
+<script src="${pageContext.request.contextPath}/js/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/addComputer.js"></script>
 </body>
 </html>
 

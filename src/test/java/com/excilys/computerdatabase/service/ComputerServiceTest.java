@@ -161,7 +161,7 @@ public class ComputerServiceTest {
         assertNotNull(c2);
 
         // Builder pattern
-        Computer c3 = new Computer.ComputerBuilder().name("Test Create Build Computer").id(Long.valueOf(5)).build();
+        Computer c3 = new Computer.ComputerBuilder("Test Create Build Computer").id(Long.valueOf(5)).build();
         assertNotNull(c3);
     }
 

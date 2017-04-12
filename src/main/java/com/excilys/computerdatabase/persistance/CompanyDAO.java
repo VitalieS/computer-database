@@ -70,10 +70,8 @@ public enum CompanyDAO {
     }
 
     /**
-     * @param idBegin
-     *            - The id of the first company
-     * @param idEnd
-     *            - The id of the last company
+     * @param idBegin - The id of the first company
+     * @param idEnd - The id of the last company
      * @return listCompany - The list of companies in the selected range
      */
     public ArrayList<Company> getCompanyInRange(long idBegin, long idEnd) {

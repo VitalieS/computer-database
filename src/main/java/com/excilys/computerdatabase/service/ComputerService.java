@@ -1,13 +1,9 @@
 package com.excilys.computerdatabase.service;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.configuration.ConfigurationException;
-
 import com.excilys.computerdatabase.model.entities.Computer;
-import com.excilys.computerdatabase.model.entities.Page;
 import com.excilys.computerdatabase.model.entities.Page.SortingBy;
 import com.excilys.computerdatabase.persistance.ComputerDAO;
 
@@ -25,18 +21,15 @@ public enum ComputerService {
      * @return computerList - An ArrayList of computers
      */
     public ArrayList<Computer> getComputerList() {
-        ArrayList<Computer> computerList = compDAO.getComputerList();
-        return computerList;
+        return compDAO.getComputerList();
     }
 
     /**
-     * @param idToSelect
-     *            - The id of the selected computer
+     * @param idToSelect - The id of the selected computer
      * @return computerById - The selected computer object
      */
     public Computer getComputerById(Long idToSelect) {
-        Computer computerById = compDAO.getComputerById(idToSelect);
-        return computerById;
+        return compDAO.getComputerById(idToSelect);
     }
 
     /**
@@ -44,8 +37,7 @@ public enum ComputerService {
      * @return generatedKey - The generated key
      */
     public long createComputer(Computer newComputer) {
-        long generatedKey = compDAO.createComputer(newComputer);
-        return generatedKey;
+        return compDAO.createComputer(newComputer);
     }
 
     /**
@@ -66,19 +58,6 @@ public enum ComputerService {
         compDAO.deleteComputer(idToDelete);
     }
 
-    public void deleteComputers(List<Long> recuperationListSuppresionRequestPost) {
-        for (Long idToDelete : recuperationListSuppresionRequestPost) {
-            compDAO.deleteComputer(idToDelete);
-        }
-    }
-
-    /**
-     * @return nbOfComputers - The number of computers
-     */
-    public int getNumberOfComputers() {
-        return compDAO.getNumberOfComputers();
-    }
-
     /**
      * @param idBegin
      *            - The id of the first computer
@@ -94,12 +73,6 @@ public enum ComputerService {
         return listAllComputer;
     }
 
-    public List<Computer> getComputerInRangeNb(Long debut, int nbId) {
-        List<Computer> listAllComputer = new ArrayList<>();
-        compDAO.getComputerInRangeNb(debut, nbId).forEach(computer -> { listAllComputer.add(computer); });
-        return listAllComputer;
-    }
-
     public Object getComputerInRangeNb(Long debut, int nbId, SortingBy sort,
             String search) {
         List<Computer> listAllComputer = new ArrayList<>();
@@ -107,23 +80,14 @@ public enum ComputerService {
         return listAllComputer;
     };
 
-    public static List<Computer> listComputers(long debut, int nbItems) {
-        List<Computer> liste = new ArrayList<Computer>();
-        ComputerDAO compDAO = ComputerDAO.ComputerDao;
-        liste = compDAO.getComputerInRangeNb(debut, nbItems);
-        return liste;
+    /**
+     * @return nbOfComputers - The number of computers
+     */
+    public int getNumberOfComputers() {
+        return compDAO.getNumberOfComputers();
     }
 
-    public int pageNumber() throws SQLException, ConfigurationException {
-        return ComputerDAO.ComputerDao.getNumberOfComputers() / Page.elementsByPage;
+    public static int getNumberOfPages(int elementsByPage) {
+        return ComputerDAO.ComputerDao.getNumberOfComputers() / elementsByPage;
     }
-
-    public static int countPages(int nbId) {
-        ComputerDAO compDAO = ComputerDAO.ComputerDao;
-        int nbPages = compDAO.countPages(nbId);
-        return nbPages;
-    }
-
-
-
 }

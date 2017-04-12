@@ -21,38 +21,38 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <div class="label label-default pull-right">
-                        <c:out value="${requestScope.computer.computerId}" />
+                        <c:out value="${requestScope.computerToEdit.computerId}" />
                     </div>
                     <h1>Edit Computer</h1>
 
                     <form action="editComputer" method="POST">
-                        <input type="hidden" id="computerId" value="${requestScope.computer.computerId}" id="id"/>
+                        <input type="hidden" name="computerId" id="computerId" value="${requestScope.computerToEdit.computerId}"/>
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="computerName" placeholder="Computer name" value="${computerToEdit.getComputerName()}">
+                                <input type="text" class="form-control" name="computerName" id="computerName" placeholder="Computer name" value="${requestScope.computerToEdit.getComputerName()}">
                             </div>
                             <div class="form-group">
-                                <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introducedDate" placeholder="Introduced date" value="${computerToEdit.getIntroducedDate()}">
+                                <label for="introducedDate">Introduced date</label>
+                                <input type="date" class="form-control" name="introducedDate" id="introducedDate" placeholder="Introduced date" value="${requestScope.computerToEdit.getIntroducedDate()}">
                             </div>
                             <div class="form-group">
-                                <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinuedDate" placeholder="Discontinued date" value="${computerToEdit.getDiscontinuedDate()}">
+                                <label for="discontinuedDate">Discontinued date</label>
+                                <input type="date" class="form-control" name="discontinuedDate" id="discontinuedDate" placeholder="Discontinued date" value="${requestScope.computerToEdit.getDiscontinuedDate()}">
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
-                                <select class="form-control" id="companyId" >
+                                <select class="form-control" name="companyId" id="companyId" >
                                     <option value="${computerToEdit.getCompanyId()}">
-                                        <c:out value="${companyOfTheEditedComputer.getName()}" />
+                                        <c:out value="${companyOfTheEditedComputer.getCompanyName()}" />
                                     </option>
                                     <c:forEach items="${companyList}" var="company">
-                                        <option value="<c:out value="${company.getId()}"/>">
-                                            <c:out value="${company.getName()}" />
+                                        <option value="<c:out value="${company.getCompanyId()}"/>">
+                                            <c:out value="${company.getCompanyName()}" />
                                         </option>
                                     </c:forEach>
                                 </select>
-                            </div>                          
+                            </div>                                           
                                     
                         </fieldset>        
                         <div class="actions pull-right">
