@@ -2,7 +2,6 @@
 package com.excilys.computerdatabase.service;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 import org.slf4j.Logger;
@@ -13,7 +12,7 @@ public enum Validate {
 
     static final Logger LOG = LoggerFactory.getLogger(Validate.class);
 
-    DateTimeFormatter form = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    // DateTimeFormatter form = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 
     /**
@@ -69,7 +68,8 @@ public enum Validate {
     public void checkDate(String date) {
         if (date != null && !date.trim().isEmpty()) {
             try {
-                LocalDate.parse(date, form);
+                //LocalDate.parse(date, form);
+                LocalDate.parse(date);
             } catch (DateTimeParseException e) {
                 LOG.info("The given date is not a date");
                 throw new IllegalArgumentException("Invalid format for date", e);
@@ -86,8 +86,10 @@ public enum Validate {
         if (introducedDate != null && discontinuedDate != null && !introducedDate.trim().isEmpty() && !discontinuedDate.trim().isEmpty()) {
             checkDate(introducedDate);
             checkDate(discontinuedDate);
-            LocalDate introducedDateLD = LocalDate.parse(introducedDate, form);
-            LocalDate discontinuedDateLD = LocalDate.parse(discontinuedDate, form);
+            //LocalDate introducedDateLD = LocalDate.parse(introducedDate, form);
+            //LocalDate discontinuedDateLD = LocalDate.parse(discontinuedDate, form);
+            LocalDate introducedDateLD = LocalDate.parse(introducedDate);
+            LocalDate discontinuedDateLD = LocalDate.parse(discontinuedDate);
             if (introducedDateLD.isAfter(discontinuedDateLD)) {
                 LOG.info("The introduced date is after the discontinued date");
                 throw new IllegalArgumentException("The introduced date is after the discontinued date");

@@ -17,6 +17,15 @@
         </div>
     </header>
     <section id="main">
+    
+        <c:if test="${not empty exception}">
+            <div class="container">
+                <div class="alert alert-danger">
+                    <strong>Danger!</strong> <c:out value="${exception}" />
+                </div>
+            </div>
+        </c:if>
+        
         <div class="container">
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">

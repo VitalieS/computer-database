@@ -103,7 +103,6 @@ public class Computer {
      * @param computerId - The computer id
      */
     public void setComputerId(Long computerId) {
-        LOG.info("Setting the computer id");
         this.computerId = computerId;
     }
 
@@ -113,7 +112,6 @@ public class Computer {
      * @param computerName - The computer name
      */
     public void setComputerName(String computerName) {
-        LOG.info("Setting the computer name");
         this.computerName = computerName;
     }
 
@@ -123,7 +121,6 @@ public class Computer {
      * @param introducedDate - The introduced date
      */
     public void setIntroducedDate(LocalDate introducedDate) {
-        LOG.info("Setting the introduced date");
         this.introducedDate = introducedDate;
     }
 
@@ -134,7 +131,6 @@ public class Computer {
      *            - the discontinued date
      */
     public void setDiscontinuedDate(LocalDate discontinuedDate) {
-        LOG.info("Setting the discontinued date");
         this.discontinuedDate = discontinuedDate;
     }
 
@@ -144,7 +140,6 @@ public class Computer {
      * @param companyId - The company id
      */
     public void setCompanyId(Long companyId) {
-        LOG.info("Setting the company id");
         this.companyId = companyId;
     }
 

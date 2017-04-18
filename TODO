@@ -1,3 +1,0 @@
-1. Close Hikari connections on every call;
-2. Properly refactor the tests;
-3. Fix jquery on addComputer and editComputer.

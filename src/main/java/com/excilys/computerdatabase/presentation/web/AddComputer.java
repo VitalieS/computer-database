@@ -2,7 +2,6 @@ package com.excilys.computerdatabase.presentation.web;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -49,29 +48,32 @@ public class AddComputer extends HttpServlet {
             Validate.INSTANCE.checkDateNotBeforeDate(introducedDate, discontinuedDate);
             Validate.INSTANCE.checkId(companyId);
 
-            DateTimeFormatter form = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            //DateTimeFormatter form = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
             Computer comp = new Computer.ComputerBuilder(computerName).build();
 
             if (introducedDate != null && !introducedDate.trim().isEmpty()) {
-                LocalDate introducedDateLD = LocalDate.parse(introducedDate, form);
+                //LocalDate introducedDateLD = LocalDate.parse(introducedDate, form);
+                LocalDate introducedDateLD = LocalDate.parse(introducedDate);
                 comp.setIntroducedDate(introducedDateLD);
             }
             if (discontinuedDate != null && !discontinuedDate.trim().isEmpty()) {
-                LocalDate discontinuedDateLD = LocalDate.parse(discontinuedDate, form);
+                //LocalDate discontinuedDateLD = LocalDate.parse(discontinuedDate, form);
+                LocalDate discontinuedDateLD = LocalDate.parse(discontinuedDate);
                 comp.setDiscontinuedDate(discontinuedDateLD);
             }
             if (companyId != null && !companyId.trim().isEmpty()) {
                 comp.setCompanyId(Long.valueOf(companyId));
             }
 
+            System.out.println(comp);
             ComputerService.INSTANCE.createComputer(comp);
             response.sendRedirect(getServletContext().getContextPath() + "/dashboard");
 
         } catch (IllegalArgumentException e) {
             request.setAttribute("exception", e.getMessage());
-            //doGet(request, response);
-            request.getServletContext().getRequestDispatcher(VUE).forward(request, response);
+            doGet(request, response);
+            //request.getServletContext().getRequestDispatcher(VUE).forward(request, response);
         }
     }
 }

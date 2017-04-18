@@ -29,12 +29,6 @@
 				<div class="pull-left">
 					<form id="searchForm" action="dashboard" method="GET" class="form-inline">
 						<input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${requestScope.search}"/> 
-						<!-- If one day I will want to search by computer or by company -->
-						<!-- <select class="form-control" name="by">
-						    <option value='--' <c:if test="${by == '--'}"> selected</c:if>> --</option>
-                            <option value='computer' <c:if test="${by == 'computer'}"> selected</c:if>> Computers</option>
-                            <option value='computer' <c:if test="${by == 'computer'}"> selected</c:if>> Companies</option>
-                        </select>  -->
 						<input type="submit" id="searchsubmit" value="Filter by name" class="btn btn-primary" />
 					</form>
 				</div>

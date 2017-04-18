@@ -319,54 +319,6 @@ public enum ComputerDAO {
         return listComputer;
     }
 
-    public List<Computer> getComputerInRangeNb(long idFirst, int number) {
-        List<Computer> computers = new ArrayList<>();
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = ConnectionHikari.CONNECTION.getConnection();
-            // connection = ConnectionDB.CONNECTION.getConnection();
-            preparedStatement = connection.prepareStatement(
-                    "SELECT c.id as id, c.name as name, c.introduced as introduced, c.discontinued as discontinued, company.id as company_id, company.name as company_name FROM computer as c LEFT JOIN company ON c.company_id=company.id ORDER BY c.id ASC LIMIT ?,?");
-            preparedStatement.setLong(1, idFirst);
-            preparedStatement.setInt(2, number);
-            resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                LocalDate getIntroduced;
-                if (resultSet.getTimestamp(3) != null) {
-                    getIntroduced = resultSet.getTimestamp(3).toLocalDateTime()
-                            .toLocalDate();
-                } else {
-                    getIntroduced = null;
-                }
-                LocalDate getDiscontinued;
-                if (resultSet.getTimestamp(4) != null) {
-                    getDiscontinued = resultSet.getTimestamp(4)
-                            .toLocalDateTime().toLocalDate();
-                } else {
-                    getDiscontinued = null;
-                }
-                computers.add(new Computer.ComputerBuilder(resultSet.getString(2))
-                        .id(Long.valueOf(resultSet.getInt(1)))
-                        .introducedDate(getIntroduced)
-                        .discontinuedDate(getDiscontinued)
-                        .companyId(Long.valueOf(resultSet.getInt(5))).build());
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            ConnectionHikari.CONNECTION.close(resultSet, preparedStatement);
-            /*
-             * ConnectionDB.CONNECTION.closeConnection(connection);
-             * ConnectionDB.CONNECTION.closeStatement(preparedStatement);
-             * ConnectionDB.CONNECTION.closeResulSet(resultSet);
-             */
-        }
-        return computers;
-    }
-
     public static final String  ID                    = "id";
     public static final String  NAME                  = "name";
     public static final String  INTRODUCED            = "introduced";
@@ -377,12 +329,12 @@ public enum ComputerDAO {
     private static final String SQL_SEARCH            = "SELECT c.id as " + ID + " ,c.name as "
             + NAME + " ,c.introduced as " + INTRODUCED + " ,c.discontinued as " + DISCONTINUED
             + " ,company.id as " + COMPANY_ID + " ,company.name as " + COMPANY_NAME
-            + " FROM computer as c LEFT JOIN company ON c.company_id=company.id WHERE c.name LIKE ? OR company.name like ? ORDER BY %s ASC LIMIT ?,?";
+            + " FROM computer as c LEFT JOIN company ON c.company_id = company.id WHERE c.name LIKE ? OR company.name like ? ORDER BY %s ASC LIMIT ?,?";
 
     private static final String SQL_SEARCH_WITHOUT            = "SELECT c.id as " + ID + " ,c.name as "
             + NAME + " ,c.introduced as " + INTRODUCED + " ,c.discontinued as " + DISCONTINUED
             + " ,company.id as " + COMPANY_ID + " ,company.name as " + COMPANY_NAME
-            + " FROM computer as c LEFT JOIN company ON c.company_id=company.id WHERE c.name LIKE ? OR company.name like ? LIMIT ?,?";
+            + " FROM computer as c LEFT JOIN company ON c.company_id = company.id WHERE c.name LIKE ? OR company.name like ? LIMIT ?,?";
 
     public List<Computer> getComputerInRangeNb(long idFirst, int number, Page.SortingBy sort, String search) {
         List<Computer> computers = new ArrayList<>();
@@ -440,31 +392,5 @@ public enum ComputerDAO {
         }
         System.out.println("computersss" + computers);
         return computers;
-    }
-
-    public int countPages(int nbId) {
-        Connection connection = ConnectionHikari.CONNECTION.getConnection();
-        // Connection connection = ConnectionDB.CONNECTION.getConnection();
-        int maxId = 0;
-        int nbPages = 0;
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) AS count FROM computer");
-            resultSet.next();
-            maxId = resultSet.getInt("count");
-            resultSet.close();
-            if (nbId != 0) {
-                if (maxId % nbId == 0) {
-                    nbPages = maxId / nbId;
-                } else {
-                    nbPages = maxId / nbId + 1;
-                }
-            }
-            ConnectionHikari.CONNECTION.close(resultSet, statement);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return nbPages;
     }
 }

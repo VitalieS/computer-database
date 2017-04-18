@@ -61,7 +61,6 @@ public class Dashboard extends HttpServlet {
         request.setAttribute("sort", sort);
         request.setAttribute("submit", nbId);
         request.setAttribute("maxPage", ComputerService.getNumberOfPages(nbId));
-        //request.setAttribute("maxPage", ComputerService.countPages(nbId));
         request.getServletContext().getRequestDispatcher(VUE).forward(request, response);
     }
 

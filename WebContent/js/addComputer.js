@@ -9,7 +9,7 @@ $(function() {
 	    	 alert("Too short name. Include more letters.");
 	     }
 	});
-	
+	/*
 	$( "#introducedDate" ).datepicker({
 		dateFormat: 'dd/MM/yyyy',
 		onSelect:function(){
@@ -21,7 +21,7 @@ $(function() {
 		onSelect:function(){
 			validateDate();
 			}
-	});
+	});*/
 	
 	$('#discontinuedDate').on('blur', function() {
 		validateDate();
@@ -42,7 +42,7 @@ $(function() {
 });
 
 function validateDate(){
-	alert('My message2');
+	// alert('Validate Date');
 	var disco=$('#discontinuedDate').val();
 	var intro=$('#introducedDate').val();
 	if(!intro || !disco || disco>intro){
@@ -55,7 +55,7 @@ function validateDate(){
 }
 
 function validateName(){
-	alert('My message3');
+	// alert('Validate Name');
 	var name=$('#computerName').val();
 	if(typeof name === "undefined" || name.trim()==""){
 		alert("You must suply a name");

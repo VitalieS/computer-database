@@ -33,7 +33,6 @@
             </div>
         </c:if>
     
-    
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">

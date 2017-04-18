@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNull;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -156,14 +155,6 @@ public class ComputerDAOTest {
     public void testgetComputerInRange() throws SQLException, ConfigurationException {
         ArrayList<Computer> haha;
         haha = ComputerDAO.ComputerDao.getComputerInRange(1, 10);
-        assertEquals(10, haha.size());
-    }
-
-    @Test
-    public void testgetComputerInRangeNb()
-            throws SQLException, ClassNotFoundException, ConfigurationException {
-        List<Computer> haha;
-        haha = ComputerDAO.ComputerDao.getComputerInRangeNb(45, 10);
         assertEquals(10, haha.size());
     }
 
