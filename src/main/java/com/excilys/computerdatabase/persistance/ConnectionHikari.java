@@ -8,8 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
-import org.slf4j.LoggerFactory;
-
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -20,26 +18,21 @@ import com.zaxxer.hikari.HikariDataSource;
 public enum ConnectionHikari {
     CONNECTION;
 
-    private final String resourceName = "hikaridatabase.properties";
-    HikariConfig config;
+    private final String hikariProperties = "hikaridatabase.properties";
+    private HikariConfig config;
     private HikariDataSource hikariDataSource;
-
     private ThreadLocal<Connection> threadLocal;
-
-    private org.slf4j.Logger LOG = LoggerFactory.getLogger(ConnectionHikari.class);
 
     /**
      * Default constructor.
-     * @throws ClassNotFoundException
      */
-    ConnectionHikari()  {
+    private ConnectionHikari()  {
         if (threadLocal == null) {
-            //final String resourceName = "hikaridatabase.properties";
             ClassLoader loader = Thread.currentThread().getContextClassLoader();
             Properties props = new Properties();
-            try (InputStream resourceStream = loader.getResourceAsStream(resourceName)) {
+            try (InputStream resourceStream = loader.getResourceAsStream(hikariProperties)) {
                 props.load(resourceStream);
-                props.list(System.out);
+                // props.list(System.out);
                 config = new HikariConfig(props);
                 hikariDataSource = new HikariDataSource(config);
             } catch (IOException e) {
@@ -62,66 +55,13 @@ public enum ConnectionHikari {
             }
             return connection;
         } catch (SQLException e) {
-            LOG.debug("Hmm" + e.toString());
             e.printStackTrace();
         }
         return threadLocal.get();
     }
 
     /**
-     * Start transaction.
-     */
-    public void startTransaction() {
-        try {
-            threadLocal.get().setAutoCommit(false);
-        } catch (SQLException e) {
-            LOG.debug(e.toString());
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Commit transaction.
-     */
-    public void commit() {
-        try {
-            threadLocal.get().commit();
-        } catch (SQLException e) {
-            LOG.debug(e.toString());
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Rollback transaction.
-     */
-    public void roolback() {
-        try {
-            threadLocal.get().rollback();
-        } catch (SQLException e) {
-            LOG.debug(e.toString());
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Open connection.
-     */
-    public void open() {
-        try {
-            Connection connection = threadLocal.get();
-            if (connection == null) {
-                connection = hikariDataSource.getConnection();
-                threadLocal.set(connection);
-            }
-        } catch (SQLException e) {
-            LOG.debug(e.toString());
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Close connexion.
+     * Close    .
      */
     public void close() {
         Connection connection = getConnection();
@@ -129,7 +69,6 @@ public enum ConnectionHikari {
         try {
             connection.close();
         } catch (SQLException e) {
-            LOG.debug(e.toString());
             e.printStackTrace();
         }
     }
@@ -145,7 +84,6 @@ public enum ConnectionHikari {
             try {
                 resultSet.close();
             } catch (SQLException e) {
-                LOG.debug(e.toString());
                 e.printStackTrace();
             }
         }
@@ -153,7 +91,6 @@ public enum ConnectionHikari {
             try {
                 statement.close();
             } catch (SQLException e) {
-                LOG.debug(e.toString());
                 e.printStackTrace();
             }
         }
@@ -169,7 +106,6 @@ public enum ConnectionHikari {
             try {
                 statement.close();
             } catch (SQLException e) {
-                LOG.debug(e.toString());
                 e.printStackTrace();
             }
         }

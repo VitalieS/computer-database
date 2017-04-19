@@ -1,13 +1,12 @@
 package com.excilys.computerdatabase.presentation.cliui;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import com.excilys.computerdatabase.model.entities.Computer;
-import com.excilys.computerdatabase.model.entities.Page;
+import com.excilys.computerdatabase.model.Computer;
+import com.excilys.computerdatabase.model.Page;
+import com.excilys.computerdatabase.persistance.dto.ComputerDTO;
 import com.excilys.computerdatabase.service.ComputerService;
 
 /**
@@ -15,8 +14,6 @@ import com.excilys.computerdatabase.service.ComputerService;
  *
  */
 public class ComputerView {
-
-    private DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     /**
      *
@@ -32,8 +29,6 @@ public class ComputerView {
      *
      */
     protected void showComputersDetails() {
-        @SuppressWarnings("resource")
-        // TODO Manage scanner leak
         Scanner keyboardComputerId = new Scanner(System.in);
         System.out.println("What's your computer ID?");
         int number;
@@ -41,7 +36,8 @@ public class ComputerView {
             number = Integer.parseInt(keyboardComputerId.nextLine());
             Computer computer = ComputerService.INSTANCE.getComputerById(Long.valueOf(number));
             System.out.println("Computer found:" + computer.toString());
-            return; // this will escape the while loop
+            keyboardComputerId.close();
+            return;
         } catch (Exception e) {
             System.out.println("No computer has this id. Try again.");
             return;
@@ -51,34 +47,31 @@ public class ComputerView {
     /**
      *
      */
-    @SuppressWarnings("resource")
-    // TODO Manage scanner leak
     protected void createComputer() {
         Scanner keyboardNewComputername = new Scanner(System.in);
         System.out.println("What's the new computer name?");
         String newName = keyboardNewComputername.nextLine();
-        Computer c = new Computer();
+        ComputerDTO c = new ComputerDTO.ComputerBuilder("New Computer").build();
         if (newName != null && !newName.trim().isEmpty()) {
             c.setComputerName(newName);
         } else {
             System.out.println("The computer can't have empty name field");
+            keyboardNewComputername.close();
             return;
         }
 
         Scanner keyboardNewComputerIDate = new Scanner(System.in);
-        System.out.println("What's the new computer iDate? [dd/mm/yyyy]");
+        System.out.println("What's the new computer iDate? [yyyy-mm-dd]");
         String newIDate = keyboardNewComputerIDate.nextLine();
         if (newIDate != null && !newIDate.trim().isEmpty()) {
-            LocalDate newIDate1LD = LocalDate.parse(newIDate, DATE_FORMAT);
-            c.setIntroducedDate(newIDate1LD);
+            c.setIntroducedDate(newIDate);
         }
 
         Scanner keyboardNewComputerDDate = new Scanner(System.in);
-        System.out.println("What's the new computer dDate? [dd/mm/yyyy]");
+        System.out.println("What's the new computer dDate? [yyyy-mm-dd]");
         String newDDate = keyboardNewComputerDDate.nextLine();
         if (newDDate != null && !newDDate.trim().isEmpty()) {
-            LocalDate newDDate1LD = LocalDate.parse(newDDate, DATE_FORMAT);
-            c.setIntroducedDate(newDDate1LD);
+            c.setIntroducedDate(newDDate);
         }
 
         Scanner keyboardNewComputerManufacturer = new Scanner(System.in);
@@ -93,13 +86,16 @@ public class ComputerView {
         Long key = ComputerService.INSTANCE.createComputer(c);
         Computer addedCompany = ComputerService.INSTANCE.getComputerById(key);
         System.out.println(addedCompany.toString());
+
+        keyboardNewComputername.close();
+        keyboardNewComputerIDate.close();
+        keyboardNewComputerDDate.close();
+        keyboardNewComputerManufacturer.close();
     }
 
     /**
      *
      */
-    @SuppressWarnings("resource")
-    // TODO Manage scanner leak
     protected void updateComputer() {
         Scanner keyboardID = new Scanner(System.in);
         System.out.println("Which computer do you want to modify ?");
@@ -112,10 +108,11 @@ public class ComputerView {
             System.out.println(computer.toString());
         } catch (Exception e) {
             System.out.println("That is not a valid id. Try again.");
+            keyboardID.close();
             return;
         }
 
-        Computer c1 = new Computer();
+        ComputerDTO c1 = new ComputerDTO.ComputerBuilder("New Computer").build();
         c1.setComputerId(Long.valueOf(numberID));
         Scanner keyboardNewComputername1 = new Scanner(System.in);
         System.out.println("What's the new computer name?");
@@ -130,20 +127,18 @@ public class ComputerView {
         System.out.println("What's the new computer iDate? [dd/mm/yyyy]");
         String newIDate1 = keyboardNewComputerIDate1.nextLine();
         if (newIDate1 != null && !newIDate1.trim().isEmpty()) {
-            LocalDate newIDate1LD = LocalDate.parse(newIDate1, DATE_FORMAT);
-            c1.setIntroducedDate(newIDate1LD);
+            c1.setIntroducedDate(newIDate1);
         } else {
-            c1.setIntroducedDate(computer.getIntroducedDate());
+            c1.setIntroducedDate(computer.getIntroducedDate().toString());
         }
 
         Scanner keyboardNewComputerDDate1 = new Scanner(System.in);
         System.out.println("What's the new computer dDate? [dd/mm/yyyy]");
         String newDDate1 = keyboardNewComputerDDate1.nextLine();
         if (newDDate1 != null && !newDDate1.trim().isEmpty()) {
-            LocalDate newDDateDD = LocalDate.parse(newDDate1, DATE_FORMAT);
-            c1.setDiscontinuedDate(newDDateDD);
+            c1.setDiscontinuedDate(newDDate1);
         } else {
-            c1.setDiscontinuedDate(computer.getDiscontinuedDate());
+            c1.setDiscontinuedDate(computer.getDiscontinuedDate().toString());
         }
 
         Scanner keyboardNewComputerManufacturer1 = new Scanner(System.in);
@@ -152,20 +147,24 @@ public class ComputerView {
         if (newmanufacturer1 != null && !newmanufacturer1.trim().isEmpty()) {
             c1.setCompanyId(Long.valueOf(newmanufacturer1));
         } else {
-            c1.setCompanyId(computer.getCompanyId());
+            c1.setCompanyId(computer.getCompany().getCompanyId());
         }
 
         System.out.println(c1.toString());
         ComputerService.INSTANCE.updateComputer(Long.valueOf(numberID), c1);
         System.out.println(ComputerService.INSTANCE.getComputerById(Long.valueOf(numberID)).toString());
+
+        keyboardID.close();
+        keyboardNewComputername1.close();
+        keyboardNewComputerIDate1.close();
+        keyboardNewComputerDDate1.close();
+        keyboardNewComputerManufacturer1.close();
     }
 
     /**
      *
      */
     protected void deleteComputer() {
-        @SuppressWarnings("resource")
-        // TODO Manage scanner leak
         Scanner keyboardDelete = new Scanner(System.in);
         System.out.println("Which computer do you want to delete ?");
         Computer computerDelete;
@@ -175,22 +174,21 @@ public class ComputerView {
             computerDelete = ComputerService.INSTANCE.getComputerById(Long.valueOf(numberDelete));
             System.out.println("This is the computer you want to delete");
             System.out.println(computerDelete.toString());
-            // TODO Confirm deletion
             ComputerService.INSTANCE.deleteComputer(Long.valueOf(numberDelete));
         } catch (Exception e) {
             System.out.println("That is not a valid id. Try again.");
+            keyboardDelete.close();
             return;
         }
+        keyboardDelete.close();
     }
 
     /**
      *
      */
     protected void showComputersListPageCallingAll() {
-        Page<Computer> pageComputers = new Page<>(
-                ComputerService.INSTANCE.getComputerList());
-        System.out.println(
-                "There are currently " + pageComputers.getNumPage() + " pages");
+        Page<Computer> pageComputers = new Page<>(ComputerService.INSTANCE.getComputerList());
+        System.out.println("There are currently " + pageComputers.getNumPage() + " pages");
         Scanner keyboardShowPage = new Scanner(System.in);
         System.out.print("Which page do you want to list ? ");
         int pageNb = keyboardShowPage.nextInt();
@@ -199,12 +197,12 @@ public class ComputerView {
         for (Computer c : newPage) {
             System.out.println(c.toString());
         }
-
+        keyboardShowPage.close();
         while (true) {
             Scanner seeNext = new Scanner(System.in);
-            System.out.print(
-                    "Write 0 if you want to go to the previous page or 1 if you want to go to the next one. \n");
+            System.out.print("Write 0 if you want to go to the previous page or 1 if you want to go to the next one. \n");
             int newpageNb = seeNext.nextInt();
+            seeNext.close();
             if (newpageNb == 1) {
                 List<Computer> newPageNext = pageComputers.getNextPage();
                 for (Computer e : newPageNext) {
@@ -219,6 +217,7 @@ public class ComputerView {
                 return;
             }
         }
+
     }
 
     /**
@@ -234,10 +233,11 @@ public class ComputerView {
         System.out.println(idBegin);
         System.out.println(idEnd);
 
-        Page<Computer> pageComputers = new Page<>(ComputerService.INSTANCE.getComputerInRange(idBegin, idEnd));
-        List<Computer> newPages = pageComputers.getPage((int) idBegin, (int) idEnd);
-        for (Computer c : newPages) {
-            System.out.println("Ha" + c.toString());
+        Page<ComputerDTO> pageComputers = new Page<>(ComputerService.INSTANCE.getComputerInRange(idBegin, idEnd));
+        List<ComputerDTO> newPages = pageComputers.getPage((int) idBegin, (int) idEnd);
+        for (ComputerDTO c : newPages) {
+            System.out.println(c.toString());
         }
+        keyboardShowPage.close();
     }
 }

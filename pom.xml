@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.excilys.computerdatabase</groupId>
 	<artifactId>computerdatabase</artifactId>
-	<version>0.3.0-RELEASE</version>
+	<version>0.3.1-SNAPSHOT</version>
 	<name>Computer Database</name>
 	<url>http://maven.apache.org</url>
 	<packaging>war</packaging>
@@ -25,6 +25,8 @@
 		<selenium.version>3.3.1</selenium.version>
 		<version.plugin.tomcat>2.2</version.plugin.tomcat>
 		<version.tomcat>9.0.0.M17</version.tomcat>
+
+		<maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -92,13 +94,11 @@
 			</exclusions>
 		</dependency>
 
-		<!-- Binding for System.out -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 			<version>${slf4j.version}</version>
 		</dependency>
-
 
 		<dependency>
 			<groupId>junit</groupId>
@@ -186,7 +186,6 @@
 			<artifactId>plexus-utils</artifactId>
 			<version>3.0.24</version>
 		</dependency>
-
 	</dependencies>
 
 	<build>
@@ -201,25 +200,6 @@
 			</plugin>
 
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>2.17</version>
-
-				<goals>
-					<goal>check</goal>
-				</goals>
-
-				<configuration>
-					<configLocation>checkstyle.xml</configLocation>
-					<encoding>UTF-8</encoding>
-					<consoleOutput>true</consoleOutput>
-					<failsOnError>false</failsOnError>
-					<linkXRef>false</linkXRef>
-				</configuration>
-
-			</plugin>
-
-			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<version>${version.plugin.tomcat}</version>
@@ -231,17 +211,34 @@
 					<password>admin</password>
 				</configuration>
 			</plugin>
-		</plugins>
 
-
-	</build>
-
-	<reporting>
-		<plugins>
+			<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-checkstyle-plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
 				<version>2.17</version>
+				<goals>
+					<goal>check</goal>
+				</goals>
+				<configuration>
+					<configLocation>checkstyle.xml</configLocation>
+					<encoding>UTF-8</encoding>
+					<consoleOutput>true</consoleOutput>
+					<failsOnError>false</failsOnError>
+					<linkXRef>false</linkXRef>
+				</configuration>
+
+			</plugin>
+		</plugins>
+	</build>
+
+	<reporting>
+		<plugins>
+			<!-- Vérification de styles -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>${maven-checkstyle-plugin.version}</version>
 				<configuration>
 					<configLocation>checkstyle.xml</configLocation>
 					<suppressionsLocation>suppressions.xml</suppressionsLocation>
@@ -258,4 +255,3 @@
 		</plugins>
 	</reporting>
 </project>
-

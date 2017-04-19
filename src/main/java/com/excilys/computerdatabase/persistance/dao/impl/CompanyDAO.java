@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.persistance;
+package com.excilys.computerdatabase.persistance.dao.impl;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -6,7 +6,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import com.excilys.computerdatabase.model.entities.Company;
+import com.excilys.computerdatabase.model.Company;
+import com.excilys.computerdatabase.persistance.ConnectionHikari;
+import com.excilys.computerdatabase.persistance.mappers.ResultSetMapper;
 
 /**
  * @author Vitalie SOVA
@@ -20,7 +22,6 @@ public enum CompanyDAO {
      */
     public ArrayList<Company> getCompaniesList() {
         Connection connection = ConnectionHikari.CONNECTION.getConnection();
-        // Connection connection = ConnectionDB.CONNECTION.getConnection();
         Statement statement = null;
         ResultSet resultSet = null;
         ArrayList<Company> companyList = new ArrayList<Company>();
@@ -28,16 +29,12 @@ public enum CompanyDAO {
             statement = connection.createStatement();
             resultSet = statement.executeQuery("SELECT * FROM company ORDER BY id ASC");
             while (resultSet.next()) {
-                Company c = new Company(resultSet.getLong("id"), resultSet.getString("name"));
-                companyList.add(c);
+                companyList.add(ResultSetMapper.INSTANCE.mapperCompany(resultSet));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             ConnectionHikari.CONNECTION.close(resultSet, statement);
-            /* ConnectionDB.CONNECTION.closeConnection(connection);
-            ConnectionDB.CONNECTION.closeStatement(statement);
-            ConnectionDB.CONNECTION.closeResulSet(resultSet); */
         }
         return companyList;
     }
@@ -48,7 +45,6 @@ public enum CompanyDAO {
      */
     public Company getCompanyById(Long choiceId) {
         Connection connection = ConnectionHikari.CONNECTION.getConnection();
-        // Connection connection = ConnectionDB.CONNECTION.getConnection();
         Statement statement = null;
         ResultSet resultSet = null;
         Company company = null;
@@ -56,15 +52,12 @@ public enum CompanyDAO {
             statement = connection.createStatement();
             resultSet = statement.executeQuery("SELECT * FROM company WHERE id = " + choiceId);
             while (resultSet.next()) {
-                company = new Company(resultSet.getLong("id"), resultSet.getString("name"));
+                company = ResultSetMapper.INSTANCE.mapperCompany(resultSet);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             ConnectionHikari.CONNECTION.close(resultSet, statement);
-            /* ConnectionDB.CONNECTION.closeConnection(connection);
-            ConnectionDB.CONNECTION.closeStatement(statement);
-            ConnectionDB.CONNECTION.closeResulSet(resultSet); */
         }
         return company;
     }
@@ -76,7 +69,6 @@ public enum CompanyDAO {
      */
     public ArrayList<Company> getCompanyInRange(long idBegin, long idEnd) {
         Connection connection = ConnectionHikari.CONNECTION.getConnection();
-        // Connection connection = ConnectionDB.CONNECTION.getConnection();
         Statement statement = null;
         ResultSet resultSet = null;
         ArrayList<Company> listCompany = new ArrayList<>();
@@ -84,15 +76,12 @@ public enum CompanyDAO {
             statement = connection.createStatement();
             resultSet = statement.executeQuery("SELECT * FROM company ORDER BY id ASC LIMIT ?,?");
             while (resultSet.next()) {
-                listCompany.add(new Company(resultSet.getLong("id"), resultSet.getString("name")));
+                listCompany.add(ResultSetMapper.INSTANCE.mapperCompany(resultSet));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             ConnectionHikari.CONNECTION.close(resultSet, statement);
-            /* ConnectionDB.CONNECTION.closeConnection(connection);
-            ConnectionDB.CONNECTION.closeStatement(statement);
-            ConnectionDB.CONNECTION.closeResulSet(resultSet); */
         }
         return listCompany;
     }
@@ -102,23 +91,19 @@ public enum CompanyDAO {
      */
     public int getNumberOfCompanies() {
         Connection connection = ConnectionHikari.CONNECTION.getConnection();
-        // Connection connection = ConnectionDB.CONNECTION.getConnection();
         Statement statement = null;
         ResultSet resultSet = null;
         int count = 0;
         try {
             statement = connection.createStatement();
-            resultSet = statement.executeQuery("SELECT COUNT(*) AS nbOfCompanies FROM company");
+            resultSet = statement.executeQuery("SELECT COUNT(*) AS nbCompanies FROM company");
             while (resultSet.next()) {
-                count = resultSet.getInt("nbOfCompanies");
+                count = resultSet.getInt("nbCompanies");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             ConnectionHikari.CONNECTION.close(resultSet, statement);
-            /* ConnectionDB.CONNECTION.closeConnection(connection);
-            ConnectionDB.CONNECTION.closeStatement(statement);
-            ConnectionDB.CONNECTION.closeResulSet(resultSet); */
         }
         return count;
     }

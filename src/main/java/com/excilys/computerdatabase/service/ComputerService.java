@@ -1,17 +1,16 @@
 package com.excilys.computerdatabase.service;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import com.excilys.computerdatabase.model.entities.Computer;
-import com.excilys.computerdatabase.model.entities.Page.SortingBy;
-import com.excilys.computerdatabase.persistance.ComputerDAO;
+import com.excilys.computerdatabase.model.Computer;
+import com.excilys.computerdatabase.model.Page.SortingBy;
+import com.excilys.computerdatabase.persistance.dao.impl.ComputerDAO;
+import com.excilys.computerdatabase.persistance.dto.ComputerDTO;
+import com.excilys.computerdatabase.persistance.mappers.ComputerMapper;
 
 /**
  * @author Vitalie SOVA
- *
  */
-
 public enum ComputerService {
     INSTANCE;
 
@@ -36,47 +35,40 @@ public enum ComputerService {
      * @param newComputer - The new computer object
      * @return generatedKey - The generated key
      */
-    public long createComputer(Computer newComputer) {
+    public long createComputer(ComputerDTO newComputer) {
         return compDAO.createComputer(newComputer);
     }
 
     /**
-     * @param id
-     *            - The id
-     * @param computer
-     *            - The computer
+     * @param id - The id
+     * @param computer - The computer
      */
-    public void updateComputer(Long id, Computer computer){
+    public void updateComputer(Long id, ComputerDTO computer) {
         compDAO.updateComputer(id, computer);
     }
 
     /**
-     * @param idToDelete
-     *            - The id of the computer to delete
+     * @param idToDelete - The id of the computer to delete
      */
     public void deleteComputer(long idToDelete) {
         compDAO.deleteComputer(idToDelete);
     }
 
     /**
-     * @param idBegin
-     *            - The id of the first computer
-     * @param idEnd
-     *            - The id of the last computer
+     * @param idBegin -  The id of the first computer
+     * @param idEnd - The id of the last computer
      * @return listAllComputer - An ArrayList of all computers
      */
-    public ArrayList<Computer> getComputerInRange(long idBegin, long idEnd) {
-        ArrayList<Computer> listAllComputer = new ArrayList<>();
-        compDAO.getComputerInRange(idBegin, idEnd).forEach(computer -> {
-            listAllComputer.add(computer);
+    public ArrayList<ComputerDTO> getComputerInRange(long idBegin, long idEnd) {
+        ArrayList<ComputerDTO> listAllComputer = new ArrayList<>();
+        compDAO.getComputerInRange(idBegin, idEnd).forEach(computer -> { listAllComputer.add(ComputerMapper.mapper(computer));
         });
         return listAllComputer;
     }
 
-    public Object getComputerInRangeNb(Long debut, int nbId, SortingBy sort,
-            String search) {
-        List<Computer> listAllComputer = new ArrayList<>();
-        compDAO.getComputerInRangeNb(debut, nbId, sort, search).forEach(computer -> { listAllComputer.add(computer); });
+    public ArrayList<ComputerDTO> getComputerInRangeNb(Long debut, int nbId, SortingBy sort, String search) {
+        ArrayList<ComputerDTO> listAllComputer = new ArrayList<>();
+        compDAO.getComputerInRangeNb(debut, nbId, sort, search).forEach(computer -> { listAllComputer.add(ComputerMapper.mapper(computer)); });
         return listAllComputer;
     };
 

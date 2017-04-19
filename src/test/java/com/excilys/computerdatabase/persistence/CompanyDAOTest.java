@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import org.apache.commons.configuration.ConfigurationException;
 import org.junit.Test;
 
-import com.excilys.computerdatabase.model.entities.Company;
-import com.excilys.computerdatabase.persistance.CompanyDAO;
+import com.excilys.computerdatabase.model.Company;
+import com.excilys.computerdatabase.persistance.dao.impl.CompanyDAO;
 
 /**
  * @author Vitalie SOVA

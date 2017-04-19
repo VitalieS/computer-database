@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.model.entities;
+package com.excilys.computerdatabase.model;
 
 import java.util.List;
 

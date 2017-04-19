@@ -1,30 +1,12 @@
-package com.excilys.computerdatabase.model.entities;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+package com.excilys.computerdatabase.model;
 
 /**
- * This class is the object version of a Company from the Database.
- *
  * @author Vitalie SOVA
  */
 public class Company {
 
     private Long companyId;
     private String companyName;
-
-    static final Logger LOG = LoggerFactory.getLogger(Computer.class);
-
-    /**
-     * Instantiates a new company.
-     *
-     * @param companyId - The company id
-     * @param companyName - The company name
-     */
-    public Company(Long companyId, final String companyName) {
-        this.companyId = companyId;
-        this.companyName = companyName;
-    }
 
     /**
      * Gets companyId.
@@ -109,7 +91,6 @@ public class Company {
      *
      * @return The Company
      */
-
     public static class CompanyBuilder {
         private Long companyId;
         private String companyName;
@@ -146,6 +127,5 @@ public class Company {
     private Company(CompanyBuilder builder) {
         this.companyId = builder.companyId;
         this.companyName = builder.companyName;
-
     }
 }

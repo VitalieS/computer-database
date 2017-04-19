@@ -1,9 +1,6 @@
 package com.excilys.computerdatabase.presentation.cliui;
 
-import java.sql.SQLException;
 import java.util.Scanner;
-
-import org.apache.commons.configuration.ConfigurationException;
 
 /**
  * @author Vitalie SOVA
@@ -15,14 +12,13 @@ public class View {
      * The main method.
      *
      * @param args - Arguments main
-     * @throws SQLException - The SQL exception
-     * @throws ClassNotFoundException
      */
-    public static void main(String[] args) throws SQLException, ConfigurationException {
+    public static void main(String[] args) {
 
         System.out.println("Welcome, master !");
         System.out.println("What do you want to do today ?");
         int choice;
+
         Scanner keyboard = new Scanner(System.in);
 
         ComputerView computerView = new ComputerView();
@@ -31,10 +27,10 @@ public class View {
         inputloop : while (true) {
             printMenu();
 
-            while (!keyboard.hasNextInt()) {
+            /*while (!keyboard.hasNextInt()) {
                 System.out.println("Nope, that's not it!");
                 keyboard.next();
-            }
+            }*/
             choice = keyboard.nextInt();
 
             switch (choice) {
@@ -81,7 +77,7 @@ public class View {
                     break;
             }
         }
-        keyboard.close();
+        //keyboard.close();
     }
 
     /**

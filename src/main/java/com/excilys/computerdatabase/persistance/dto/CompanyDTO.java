@@ -1,12 +1,19 @@
-package com.excilys.computerdatabase.model.entities.dto;
+package com.excilys.computerdatabase.persistance.dto;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
+ * This class is the object version of a Company from the Database.
+ *
  * @author Vitalie SOVA
  */
 public class CompanyDTO {
 
     private Long companyId;
     private String companyName;
+
+    static final Logger LOG = LoggerFactory.getLogger(ComputerDTO.class);
 
     /**
      * Instantiates a new company.
@@ -24,7 +31,7 @@ public class CompanyDTO {
      *
      * @return companyId - The company id
      */
-    public Long getId() {
+    public Long getCompanyId() {
         return companyId;
     }
 
@@ -33,7 +40,7 @@ public class CompanyDTO {
      *
      * @return companyName - The company name
      */
-    public String getName() {
+    public String getCompanyName() {
         return companyName;
     }
 
@@ -42,7 +49,7 @@ public class CompanyDTO {
      *
      * @param companyId - The company id
      */
-    public void setId(Long companyId) {
+    public void setCompanyId(Long companyId) {
         this.companyId = companyId;
     }
 
@@ -51,7 +58,7 @@ public class CompanyDTO {
      *
      * @param companyName - The company name
      */
-    public void setName(String companyName) {
+    public void setCompanyName(String companyName) {
         this.companyName = companyName;
     }
 
@@ -97,7 +104,6 @@ public class CompanyDTO {
         return result;
     }
 
-
     /**
      * Builder pattern to instantiate a computer.
      *
@@ -134,12 +140,15 @@ public class CompanyDTO {
         }
     }
 
+    public static CompanyBuilder builder() {
+        return new CompanyDTO.CompanyBuilder();
+    }
+
     /**
      * @param builder - The ComputerBuilder
      */
     private CompanyDTO(CompanyBuilder builder) {
         this.companyId = builder.companyId;
         this.companyName = builder.companyName;
-
     }
 }

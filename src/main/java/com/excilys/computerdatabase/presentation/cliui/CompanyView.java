@@ -6,8 +6,8 @@ import java.util.Scanner;
 
 import org.slf4j.LoggerFactory;
 
-import com.excilys.computerdatabase.model.entities.Company;
-import com.excilys.computerdatabase.model.entities.Page;
+import com.excilys.computerdatabase.model.Company;
+import com.excilys.computerdatabase.model.Page;
 import com.excilys.computerdatabase.service.CompanyService;
 
 /**
@@ -32,16 +32,15 @@ public class CompanyView {
      *
      */
     protected void showCompaniesDetails() {
-        @SuppressWarnings("resource")
-        // TODO Manage scanner leak
-        Scanner keyboardCompanyID = new Scanner(System.in);
+        Scanner keyboardCompanyId = new Scanner(System.in);
         System.out.println("What's your company ID ?");
         int numberC;
         try {
-            numberC = Integer.parseInt(keyboardCompanyID.nextLine());
+            numberC = Integer.parseInt(keyboardCompanyId.nextLine());
             Company company = CompanyService.INSTANCE.getCompanyById(Long.valueOf(numberC));
             System.out.println(company.toString());
-            return; // this will escape the while loop
+            keyboardCompanyId.close();
+            return;
         } catch (Exception e) {
             System.out.println("That is not a valid id. Try again.");
             return;
@@ -62,11 +61,12 @@ public class CompanyView {
         for (Company e : newPage) {
             System.out.println(e.toString());
         }
-
+        keyboardShowPage.close();
         while (true) {
             Scanner seeNext = new Scanner(System.in);
             System.out.print("Write 0 if you want to go to the previous page or 1 if you want to go to the next one. \n");
             int newpageNb = seeNext.nextInt();
+            seeNext.close();
             if (newpageNb == 1) {
                 List<Company> newPageNext = pageCompany.getNextPage();
                 for (Company e : newPageNext) {
@@ -87,6 +87,20 @@ public class CompanyView {
      *
      */
     public void showCompaniesListPage() {
-        // TODO Auto-generated method stub
+        Scanner keyboardShowPage = new Scanner(System.in);
+        System.out.print("Which page do you want to list ? ");
+        int pageNb = keyboardShowPage.nextInt();
+
+        long idBegin = pageNb * Page.elementsByPage;
+        long idEnd = pageNb * Page.elementsByPage + Page.elementsByPage;
+        System.out.println(idBegin);
+        System.out.println(idEnd);
+
+        Page<Company> pageCompany = new Page<>(CompanyService.INSTANCE.getCompanyInRange(idBegin, idEnd));
+        List<Company> newPages = pageCompany.getPage((int) idBegin, (int) idEnd);
+        for (Company c : newPages) {
+            System.out.println(c.toString());
+        }
+        keyboardShowPage.close();
     }
 }

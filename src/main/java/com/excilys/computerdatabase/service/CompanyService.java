@@ -2,8 +2,8 @@ package com.excilys.computerdatabase.service;
 
 import java.util.ArrayList;
 
-import com.excilys.computerdatabase.model.entities.Company;
-import com.excilys.computerdatabase.persistance.CompanyDAO;
+import com.excilys.computerdatabase.model.Company;
+import com.excilys.computerdatabase.persistance.dao.impl.CompanyDAO;
 
 /**
  * @author Vitalie SOVA

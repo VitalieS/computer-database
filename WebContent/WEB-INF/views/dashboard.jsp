@@ -8,11 +8,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
-<link href="${pageContext.request.contextPath}/css/bootstrap.css"
+<link href="${pageContext.request.contextPath}/resources/css/bootstrap.css"
 	rel="stylesheet" media="screen">
-<link href="${pageContext.request.contextPath}/css/font-awesome.css"
+<link href="${pageContext.request.contextPath}/resources/css/font-awesome.css"
 	rel="stylesheet" media="screen">
-<link href="${pageContext.request.contextPath}/css/main.css"
+<link href="${pageContext.request.contextPath}/resources/css/main.css"
 	rel="stylesheet" media="screen"> 
 </head>
 <body>
@@ -39,7 +39,7 @@
 			</div>
 		</div>
 
-		<form id="deleteForm" action="dashboard" method="POST">
+		<form id="deleteForm" action="deleteComputer" method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 
@@ -78,7 +78,7 @@
                              </td>
 							<td><c:out value="${computer.getIntroducedDate()}" /></td>
 							<td><c:out value="${computer.getDiscontinuedDate()}" /></td>
-							<td><c:out value="${computer.getCompanyId()}" /></td>
+							<td><c:out value="${computer.getCompanyName()}" /></td>
 						</tr>						
 					</c:forEach>
 				</tbody>
@@ -100,9 +100,9 @@
 		</div>
 	</footer>
 
-<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
-<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-<script src="${pageContext.request.contextPath}/js/dashboard.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/dashboard.js"></script>
 
 </body>
 </html>

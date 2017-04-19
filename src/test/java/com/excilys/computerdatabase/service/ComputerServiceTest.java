@@ -11,7 +11,8 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.apache.commons.configuration.ConfigurationException;
 import org.junit.Test;
 
-import com.excilys.computerdatabase.model.entities.Computer;
+import com.excilys.computerdatabase.model.Computer;
+import com.excilys.computerdatabase.persistance.dto.ComputerDTO;
 
 /**
  * @author Vitalie SOVA
@@ -21,10 +22,6 @@ public class ComputerServiceTest {
 
     /**
      * Test - getComputerList
-     *
-     * @throws SQLException
-     * @throws ClassNotFoundException
-     * @throws ConfigurationException
      */
     @Test
     public void testGetComputerList() {
@@ -35,42 +32,29 @@ public class ComputerServiceTest {
 
     /**
      * Test - getComputerById when the Id exists
-     *
-     * @throws SQLException
-     * @throws ClassNotFoundException
-     * @throws ConfigurationException
      */
     @Test
-    public void testGetComputerByIDExistant() throws SQLException, ClassNotFoundException, ConfigurationException {
+    public void testGetComputerByIDExistant() {
         Computer c = ComputerService.INSTANCE.getComputerById(Long.valueOf(50));
         assertNotNull(c);
     }
 
     /**
      * Test - getComputerById when the Id is negative
-     *
-     * @throws SQLException
-     * @throws ClassNotFoundException
-     * @throws ConfigurationException
      */
     @Test
-    public void testGetComputerByIDNegative() throws SQLException, ClassNotFoundException, ConfigurationException {
+    public void testGetComputerByIDNegative() {
         int randomNegative = ThreadLocalRandom.current().nextInt(-500, -1 + 1);
-        Computer c = ComputerService.INSTANCE
-                .getComputerById(Long.valueOf(randomNegative));
+        Computer c = ComputerService.INSTANCE.getComputerById(Long.valueOf(randomNegative));
         assertNull(c);
     }
 
     /**
      * Test - Crate a new computer
-     *
-     * @throws SQLException
-     * @throws ClassNotFoundException
-     * @throws ConfigurationException
      */
     @Test
-    public void testCreate() throws SQLException, ClassNotFoundException, ConfigurationException {
-        Computer c = new Computer("New computer Insert");
+    public void testCreate() {
+        ComputerDTO c = new ComputerDTO.ComputerBuilder("New Computer Insert").build();
         int numberofComputers = ComputerService.INSTANCE.getNumberOfComputers();
         Long newId = ComputerService.INSTANCE.createComputer(c);
         assertNotNull(ComputerService.INSTANCE.getComputerById(newId));
@@ -81,14 +65,10 @@ public class ComputerServiceTest {
 
     /**
      * Test - Delete a computer
-     *
-     * @throws SQLException
-     * @throws ClassNotFoundException
-     * @throws ConfigurationException
      */
     @Test
-    public void testDelete() throws SQLException, ClassNotFoundException, ConfigurationException {
-        Computer c = new Computer("New Computer Delete");
+    public void testDelete() {
+        ComputerDTO c = new ComputerDTO.ComputerBuilder("New Computer Delete").build();
         int numberofComputers = ComputerService.INSTANCE.getNumberOfComputers();
         Long newId = ComputerService.INSTANCE.createComputer(c);
 
@@ -101,41 +81,28 @@ public class ComputerServiceTest {
 
     /**
      * Test - Update a computer
-     *
-     * @throws SQLException
-     * @throws ClassNotFoundException
-     * @throws ConfigurationException
      */
     @Test
-    public void testUpdate() throws SQLException, ClassNotFoundException, ConfigurationException {
+    public void testUpdate() {
         // Je cree un nouveau ordinateur que j'insere dans la base de donnee
-        Computer c = new Computer("New Computer Update");
+        ComputerDTO c = new ComputerDTO.ComputerBuilder("New Computer Update").build();
         Long newId = ComputerService.INSTANCE.createComputer(c);
         int numberofComputers = ComputerService.INSTANCE.getNumberOfComputers();
-
         // Je modifie cet ordinateur
-        Computer c1 = new Computer("New ComputerUpdate");
+        ComputerDTO c1 = new ComputerDTO.ComputerBuilder("New Computer Update").build();
         ComputerService.INSTANCE.updateComputer(newId, c1);
-
         assertNotNull(ComputerService.INSTANCE.getComputerById(newId));
-        assertEquals(numberofComputers,
-                ComputerService.INSTANCE.getNumberOfComputers());
-
+        assertEquals(numberofComputers, ComputerService.INSTANCE.getNumberOfComputers());
         // Je supprime cet ordinateur
         ComputerService.INSTANCE.deleteComputer(newId);
-
     }
 
     /**
      * Test - getNumberOfComputers
-     *
-     * @throws SQLException
-     * @throws ClassNotFoundException
-     * @throws ConfigurationException
      */
     @Test
-    public void testGetNumberOfComputers() throws SQLException, ClassNotFoundException, ConfigurationException {
-        Computer c = new Computer("New Computer Test Number");
+    public void testGetNumberOfComputers() {
+        ComputerDTO c = new ComputerDTO.ComputerBuilder("New Computer Test Number").build();
         int nb = ComputerService.INSTANCE.getNumberOfComputers();
         Long newC = ComputerService.INSTANCE.createComputer(c);
         ComputerService.INSTANCE.deleteComputer(newC);
@@ -143,34 +110,10 @@ public class ComputerServiceTest {
         assertEquals(nb, newNb);
     }
 
-    /**
-     * Test - Creation of Computer Objects
-     *
-     * @throws SQLException
-     */
     @Test
-    public void testCreateComputerObject() throws SQLException {
-        // Bean pattern
-        Computer c1 = new Computer("Test Create Bean");
-        c1.setComputerId(Long.valueOf(5));
-        c1.setCompanyId(Long.valueOf(8));
-        assertNotNull(c1);
-
-        // Telescope pattern
-        Computer c2 = new Computer("Test Create Telescope Computer", null, null, Long.valueOf(5));
-        assertNotNull(c2);
-
-        // Builder pattern
-        Computer c3 = new Computer.ComputerBuilder("Test Create Build Computer").id(Long.valueOf(5)).build();
-        assertNotNull(c3);
-    }
-
-    @Test
-    public void testgetComputerInRange() throws SQLException, ConfigurationException {
-        ArrayList<Computer> listOfComputers;
-        listOfComputers = ComputerService.INSTANCE.getComputerInRange(1, 10);
-        System.out.println(listOfComputers);
-        assertEquals(10, listOfComputers.size());
+    public void testGetComputerInRange() throws SQLException, ConfigurationException {
+        ArrayList<ComputerDTO> listComputers = ComputerService.INSTANCE.getComputerInRange(1, 10);
+        assertEquals(10, listComputers.size());
     }
 
 }

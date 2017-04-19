@@ -1,34 +1,26 @@
-package com.excilys.computerdatabase.model.entities.dto;
+package com.excilys.computerdatabase.model;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 /**
  * @author Vitalie SOVA
  */
-public class ComputerDTO {
+public class Computer {
 
-    private Long computerId; // optional
-    private String computerName; // required
-    private LocalDate introducedDate; // optional
-    private LocalDate discontinuedDate; // optional
-    private CompanyDTO company;
-
-    /**
-     * Instantiates a new Computer.
-     */
-    public ComputerDTO() {
-        super();
-    }
+    private Long computerId;
+    private String computerName;
+    private LocalDate introducedDate;
+    private LocalDate discontinuedDate;
+    private Company company;
 
     /**
      * Instantiates a new Computer.
      *
      * @param computerName - The computer name
      */
-    public ComputerDTO(String computerName) {
+    /* public Computer(String computerName) {
         this.computerName = computerName;
-    }
+    }*/
 
     /**
      * Instantiates a new Computer.
@@ -36,16 +28,15 @@ public class ComputerDTO {
      * @param computerName - The computer name
      * @param introducedDate - The introduced date
      * @param discontinuedDate - The discontinued date
-     * @param companyId
-     *            - The company id
+     * @param companyId - The company id
      */
-    public ComputerDTO(String computerName, LocalDate introducedDate,
-            LocalDate discontinuedDate, CompanyDTO company) {
+    /* public Computer(String computerName, LocalDate introducedDate,
+            LocalDate discontinuedDate, Company company) {
         this.computerName = computerName;
         this.introducedDate = introducedDate;
         this.discontinuedDate = discontinuedDate;
         this.company = company;
-    }
+    }*/
 
     /**
      * Gets computerId.
@@ -88,15 +79,14 @@ public class ComputerDTO {
      *
      * @return companyId - The company id
      */
-    public CompanyDTO getCompany() {
+    public Company getCompany() {
         return this.company;
     }
 
     /**
      * Sets computerId.
      *
-     * @param computerId
-     *            - The computer id
+     * @param computerId - The computer id
      */
     public void setComputerId(Long computerId) {
         this.computerId = computerId;
@@ -105,8 +95,7 @@ public class ComputerDTO {
     /**
      * Sets computerName.
      *
-     * @param computerName
-     *            - The computer name
+     * @param computerName - The computer name
      */
     public void setComputerName(String computerName) {
         this.computerName = computerName;
@@ -138,7 +127,7 @@ public class ComputerDTO {
      * @param companyId
      *            - the company id
      */
-    public void setCompany(CompanyDTO company) {
+    public void setCompany(Company company) {
         this.company = company;
     }
 
@@ -146,8 +135,7 @@ public class ComputerDTO {
     public String toString() {
         return "Computer [id = " + this.computerId + ", name = "
                 + this.computerName + ", introduced = " + this.introducedDate
-                + ", discontinued = " + this.discontinuedDate + ", company = "
-                + this.company.getId() + this.company.getName() + "]";
+                + ", discontinued = " + this.discontinuedDate + ", " + this.company + "]";
     }
 
     @Override
@@ -161,7 +149,7 @@ public class ComputerDTO {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        ComputerDTO other = (ComputerDTO) obj;
+        Computer other = (Computer) obj;
         if (discontinuedDate == null) {
             if (other.discontinuedDate != null) {
                 return false;
@@ -209,13 +197,21 @@ public class ComputerDTO {
      *
      * @return The Computer
      */
-
     public static class ComputerBuilder {
         private Long computerId;
         private String computerName;
         private LocalDate introducedDate;
         private LocalDate discontinuedDate;
-        private CompanyDTO company;
+        private Company company;
+
+        /**
+         * Builder constructor. The name of the computer is required.
+         *
+         * @param computerName - The name of the computer
+         */
+        public ComputerBuilder(String computerName) {
+            this.computerName = computerName;
+        }
 
         /**
          * @param computerId - The computer id
@@ -223,15 +219,6 @@ public class ComputerDTO {
          */
         public ComputerBuilder id(Long computerId) {
             this.computerId = computerId;
-            return this;
-        }
-
-        /**
-         * @param computerName - The computer name
-         * @return The computer with the name
-         */
-        public ComputerBuilder name(String computerName) {
-            this.computerName = computerName;
             return this;
         }
 
@@ -257,29 +244,29 @@ public class ComputerDTO {
          * @param introducedDate - The introduced date
          * @return The computer with the introduced date
          */
-        public ComputerBuilder introducedDate(String introducedDate) {
+        /* public ComputerBuilder introducedDate(String introducedDate) {
             DateTimeFormatter form = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate introducedDateLD = LocalDate.parse(introducedDate, form);
-            this.introducedDate = introducedDateLD;
+            this.introducedDate = introducedDate;
             return this;
-        }
+        }*/
 
         /**
          * @param discontinuedDate - The discontinued date
          * @return The computer with the discontinued date
          */
-        public ComputerBuilder discontinuedDate(String discontinuedDate) {
+        /* public ComputerBuilder discontinuedDate(String discontinuedDate) {
             DateTimeFormatter form = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate discontinuedDateLD = LocalDate.parse(discontinuedDate, form);
-            this.discontinuedDate = discontinuedDateLD;
+            this.discontinuedDate = discontinuedDate;
             return this;
-        }
+        }*/
 
         /**
          * @param companyId - The company id
          * @return The computer with the company id
          */
-        public ComputerBuilder company(CompanyDTO company) {
+        public ComputerBuilder company(Company company) {
             this.company = company;
             return this;
         }
@@ -287,15 +274,15 @@ public class ComputerDTO {
         /**
          * @return The computer
          */
-        public ComputerDTO build() {
-            return new ComputerDTO(this);
+        public Computer build() {
+            return new Computer(this);
         }
     }
 
     /**
      * @param builder - The ComputerBuilder
      */
-    private ComputerDTO(ComputerBuilder builder) {
+    private Computer(ComputerBuilder builder) {
         this.computerId = builder.computerId;
         this.computerName = builder.computerName;
         this.introducedDate = builder.introducedDate;

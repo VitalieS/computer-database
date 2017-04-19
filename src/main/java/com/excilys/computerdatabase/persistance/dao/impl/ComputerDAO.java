@@ -1,18 +1,20 @@
-package com.excilys.computerdatabase.persistance;
+package com.excilys.computerdatabase.persistance.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.LoggerFactory;
 
-import com.excilys.computerdatabase.model.entities.Computer;
-import com.excilys.computerdatabase.model.entities.Page;
+import com.excilys.computerdatabase.model.Computer;
+import com.excilys.computerdatabase.model.Page;
+import com.excilys.computerdatabase.persistance.ConnectionHikari;
+import com.excilys.computerdatabase.persistance.dto.ComputerDTO;
+import com.excilys.computerdatabase.persistance.mappers.ResultSetMapper;
 
 /**
  * @author Vitalie SOVA
@@ -29,35 +31,18 @@ public enum ComputerDAO {
     public ArrayList<Computer> getComputerList() {
         ArrayList<Computer> computerList = new ArrayList<Computer>();
         Connection connection = ConnectionHikari.CONNECTION.getConnection();
-        // Connection connection = ConnectionDB.CONNECTION.getConnection();
         Statement statement = null;
         ResultSet resultSet = null;
         try {
             statement = connection.createStatement();
             resultSet = statement.executeQuery("SELECT * FROM computer");
             while (resultSet.next()) {
-                Computer c = new Computer.ComputerBuilder(resultSet.getString("name"))
-                        .id(resultSet.getLong("id"))
-                        .companyId(resultSet.getLong("company_id")).build();
-                if (resultSet.getDate("introduced") != null) {
-                    c.setIntroducedDate(
-                            resultSet.getDate("introduced").toLocalDate());
-                }
-                if (resultSet.getDate("discontinued") != null) {
-                    c.setDiscontinuedDate(
-                            resultSet.getDate("discontinued").toLocalDate());
-                }
-                computerList.add(c);
+                computerList.add(ResultSetMapper.INSTANCE.mapperComputer(resultSet));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             ConnectionHikari.CONNECTION.close(resultSet, statement);
-            /*
-             * ConnectionDB.CONNECTION.closeConnection(connection);
-             * ConnectionDB.CONNECTION.closeStatement(statement);
-             * ConnectionDB.CONNECTION.closeResulSet(resultSet);
-             */
         }
         return computerList;
     }
@@ -68,47 +53,29 @@ public enum ComputerDAO {
      */
     public Computer getComputerById(Long choiceId) {
         Connection connection = ConnectionHikari.CONNECTION.getConnection();
-        // Connection connection = ConnectionDB.CONNECTION.getConnection();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         Computer computer = null;
         try {
-            preparedStatement = connection.prepareStatement(
-                    "SELECT c.id as id ,c.name as name ,c.introduced as introduced ,c.discontinued as discontinued ,company.id as company_id ,company.name as company_name FROM computer as c LEFT JOIN company ON c.company_id=company.id WHERE c.id=?");
+            preparedStatement = connection.prepareStatement("SELECT c.id as id ,c.name as name ,c.introduced as introduced ,c.discontinued as discontinued ,company.id as company_id ,company.name as company_name FROM computer as c LEFT JOIN company ON c.company_id=company.id WHERE c.id=?");
             preparedStatement.setLong(1, choiceId);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                computer = new Computer.ComputerBuilder(resultSet.getString("name"))
-                        .id(resultSet.getLong("id"))
-                        .companyId(resultSet.getLong("company_id")).build();
-                if (resultSet.getString("introduced") != null) {
-                    computer.setIntroducedDate(
-                            resultSet.getDate("introduced").toLocalDate());
-                }
-                if (resultSet.getString("discontinued") != null) {
-                    computer.setDiscontinuedDate(
-                            resultSet.getDate("discontinued").toLocalDate());
-                }
+                computer = ResultSetMapper.INSTANCE.mapperComputer(resultSet);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             ConnectionHikari.CONNECTION.close(resultSet, preparedStatement);
-            /*
-             * ConnectionDB.CONNECTION.closeConnection(connection);
-             * ConnectionDB.CONNECTION.closeStatement(preparedStatement);
-             * ConnectionDB.CONNECTION.closeResulSet(resultSet);
-             */
         }
         return computer;
-
     }
 
     /**
      * @param c - The computer object to create
      * @return generatedKey - The generated Key
      */
-    public Long createComputer(Computer c) {
+    public Long createComputer(ComputerDTO c) {
         String query = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES(";
         if (c.getComputerName() == null) {
             query += null + ", ";
@@ -132,20 +99,17 @@ public enum ComputerDAO {
         }
 
         Connection connection = ConnectionHikari.CONNECTION.getConnection();
-        // Connection connection = ConnectionDB.CONNECTION.getConnection();
         Statement statement = null;
         ResultSet resultSet = null;
         Long generatedkey = null;
         try {
             statement = connection.createStatement();
-            int results = statement.executeUpdate(query,
-                    Statement.RETURN_GENERATED_KEYS);
+            int results = statement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
             if (results == 1) {
                 LOG.info("Succes");
             } else {
                 LOG.info("Fail");
             }
-
             resultSet = statement.getGeneratedKeys();
             if (resultSet.next()) {
                 generatedkey = resultSet.getLong(1);
@@ -155,22 +119,15 @@ public enum ComputerDAO {
             e.printStackTrace();
         } finally {
             ConnectionHikari.CONNECTION.close(resultSet, statement);
-            /*
-             * ConnectionDB.CONNECTION.closeConnection(connection);
-             * ConnectionDB.CONNECTION.closeStatement(statement);
-             * ConnectionDB.CONNECTION.closeResulSet(resultSet);
-             */
         }
         return generatedkey;
     }
 
     /**
-     * @param id
-     *            - The id of the computer to update
-     * @param c
-     *            - The computer object to update with
+     * @param id - The id of the computer to update
+     * @param c - The computer object to update with
      */
-    public void updateComputer(Long id, Computer c) {
+    public void updateComputer(Long id, ComputerDTO c) {
         String query = "UPDATE computer SET name = '" + c.getComputerName()
         + "', introduced = ";
         if (c.getIntroducedDate() == null) {
@@ -189,12 +146,10 @@ public enum ComputerDAO {
             query += c.getCompanyId() + " WHERE id = " + id;
         }
         Connection connection = ConnectionHikari.CONNECTION.getConnection();
-        // Connection connection = ConnectionDB.CONNECTION.getConnection();
         Statement statement = null;
         try {
             statement = connection.createStatement();
-            int results = statement.executeUpdate(query,
-                    Statement.RETURN_GENERATED_KEYS);
+            int results = statement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
             if (results == 1) {
                 LOG.info("Succes");
             } else {
@@ -204,27 +159,20 @@ public enum ComputerDAO {
             e.printStackTrace();
         } finally {
             ConnectionHikari.CONNECTION.close(statement);
-            /*
-             * ConnectionDB.CONNECTION.closeConnection(connection);
-             * ConnectionDB.CONNECTION.closeStatement(statement);
-             */
         }
 
     }
 
     /**
-     * @param id
-     *            - The id of the computer to delete
+     * @param id - The id of the computer to delete
      */
     public void deleteComputer(Long id) {
         String query = "DELETE FROM computer WHERE id = " + id;
         Connection connection = ConnectionHikari.CONNECTION.getConnection();
-        // Connection connection = ConnectionDB.CONNECTION.getConnection();
         Statement statement = null;
         try {
             statement = connection.createStatement();
-            int results = statement.executeUpdate(query,
-                    Statement.RETURN_GENERATED_KEYS);
+            int results = statement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
             if (results == 1) {
                 LOG.info("Succes");
             } else {
@@ -234,10 +182,6 @@ public enum ComputerDAO {
             e.printStackTrace();
         } finally {
             ConnectionHikari.CONNECTION.close(statement);
-            /*
-             * ConnectionDB.CONNECTION.closeConnection(connection);
-             * ConnectionDB.CONNECTION.closeStatement(statement);
-             */
         }
     }
 
@@ -246,14 +190,12 @@ public enum ComputerDAO {
      */
     public int getNumberOfComputers() {
         Connection connection = ConnectionHikari.CONNECTION.getConnection();
-        // Connection connection = ConnectionDB.CONNECTION.getConnection();
         Statement statement = null;
         ResultSet resultSet = null;
         int count = 0;
         try {
             statement = connection.createStatement();
-            resultSet = statement.executeQuery(
-                    "SELECT COUNT(*) AS nbOfComputers FROM computer");
+            resultSet = statement.executeQuery("SELECT COUNT(*) AS nbOfComputers FROM computer");
             while (resultSet.next()) {
                 count = resultSet.getInt("nbOfComputers");
             }
@@ -261,70 +203,59 @@ public enum ComputerDAO {
             e.printStackTrace();
         } finally {
             ConnectionHikari.CONNECTION.close(resultSet, statement);
-            /*
-             * ConnectionDB.CONNECTION.closeConnection(connection);
-             * ConnectionDB.CONNECTION.closeStatement(statement);
-             * ConnectionDB.CONNECTION.closeResulSet(resultSet);
-             */
         }
         return count;
     }
 
     /**
-     * @param idBegin
-     *            - The id of the first computer
-     * @param idEnd
-     *            - The id of the last computer
+     * @param idBegin - The id of the first computer
+     * @param idEnd - The id of the last computer
      * @return listComputer - The list of companies in the selected range
      */
     public ArrayList<Computer> getComputerInRange(long idBegin, long idEnd) {
         String query = "SELECT * FROM computer LIMIT ?,?";
-        ArrayList<Computer> listComputer = new ArrayList<>();
-        try (Connection connection = ConnectionHikari.CONNECTION
-                .getConnection();
-                // Connection connection =
-                // ConnectionDB.CONNECTION.getConnection();
-                PreparedStatement selectPStatement = connection
-                        .prepareStatement(query);) {
+        ArrayList<Computer> computerList = new ArrayList<>();
+        try (Connection connection = ConnectionHikari.CONNECTION.getConnection();
+                PreparedStatement selectPStatement = connection.prepareStatement(query);) {
             selectPStatement.setLong(1, idBegin);
             selectPStatement.setLong(2, idEnd);
             try (ResultSet resultSet = selectPStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    LocalDate getIntroduced;
+                    computerList.add(ResultSetMapper.INSTANCE.mapperComputer(resultSet));
+                    /*
+                    String getIntroduced;
                     if (resultSet.getTimestamp(3) != null) {
-                        getIntroduced = resultSet.getTimestamp(3)
-                                .toLocalDateTime().toLocalDate();
+                        getIntroduced = resultSet.getTimestamp(3).toLocalDateTime().toLocalDate().toString();
                     } else {
                         getIntroduced = null;
                     }
-                    LocalDate getDiscontinued;
+                    String getDiscontinued;
                     if (resultSet.getTimestamp(4) != null) {
-                        getDiscontinued = resultSet.getTimestamp(4)
-                                .toLocalDateTime().toLocalDate();
+                        getDiscontinued = resultSet.getTimestamp(4).toLocalDateTime().toLocalDate().toString();
                     } else {
                         getDiscontinued = null;
                     }
-                    listComputer.add(new Computer.ComputerBuilder(resultSet.getString(2))
+                    listComputer.add(new ComputerDTO.ComputerBuilder(resultSet.getString(2))
                             .id(Long.valueOf(resultSet.getInt(1)))
                             .introducedDate(getIntroduced)
                             .discontinuedDate(getDiscontinued)
                             .companyId(Long.valueOf(resultSet.getInt(5)))
-                            .build());
+                            .build());*/
                 }
                 ConnectionHikari.CONNECTION.close(resultSet, selectPStatement);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return listComputer;
+        return computerList;
     }
 
-    public static final String  ID                    = "id";
-    public static final String  NAME                  = "name";
-    public static final String  INTRODUCED            = "introduced";
-    public static final String  DISCONTINUED          = "discontinued";
+    private static final String ID = "id";
+    private static final String NAME = "name";
+    private static final String INTRODUCED = "introduced";
+    private static final String DISCONTINUED = "discontinued";
+    private static final String COMPANY_NAME = "company_name";
     private static final String COMPANY_ID            = "company_id";
-    public static final String  COMPANY_NAME          = "company_name";
 
     private static final String SQL_SEARCH            = "SELECT c.id as " + ID + " ,c.name as "
             + NAME + " ,c.introduced as " + INTRODUCED + " ,c.discontinued as " + DISCONTINUED
@@ -337,21 +268,18 @@ public enum ComputerDAO {
             + " FROM computer as c LEFT JOIN company ON c.company_id = company.id WHERE c.name LIKE ? OR company.name like ? LIMIT ?,?";
 
     public List<Computer> getComputerInRangeNb(long idFirst, int number, Page.SortingBy sort, String search) {
-        List<Computer> computers = new ArrayList<>();
+        List<Computer> computerList = new ArrayList<>();
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
             connection = ConnectionHikari.CONNECTION.getConnection();
-            // connection = ConnectionDB.CONNECTION.getConnection();
-
             if(sort != null ) {
                 String sql = String.format(SQL_SEARCH, sort.toString());
                 preparedStatement = connection.prepareStatement(sql);
             } else {
                 preparedStatement = connection.prepareStatement(SQL_SEARCH_WITHOUT);
             }
-
             String searchPattern = search != null ? search + "%" : "%";
             preparedStatement.setString(1, searchPattern);
             preparedStatement.setString(2, searchPattern);
@@ -359,38 +287,14 @@ public enum ComputerDAO {
             preparedStatement.setInt(4, number);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                LocalDate getIntroduced;
-                if (resultSet.getTimestamp(3) != null) {
-                    getIntroduced = resultSet.getTimestamp(3).toLocalDateTime()
-                            .toLocalDate();
-                } else {
-                    getIntroduced = null;
-                }
-                LocalDate getDiscontinued;
-                if (resultSet.getTimestamp(4) != null) {
-                    getDiscontinued = resultSet.getTimestamp(4)
-                            .toLocalDateTime().toLocalDate();
-                } else {
-                    getDiscontinued = null;
-                }
-                computers.add(new Computer.ComputerBuilder(resultSet.getString(2))
-                        .id(Long.valueOf(resultSet.getInt(1)))
-                        .introducedDate(getIntroduced)
-                        .discontinuedDate(getDiscontinued)
-                        .companyId(Long.valueOf(resultSet.getInt(5))).build());
+                computerList.add(ResultSetMapper.INSTANCE.mapperComputer(resultSet));
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             ConnectionHikari.CONNECTION.close(resultSet, preparedStatement);
-            /*
-             * ConnectionDB.CONNECTION.closeConnection(connection);
-             * ConnectionDB.CONNECTION.closeStatement(preparedStatement);
-             * ConnectionDB.CONNECTION.closeResulSet(resultSet);
-             */
         }
-        System.out.println("computersss" + computers);
-        return computers;
+        return computerList;
     }
 }
