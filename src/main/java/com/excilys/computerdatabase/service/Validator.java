@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.computerdatabase.persistance.dto.ComputerDTO;
 
-public enum Validate {
+public enum Validator {
     INSTANCE;
 
     private static final String COMPUTER_ID = "id";
@@ -20,7 +20,7 @@ public enum Validate {
     private static final String INTRODUCED_DATE = "introduced";
     private static final String DISCONTINUED_DATE = "discontinued";
 
-    static final Logger LOG = LoggerFactory.getLogger(Validate.class);
+    static final Logger LOG = LoggerFactory.getLogger(Validator.class);
 
     /**
      * Method to validate a computer, returns a map of errors.
@@ -61,8 +61,7 @@ public enum Validate {
     /**
      * Check if the parameter id is not empty.
      *
-     * @param computerId
-     *            - The id to check
+     * @param computerId - The id to check
      * @return null if valid or the error
      */
     private static String validateComputerId(String computerId) {
@@ -86,8 +85,7 @@ public enum Validate {
     }
 
     /**
-     * Check if the name is not empty, if is longer than 2 characters and if it
-     * contains letters, number and spaces.
+     * Check if the name is not empty and longer than 2 characters.
      *
      * @param computerName - The name to check
      */
@@ -169,12 +167,6 @@ public enum Validate {
      */
     private static String validateDateNotBeforeDate(String discontinuedDate, String introducedDate) {
         if (introducedDate != null && discontinuedDate != null && !introducedDate.trim().isEmpty()  && !discontinuedDate.trim().isEmpty()) {
-            /* try {
-                LocalDate.parse(discontinuedDate);
-                LocalDate.parse(introducedDate);
-            } catch (DateTimeParseException e) {
-                return "Please enter a valid date.";
-            }*/
             if (LocalDate.parse(introducedDate).isAfter(LocalDate.parse(discontinuedDate))) {
                 return "The introduced date is after the discontinued date";
             } else {

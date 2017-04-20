@@ -10,22 +10,24 @@
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+		<taglibs.version>1.2.5</taglibs.version>
+		<commons-collections.version>3.2.1</commons-collections.version>
+		<commons-lang.version>2.6</commons-lang.version>
 		<slf4j.version>1.7.24</slf4j.version>
 		<logback.version>1.2.1</logback.version>
 		<mysql.version>5.1.41</mysql.version>
-		<apacheCommonsConfiguration.version>2.1.1</apacheCommonsConfiguration.version>
+		<apacheCommonsConfiguration.version>2.1.1</apacheCommonsConfiguration.version>        
+		<apacheCommonsConfiguration2.version>1.6</apacheCommonsConfiguration2.version>
+		<mysql-connector-java.version>5.1.41</mysql-connector-java.version>
 		<apacheCommonsBeanutils.version>1.9.3</apacheCommonsBeanutils.version>
 		<junit.version>4.10</junit.version>
-		<mockito.version>2.7.17</mockito.version>
-		<dbunit.version>2.4.9</dbunit.version>
-		<powermock.version>1.7.0RC4</powermock.version>
 		<servlet.version>3.0.1</servlet.version>
-		<jspapi.version>2.1</jspapi.version>
+		<jspapi.version>2.0</jspapi.version>
 		<jstl.version>1.2</jstl.version>
 		<selenium.version>3.3.1</selenium.version>
-		<version.plugin.tomcat>2.2</version.plugin.tomcat>
-		<version.tomcat>9.0.0.M17</version.tomcat>
-
+		<tomcat.version>9.0.0.M17</tomcat.version>
+		<spring.version>4.3.7.RELEASE</spring.version>
+		
 		<maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
 	</properties>
 
@@ -34,23 +36,23 @@
 		<dependency>
 			<groupId>org.apache.taglibs</groupId>
 			<artifactId>taglibs-standard-impl</artifactId>
-			<version>1.2.5</version>
+			<version>${taglibs.version}</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/commons-collections/commons-collections -->
 		<dependency>
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
-			<version>3.2.1</version>
+			<version>${commons-collections.version}</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/commons-lang/commons-lang -->
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
-			<version>2.6</version>
+			<version>${commons-lang.version}</version>
 		</dependency>
-
+		
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-configuration2 -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -58,23 +60,24 @@
 			<version>${apacheCommonsConfiguration.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>commons-beanutils</groupId>
-			<artifactId>commons-beanutils</artifactId>
-			<version>${apacheCommonsBeanutils.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>${apacheCommonsBeanutils.version}</version>
+        </dependency>
+        	
 		<!-- https://mvnrepository.com/artifact/commons-configuration/commons-configuration -->
 		<dependency>
 			<groupId>commons-configuration</groupId>
 			<artifactId>commons-configuration</artifactId>
-			<version>1.6</version>
+			<version>${apacheCommonsConfiguration2.version}</version>
 		</dependency>
 
 		<!-- http://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.41</version>
+			<version>${mysql-connector-java.version}</version>
 		</dependency>
 
 		<dependency>
@@ -108,37 +111,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>${mockito.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.dbunit/dbunit -->
-		<dependency>
-			<groupId>org.dbunit</groupId>
-			<artifactId>dbunit</artifactId>
-			<version>${dbunit.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.powermock/powermock-api-mockito2 -->
-		<dependency>
-			<groupId>org.powermock</groupId>
-			<artifactId>powermock-api-mockito2</artifactId>
-			<version>${powermock.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.powermock/powermock-module-junit4 -->
-		<dependency>
-			<groupId>org.powermock</groupId>
-			<artifactId>powermock-module-junit4</artifactId>
-			<version>${powermock.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>${servlet.version}</version>
@@ -149,7 +121,7 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jsp-api</artifactId>
-			<version>2.0</version>
+			<version>${jspapi.version}</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
@@ -169,7 +141,7 @@
 		<dependency>
 			<groupId>org.apache.tomcat</groupId>
 			<artifactId>tomcat-catalina</artifactId>
-			<version>${version.tomcat}</version>
+			<version>${tomcat.version}</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -180,12 +152,38 @@
 			<version>2.6.1</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.codehaus.plexus/plexus-utils -->
-		<dependency>
-			<groupId>org.codehaus.plexus</groupId>
-			<artifactId>plexus-utils</artifactId>
-			<version>3.0.24</version>
-		</dependency>
+        <!-- spring-context which provides core functionality -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+ 
+        <!-- The spring-aop module provides an AOP Alliance-compliant aspect-oriented 
+            programming implementation allowing you to define -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+ 
+        <!-- The spring-webmvc module (also known as the Web-Servlet module) contains 
+            Spring’s model-view-controller (MVC) and REST Web Services implementation 
+            for web applications -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+ 
+        <!-- The spring-web module provides basic web-oriented integration features 
+            such as multipart file upload functionality and the initialization of the 
+            IoC container using Servlet listeners and a web-oriented application context -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
 	</dependencies>
 
 	<build>
@@ -196,19 +194,6 @@
 				<version>3.0.0</version>
 				<configuration>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat7-maven-plugin</artifactId>
-				<version>${version.plugin.tomcat}</version>
-				<configuration>
-					<url>http://localhost:8080/manager/text</url>
-					<server>tomcatserver</server>
-					<path>/computerdatabase</path>
-					<username>admin</username>
-					<password>admin</password>
 				</configuration>
 			</plugin>
 

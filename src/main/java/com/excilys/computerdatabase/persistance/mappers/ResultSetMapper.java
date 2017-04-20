@@ -8,7 +8,7 @@ import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Company.CompanyBuilder;
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Computer.ComputerBuilder;
-import com.excilys.computerdatabase.persistance.dao.impl.CompanyDAO;
+import com.excilys.computerdatabase.persistance.dao.impl.CompanyDAOTest;
 
 public enum ResultSetMapper {
     INSTANCE;
@@ -36,7 +36,7 @@ public enum ResultSetMapper {
             Long companyId = resultSet.getLong("company_id");
             Company company = null;
             if (companyId != null) {
-                company = CompanyDAO.CompanyDAO.getCompanyById(companyId);
+                company = CompanyDAOTest.CompanyDAO.getCompanyById(companyId);
             }
             computer.company(company);
         } catch (SQLException e) {

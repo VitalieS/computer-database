@@ -2,21 +2,19 @@ package com.excilys.computerdatabase.service;
 
 import java.util.ArrayList;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Page.SortingBy;
-import com.excilys.computerdatabase.persistance.dao.impl.ComputerDAO;
+import com.excilys.computerdatabase.persistance.dao.impl.ComputerDAOTest;
 import com.excilys.computerdatabase.persistance.dto.ComputerDTO;
 import com.excilys.computerdatabase.persistance.mappers.ComputerMapper;
 
 /**
  * @author Vitalie SOVA
  */
-public class ComputerService {
+public enum ComputerServiceTest {
+    INSTANCE;
 
-    @Autowired
-    private static ComputerDAO computerDAO;
+    private static ComputerDAOTest computerDAO = ComputerDAOTest.ComputerDao;
 
     /**
      * @return computerList - An ArrayList of computers
@@ -82,8 +80,6 @@ public class ComputerService {
     }
 
     public static int getNumberOfPages(int elementsByPage) {
-        System.out.println(computerDAO.getNumberOfComputers());
-        System.out.println( elementsByPage);
         return computerDAO.getNumberOfComputers() / elementsByPage;
     }
 }

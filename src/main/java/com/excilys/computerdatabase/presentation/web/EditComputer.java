@@ -12,10 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.computerdatabase.persistance.dto.ComputerDTO;
-import com.excilys.computerdatabase.persistance.mappers.PagesMapper;
 import com.excilys.computerdatabase.persistance.mappers.ServletMapper;
-import com.excilys.computerdatabase.service.ComputerService;
-import com.excilys.computerdatabase.service.Validate;
+import com.excilys.computerdatabase.service.ComputerServiceTest;
+import com.excilys.computerdatabase.service.Validator;
 
 /**
  * Servlet implementation class EditComputer.
@@ -31,22 +30,22 @@ public class EditComputer extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LOG.info("GET method called on " + this.getClass().getSimpleName());
-        PagesMapper.fromEdit(request);
+        ServletMapper.getEdit(request);
         this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LOG.info("POST method called on " + this.getClass().getSimpleName());
-        ComputerDTO computer = ServletMapper.mapperToDTO(request, PagesMapper.fromAdd(request));
-        Map<String, String> errors = Validate.validate(computer);
+        ComputerDTO computer = ServletMapper.mapperToDTO(request, ServletMapper.getAdd(request));
+        Map<String, String> errors = Validator.validate(computer);
         if (!errors.isEmpty()) {
             LOG.debug("There are errors, launched viewcomputer view again with errors.");
             request.setAttribute("exception", errors.toString());
             doGet(request, response);
             return;
         }
-        ComputerService.INSTANCE.updateComputer(computer.getComputerId(), computer);
+        ComputerServiceTest.INSTANCE.updateComputer(computer.getComputerId(), computer);
         response.sendRedirect(getServletContext().getContextPath() + "/dashboard");
     }
 }

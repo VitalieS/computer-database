@@ -6,11 +6,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import javax.sql.DataSource;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.persistance.ConnectionHikari;
 import com.excilys.computerdatabase.persistance.mappers.ResultSetMapper;
@@ -19,28 +14,27 @@ import com.excilys.computerdatabase.persistance.mappers.ResultSetMapper;
  * @author Vitalie SOVA
  *
  */
-@Repository("companyDao")
-public class CompanyDAO {
-
-    @Autowired
-    private DataSource dataSource;
+public enum CompanyDAOTest {
+    CompanyDAO;
 
     /**
      * @return companyList - The list of companies
      */
     public ArrayList<Company> getCompaniesList() {
         ArrayList<Company> companyList = new ArrayList<Company>();
-        try (Connection connection = dataSource.getConnection();
-                Statement statement = connection.createStatement();) {
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM company ORDER BY id ASC");
+        Connection connection = ConnectionHikari.CONNECTION.getConnection();
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT * FROM company ORDER BY id ASC");
             while (resultSet.next()) {
                 companyList.add(ResultSetMapper.INSTANCE.mapperCompany(resultSet));
             }
-            connection.close();
-            statement.close();
-            resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            ConnectionHikari.CONNECTION.close(resultSet, statement);
         }
         return companyList;
     }

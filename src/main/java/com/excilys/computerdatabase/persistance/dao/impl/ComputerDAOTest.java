@@ -8,11 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sql.DataSource;
-
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Page;
@@ -24,30 +20,29 @@ import com.excilys.computerdatabase.persistance.mappers.ResultSetMapper;
  * @author Vitalie SOVA
  *
  */
+public enum ComputerDAOTest {
+    ComputerDao;
 
-@Repository("computerDao")
-public class ComputerDAO {
-    private org.slf4j.Logger LOG = LoggerFactory.getLogger(ComputerDAO.class);
-
-    @Autowired
-    private DataSource dataSource;
+    private org.slf4j.Logger LOG = LoggerFactory.getLogger(ComputerDAOTest.class);
 
     /**
      * @return computerList - The list of computers
      */
     public ArrayList<Computer> getComputerList() {
         ArrayList<Computer> computerList = new ArrayList<Computer>();
-        try (Connection connection = dataSource.getConnection();
-                Statement statement = connection.createStatement(); ) {
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM computer");
+        Connection connection = ConnectionHikari.CONNECTION.getConnection();
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT * FROM computer");
             while (resultSet.next()) {
                 computerList.add(ResultSetMapper.INSTANCE.mapperComputer(resultSet));
             }
-            connection.close();
-            statement.close();
-            resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            ConnectionHikari.CONNECTION.close(resultSet, statement);
         }
         return computerList;
     }
@@ -194,16 +189,20 @@ public class ComputerDAO {
      * @return count - The number of computers
      */
     public int getNumberOfComputers() {
+        Connection connection = ConnectionHikari.CONNECTION.getConnection();
+        Statement statement = null;
+        ResultSet resultSet = null;
         int count = 0;
-        try (Connection connection = dataSource.getConnection();
-                Statement statement = connection.createStatement();) {
-            ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) AS nbOfComputers FROM computer");
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT COUNT(*) AS nbOfComputers FROM computer");
             while (resultSet.next()) {
                 count = resultSet.getInt("nbOfComputers");
             }
-            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            ConnectionHikari.CONNECTION.close(resultSet, statement);
         }
         return count;
     }
@@ -232,19 +231,19 @@ public class ComputerDAO {
         return computerList;
     }
 
-    private String ID = "id";
-    private String NAME = "name";
-    private String INTRODUCED = "introduced";
-    private String DISCONTINUED = "discontinued";
-    private String COMPANY_NAME = "company_name";
-    private String COMPANY_ID = "company_id";
+    private static final String ID = "id";
+    private static final String NAME = "name";
+    private static final String INTRODUCED = "introduced";
+    private static final String DISCONTINUED = "discontinued";
+    private static final String COMPANY_NAME = "company_name";
+    private static final String COMPANY_ID            = "company_id";
 
-    String SQL_SEARCH = "SELECT c.id as " + ID + " ,c.name as "
+    private static final String SQL_SEARCH = "SELECT c.id as " + ID + " ,c.name as "
             + NAME + " ,c.introduced as " + INTRODUCED + " ,c.discontinued as " + DISCONTINUED
             + " ,company.id as " + COMPANY_ID + " ,company.name as " + COMPANY_NAME
             + " FROM computer as c LEFT JOIN company ON c.company_id = company.id WHERE c.name LIKE ? OR company.name like ? ORDER BY %s ASC LIMIT ?,?";
 
-    String SQL_SEARCH_WITHOUT = "SELECT c.id as " + ID + " ,c.name as "
+    private static final String SQL_SEARCH_WITHOUT = "SELECT c.id as " + ID + " ,c.name as "
             + NAME + " ,c.introduced as " + INTRODUCED + " ,c.discontinued as " + DISCONTINUED
             + " ,company.id as " + COMPANY_ID + " ,company.name as " + COMPANY_NAME
             + " FROM computer as c LEFT JOIN company ON c.company_id = company.id WHERE c.name LIKE ? OR company.name like ? LIMIT ?,?";

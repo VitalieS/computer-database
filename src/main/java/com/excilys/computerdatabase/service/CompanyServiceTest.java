@@ -2,19 +2,17 @@ package com.excilys.computerdatabase.service;
 
 import java.util.ArrayList;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.excilys.computerdatabase.model.Company;
-import com.excilys.computerdatabase.persistance.dao.impl.CompanyDAO;
+import com.excilys.computerdatabase.persistance.dao.impl.CompanyDAOTest;
 
 /**
  * @author Vitalie SOVA
  *
  */
-public class CompanyService {
+public enum CompanyServiceTest {
+    INSTANCE;
 
-    @Autowired
-    private CompanyDAO companyDAO;
+    private CompanyDAOTest companyDAO = CompanyDAOTest.CompanyDAO;
 
     /**
      * @return companyList - An ArrayList of companies

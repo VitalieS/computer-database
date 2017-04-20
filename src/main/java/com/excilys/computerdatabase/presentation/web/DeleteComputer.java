@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.computerdatabase.persistance.mappers.PagesMapper;
+import com.excilys.computerdatabase.persistance.mappers.ServletMapper;
 
 /**
  * Servlet implementation class DeleteComputer.
@@ -24,7 +24,7 @@ public class DeleteComputer extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LOG.info("POST method called on " + this.getClass().getSimpleName());
-        PagesMapper.delete(request);
+        ServletMapper.delete(request);
         response.sendRedirect(getServletContext().getContextPath() + "/dashboard");
     }
 }
