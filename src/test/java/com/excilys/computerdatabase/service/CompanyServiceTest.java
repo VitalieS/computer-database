@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.excilys.computerdatabase.model.Company;
 
@@ -14,15 +15,16 @@ import com.excilys.computerdatabase.model.Company;
  */
 public class CompanyServiceTest {
 
-    //private CompanyService companyService = new CompanyService();
+    @Autowired
+    private CompanyService companyService;
 
     /**
      * Test - getCompanyList
      */
     @Test
     public void testGetCompanyList() {
-        ArrayList<Company> listCompanies = CompanyService.INSTANCE.getCompaniesList();
-        int nb = CompanyService.INSTANCE.getNumberOfCompanies();
+        ArrayList<Company> listCompanies = companyService.getCompaniesList();
+        int nb = companyService.getNumberOfCompanies();
         assertEquals(nb, listCompanies.size());
     }
 
@@ -31,10 +33,10 @@ public class CompanyServiceTest {
      */
     @Test
     public void testGetCompanyById() {
-        ArrayList<Company> listAllCompany = CompanyService.INSTANCE.getCompaniesList();
+        ArrayList<Company> listAllCompany = companyService.getCompaniesList();
         Company randomCompany = listAllCompany.get((int) (Math.random() * listAllCompany.size()));
         Long idToTest = randomCompany.getCompanyId();
-        Company selectCompany = CompanyService.INSTANCE.getCompanyById(idToTest);
+        Company selectCompany = companyService.getCompanyById(idToTest);
         assert idToTest == selectCompany.getCompanyId();
     }
 
@@ -43,7 +45,7 @@ public class CompanyServiceTest {
      */
     @Test
     public void testGetNumberOfCompanies() {
-        int nb = CompanyService.INSTANCE.getNumberOfCompanies();
+        int nb = companyService.getNumberOfCompanies();
         // We assume the number of companies will always be 42 as it can't be
         // edited, inserted or deleted
         assertEquals(42, nb);

@@ -10,10 +10,13 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.excilys.computerdatabase.model.Computer;
-import com.excilys.computerdatabase.persistance.dao.impl.ComputerDAO;
-import com.excilys.computerdatabase.persistance.dto.ComputerDTO;
+import com.excilys.computerdatabase.persistence.dao.impl.CompanyDAO;
+import com.excilys.computerdatabase.persistence.dao.impl.ComputerDAO;
+import com.excilys.computerdatabase.persistence.dto.ComputerDTO;
 
 /**
  * @author Vitalie SOVA
@@ -21,13 +24,17 @@ import com.excilys.computerdatabase.persistance.dto.ComputerDTO;
  */
 public class ComputerDAOTest {
 
+    private static ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
+    private static ComputerDAO computerDAO = (ComputerDAO) context.getBean("computerDAO");
+    private static CompanyDAO companyDAO = (CompanyDAO) context.getBean("companyDAO");
+
     /**
      * Test - getComputerList
      */
     @Test
     public void testGetComputerList() {
-        int nb = ComputerDAO.ComputerDao.getNumberOfComputers();
-        ArrayList<Computer> list = ComputerDAO.ComputerDao.getComputerList();
+        int nb = computerDAO.getNumberOfComputers();
+        ArrayList<Computer> list = computerDAO.getComputerList();
         assertEquals(nb, list.size());
     }
 
@@ -36,7 +43,7 @@ public class ComputerDAOTest {
      */
     @Test
     public void testGetComputerByIDExistant() {
-        Computer c = ComputerDAO.ComputerDao.getComputerById(Long.valueOf(50));
+        Computer c = computerDAO.getComputerById(Long.valueOf(50));
         assertNotNull(c);
 
     }
@@ -47,7 +54,7 @@ public class ComputerDAOTest {
     @Test
     public void testGetComputerByIDNegative() {
         int randomNegative = ThreadLocalRandom.current().nextInt(-500, -1 + 1);
-        Computer c = ComputerDAO.ComputerDao.getComputerById(Long.valueOf(randomNegative));
+        Computer c = computerDAO.getComputerById(Long.valueOf(randomNegative));
         assertNull(c);
     }
 
@@ -57,11 +64,11 @@ public class ComputerDAOTest {
     @Test
     public void testCreateComputer() {
         ComputerDTO c = new ComputerDTO.ComputerBuilder("New computer Insert").build();
-        int numberofComputers = ComputerDAO.ComputerDao.getNumberOfComputers();
-        Long newId = ComputerDAO.ComputerDao.createComputer(c);
-        assertNotNull(ComputerDAO.ComputerDao.getComputerById(newId));
-        assertEquals(numberofComputers + 1, ComputerDAO.ComputerDao.getNumberOfComputers());
-        ComputerDAO.ComputerDao.deleteComputer(newId);
+        int numberofComputers = computerDAO.getNumberOfComputers();
+        Long newId = computerDAO.createComputer(c);
+        assertNotNull(computerDAO.getComputerById(newId));
+        assertEquals(numberofComputers + 1, computerDAO.getNumberOfComputers());
+        computerDAO.deleteComputer(newId);
     }
 
     /**
@@ -71,16 +78,16 @@ public class ComputerDAOTest {
     public void testUpdateComputer() {
         // Je cree un nouveau ordinateur que j'insere dans la base de donnee
         ComputerDTO c = new ComputerDTO.ComputerBuilder("New computer Update").build();;
-        Long newId = ComputerDAO.ComputerDao.createComputer(c);
-        int numberofComputers = ComputerDAO.ComputerDao.getNumberOfComputers();
+        Long newId = computerDAO.createComputer(c);
+        int numberofComputers = computerDAO.getNumberOfComputers();
         // Je modifie cet ordinateur
         ComputerDTO c1 = new ComputerDTO.ComputerBuilder("New computer update").build();;
-        ComputerDAO.ComputerDao.updateComputer(newId, c1);
-        assertNotNull(ComputerDAO.ComputerDao.getComputerById(newId));
+        computerDAO.updateComputer(newId, c1);
+        assertNotNull(computerDAO.getComputerById(newId));
         assertEquals(numberofComputers,
-                ComputerDAO.ComputerDao.getNumberOfComputers());
+                computerDAO.getNumberOfComputers());
         // Je supprime cet ordinateur
-        ComputerDAO.ComputerDao.deleteComputer(newId);
+        computerDAO.deleteComputer(newId);
     }
 
     /**
@@ -90,15 +97,15 @@ public class ComputerDAOTest {
     public void testDeleteComputer()
             throws SQLException, ClassNotFoundException, ConfigurationException {
         ComputerDTO c = new ComputerDTO.ComputerBuilder("New computer delete").build();;
-        int numberofComputers = ComputerDAO.ComputerDao.getNumberOfComputers();
+        int numberofComputers = computerDAO.getNumberOfComputers();
 
-        Long newId = ComputerDAO.ComputerDao.createComputer(c);
+        Long newId = computerDAO.createComputer(c);
 
-        ComputerDAO.ComputerDao.deleteComputer(newId);
+        computerDAO.deleteComputer(newId);
 
-        assertNull(ComputerDAO.ComputerDao.getComputerById(newId));
+        assertNull(computerDAO.getComputerById(newId));
         assertEquals(numberofComputers,
-                ComputerDAO.ComputerDao.getNumberOfComputers());
+                computerDAO.getNumberOfComputers());
     }
 
     /**
@@ -107,16 +114,16 @@ public class ComputerDAOTest {
     @Test
     public void testGetNumberOfComputers() {
         ComputerDTO c = new ComputerDTO.ComputerBuilder("New computer test number").build();;
-        int nb = ComputerDAO.ComputerDao.getNumberOfComputers();
-        Long newC = ComputerDAO.ComputerDao.createComputer(c);
-        ComputerDAO.ComputerDao.deleteComputer(newC);
-        int newNb = ComputerDAO.ComputerDao.getNumberOfComputers();
+        int nb = computerDAO.getNumberOfComputers();
+        Long newC = computerDAO.createComputer(c);
+        computerDAO.deleteComputer(newC);
+        int newNb = computerDAO.getNumberOfComputers();
         assertEquals(nb, newNb);
     }
 
     @Test
     public void testgetComputerInRange() {
-        ArrayList<Computer> listComputers = ComputerDAO.ComputerDao.getComputerInRange(1, 10);
+        ArrayList<Computer> listComputers = computerDAO.getComputerInRange(1, 10);
         assertEquals(10, listComputers.size());
     }
 

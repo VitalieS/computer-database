@@ -1,7 +1,4 @@
-package com.excilys.computerdatabase.persistance.dto;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+package com.excilys.computerdatabase.persistence.dto;
 
 /**
  * This class is the object version of a Company from the Database.
@@ -12,8 +9,6 @@ public class CompanyDTO {
 
     private Long companyId;
     private String companyName;
-
-    static final Logger LOG = LoggerFactory.getLogger(ComputerDTO.class);
 
     /**
      * Instantiates a new company.

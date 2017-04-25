@@ -2,26 +2,40 @@ package com.excilys.computerdatabase.service;
 
 import java.util.ArrayList;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Page.SortingBy;
-import com.excilys.computerdatabase.persistance.dao.impl.ComputerDAO;
-import com.excilys.computerdatabase.persistance.dto.ComputerDTO;
-import com.excilys.computerdatabase.persistance.mappers.ComputerMapper;
+import com.excilys.computerdatabase.persistence.dao.impl.ComputerDAO;
+import com.excilys.computerdatabase.persistence.dto.ComputerDTO;
+import com.excilys.computerdatabase.persistence.mappers.ComputerMapper;
 
 /**
  * @author Vitalie SOVA
  */
+@Service("computerService")
 public class ComputerService {
 
+    private org.slf4j.Logger LOG = LoggerFactory.getLogger(ComputerService.class);
+
     @Autowired
-    private static ComputerDAO computerDAO;
+    public ComputerDAO computerDAO;
+
+    public ComputerDAO getComputerDAO() {
+        return computerDAO;
+    }
+
+    public void setComputerDAO(ComputerDAO computerDAO) {
+        this.computerDAO = computerDAO;
+    }
 
     /**
      * @return computerList - An ArrayList of computers
      */
     public ArrayList<Computer> getComputerList() {
+        LOG.info("HuhService" + computerDAO.getComputerList());
         return computerDAO.getComputerList();
     }
 
@@ -69,8 +83,11 @@ public class ComputerService {
     }
 
     public ArrayList<ComputerDTO> getComputerInRangeNb(Long debut, int nbId, SortingBy sort, String search) {
+        LOG.info("Trying to get the computers - Service");
         ArrayList<ComputerDTO> listAllComputer = new ArrayList<>();
+        LOG.info("The list is empty" + listAllComputer);
         computerDAO.getComputerInRangeNb(debut, nbId, sort, search).forEach(computer -> { listAllComputer.add(ComputerMapper.mapper(computer)); });
+        LOG.info("The returned list is empty" + listAllComputer);
         return listAllComputer;
     };
 
@@ -81,9 +98,7 @@ public class ComputerService {
         return computerDAO.getNumberOfComputers();
     }
 
-    public static int getNumberOfPages(int elementsByPage) {
-        System.out.println(computerDAO.getNumberOfComputers());
-        System.out.println( elementsByPage);
+    public int getNumberOfPages(int elementsByPage) {
         return computerDAO.getNumberOfComputers() / elementsByPage;
     }
 }

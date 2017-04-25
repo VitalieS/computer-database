@@ -18,11 +18,14 @@ public class CompanyView {
 
     private org.slf4j.Logger LOG = LoggerFactory.getLogger(CompanyView.class);
 
+    private CompanyService companyService;
+
     /**
      *
      */
     protected void showCompaniesList() {
-        ArrayList<Company> companyList = CompanyService.INSTANCE.getCompaniesList();
+        ArrayList<Company> companyList = new ArrayList<Company>();
+        companyList = companyService.getCompaniesList();
         for (Company e : companyList) {
             System.out.println(e.toString());
         }
@@ -37,9 +40,9 @@ public class CompanyView {
         int numberC;
         try {
             numberC = Integer.parseInt(keyboardCompanyId.nextLine());
-            Company company = CompanyService.INSTANCE.getCompanyById(Long.valueOf(numberC));
+            Company company = companyService.getCompanyById(Long.valueOf(numberC));
             System.out.println(company.toString());
-            keyboardCompanyId.close();
+            //keyboardCompanyId.close();
             return;
         } catch (Exception e) {
             System.out.println("That is not a valid id. Try again.");
@@ -51,7 +54,7 @@ public class CompanyView {
      *
      */
     protected void showCompaniesListPageCallingAll() {
-        Page<Company> pageCompany = new Page<>(CompanyService.INSTANCE.getCompaniesList());
+        Page<Company> pageCompany = new Page<>(companyService.getCompaniesList());
         LOG.info("There are currently " + pageCompany.getNumPage() + " pages");
         Scanner keyboardShowPage = new Scanner(System.in);
         LOG.info("Which page do you want to list ?");
@@ -61,7 +64,7 @@ public class CompanyView {
         for (Company e : newPage) {
             System.out.println(e.toString());
         }
-        keyboardShowPage.close();
+        //keyboardShowPage.close();
         while (true) {
             Scanner seeNext = new Scanner(System.in);
             System.out.print("Write 0 if you want to go to the previous page or 1 if you want to go to the next one. \n");
@@ -96,11 +99,11 @@ public class CompanyView {
         System.out.println(idBegin);
         System.out.println(idEnd);
 
-        Page<Company> pageCompany = new Page<>(CompanyService.INSTANCE.getCompanyInRange(idBegin, idEnd));
+        Page<Company> pageCompany = new Page<>(companyService.getCompanyInRange(idBegin, idEnd));
         List<Company> newPages = pageCompany.getPage((int) idBegin, (int) idEnd);
         for (Company c : newPages) {
             System.out.println(c.toString());
         }
-        keyboardShowPage.close();
+        //keyboardShowPage.close();
     }
 }

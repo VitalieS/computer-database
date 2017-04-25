@@ -2,6 +2,9 @@ package com.excilys.computerdatabase.presentation.cliui;
 
 import java.util.Scanner;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 /**
  * @author Vitalie SOVA
  *
@@ -21,63 +24,65 @@ public class View {
 
         Scanner keyboard = new Scanner(System.in);
 
-        ComputerView computerView = new ComputerView();
-        CompanyView companyView = new CompanyView();
+        ApplicationContext context = new ClassPathXmlApplicationContext("/spring.xml");
+        ComputerView computerView = (ComputerView) context.getBean("computerView");
+        CompanyView companyView = (CompanyView) context.getBean("companyView");
+        ((ClassPathXmlApplicationContext) context).close();
 
-        inputloop : while (true) {
+        inputloop: while (true) {
             printMenu();
 
-            /*while (!keyboard.hasNextInt()) {
+            while (!keyboard.hasNextInt()) {
                 System.out.println("Nope, that's not it!");
                 keyboard.next();
-            }*/
+            }
             choice = keyboard.nextInt();
 
             switch (choice) {
-                case 1 :
+                case 1:
                     computerView.showComputersList();
                     break;
-                case 2 :
+                case 2:
                     companyView.showCompaniesList();
                     break;
-                case 3 :
+                case 3:
                     computerView.showComputersDetails();
                     break;
-                case 4 :
+                case 4:
                     companyView.showCompaniesDetails();
                     break;
-                case 5 :
+                case 5:
                     computerView.createComputer();
                     break;
-                case 6 :
+                case 6:
                     computerView.updateComputer();
                     break;
-                case 7 :
+                case 7:
                     computerView.deleteComputer();
                     break;
-                case 8 :
+                case 8:
                     computerView.showComputersListPage();
                     break;
-                case 9 :
+                case 9:
                     companyView.showCompaniesListPage();
                     break;
-                case 10 :
+                case 10:
                     computerView.showComputersListPageCallingAll();
                     break;
-                case 11 :
+                case 11:
                     companyView.showCompaniesListPageCallingAll();
                     break;
-                case 12 :
+                case 12:
                     System.out.println("Good bye !");
                     break inputloop;
-                case 13 :
+                case 13:
                     break;
-                default :
+                default:
                     System.out.println("Invalid option, try again!");
                     break;
             }
         }
-        //keyboard.close();
+        // keyboard.close();
     }
 
     /**

@@ -1,19 +1,21 @@
-package com.excilys.computerdatabase.persistance.mappers;
+package com.excilys.computerdatabase.persistence.mappers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Company.CompanyBuilder;
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Computer.ComputerBuilder;
-import com.excilys.computerdatabase.persistance.dao.impl.CompanyDAOTest;
 
-public enum ResultSetMapper {
-    INSTANCE;
+public class ResultSetMapper {
 
-    public Company mapperCompany(ResultSet rs) {
+    private static org.slf4j.Logger LOG = LoggerFactory.getLogger(ResultSetMapper.class);
+
+    public static Company mapperCompany(ResultSet rs) {
         CompanyBuilder company = new Company.CompanyBuilder();
         try {
             company.id(rs.getLong("id"));
@@ -24,19 +26,22 @@ public enum ResultSetMapper {
         return company.build();
     }
 
-    public Computer mapperComputer(ResultSet resultSet) {
+    public static Computer mapperComputer(ResultSet resultSet) {
         ComputerBuilder computer = null;
         try {
             computer = new Computer.ComputerBuilder(resultSet.getString("name"));
             computer.id(resultSet.getLong("id"));
-            LocalDate introducedDate = (resultSet.getDate("introduced") == null) ? null : resultSet.getDate("introduced").toLocalDate();
+            LocalDate introducedDate = (resultSet.getDate("introduced") == null) ? null
+                    : resultSet.getDate("introduced").toLocalDate();
             computer.introducedDate(introducedDate);
-            LocalDate discontinuedDate = (resultSet.getDate("discontinued") == null) ? null : resultSet.getDate("discontinued").toLocalDate();
+            LocalDate discontinuedDate = (resultSet.getDate("discontinued") == null) ? null
+                    : resultSet.getDate("discontinued").toLocalDate();
             computer.discontinuedDate(discontinuedDate);
             Long companyId = resultSet.getLong("company_id");
+            String companyName= resultSet.getString("company_name");
             Company company = null;
             if (companyId != null) {
-                company = CompanyDAOTest.CompanyDAO.getCompanyById(companyId);
+                company = new Company.CompanyBuilder().id(companyId).name(companyName).build();
             }
             computer.company(company);
         } catch (SQLException e) {

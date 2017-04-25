@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.persistance.dao.impl;
+package com.excilys.computerdatabase.persistence.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,49 +6,76 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Page;
-import com.excilys.computerdatabase.persistance.ConnectionHikari;
-import com.excilys.computerdatabase.persistance.dto.ComputerDTO;
-import com.excilys.computerdatabase.persistance.mappers.ResultSetMapper;
+import com.excilys.computerdatabase.persistence.dto.ComputerDTO;
+import com.excilys.computerdatabase.persistence.mappers.ResultSetMapper;
 
 /**
  * @author Vitalie SOVA
  *
  */
-
-@Repository("computerDao")
 public class ComputerDAO {
-    private org.slf4j.Logger LOG = LoggerFactory.getLogger(ComputerDAO.class);
 
-    @Autowired
     private DataSource dataSource;
+    private final static CompanyDAO COMPUTER_DAO_INSTANCE;
+    private final static Logger LOG;
+
+    static {
+        COMPUTER_DAO_INSTANCE = new CompanyDAO();
+        LOG = LoggerFactory.getLogger(CompanyDAO.class);
+    }
+
+    public static CompanyDAO getInstance() {
+        return COMPUTER_DAO_INSTANCE;
+    }
+
+    public void setDataSource(DataSource ds) {
+        this.dataSource = ds;
+    }
 
     /**
      * @return computerList - The list of computers
      */
     public ArrayList<Computer> getComputerList() {
         ArrayList<Computer> computerList = new ArrayList<Computer>();
-        try (Connection connection = dataSource.getConnection();
-                Statement statement = connection.createStatement(); ) {
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM computer");
-            while (resultSet.next()) {
-                computerList.add(ResultSetMapper.INSTANCE.mapperComputer(resultSet));
-            }
-            connection.close();
-            statement.close();
-            resultSet.close();
+        ResultSet resultSet = null;
+        Connection connection = null;
+        try {
+            connection = dataSource.getConnection();
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
+        Statement statement = null;
+        try {
+            statement = connection.createStatement();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        try {
+            resultSet = statement.executeQuery("SELECT * FROM computer");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try {
+            while (resultSet.next()) {
+                computerList.add(ResultSetMapper.mapperComputer(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try { if (resultSet != null) resultSet.close(); } catch (Exception e) {};
+            try { if (statement != null) statement.close(); } catch (Exception e) {};
+            try { if (connection != null) connection.close(); } catch (Exception e) {};
+        }
+        LOG.info("Huh3" + computerList);
         return computerList;
     }
 
@@ -57,21 +84,19 @@ public class ComputerDAO {
      * @return computer - The selected computer object
      */
     public Computer getComputerById(Long choiceId) {
-        Connection connection = ConnectionHikari.CONNECTION.getConnection();
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
         Computer computer = null;
-        try {
-            preparedStatement = connection.prepareStatement("SELECT c.id as id, c.name as name, c.introduced as introduced, c.discontinued as discontinued ,company.id as company_id ,company.name as company_name FROM computer as c LEFT JOIN company ON c.company_id=company.id WHERE c.id=?");
+        try (Connection connection = dataSource.getConnection();){
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT c.id as id, c.name as name, c.introduced as introduced, c.discontinued as discontinued ,company.id as company_id ,company.name as company_name FROM computer as c LEFT JOIN company ON c.company_id=company.id WHERE c.id=?");
             preparedStatement.setLong(1, choiceId);
-            resultSet = preparedStatement.executeQuery();
+            ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                computer = ResultSetMapper.INSTANCE.mapperComputer(resultSet);
+                computer = ResultSetMapper.mapperComputer(resultSet);
             }
+            connection.close();
+            preparedStatement.close();
+            resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            ConnectionHikari.CONNECTION.close(resultSet, preparedStatement);
         }
         return computer;
     }
@@ -103,27 +128,25 @@ public class ComputerDAO {
             query += c.getCompanyId() + ")";
         }
 
-        Connection connection = ConnectionHikari.CONNECTION.getConnection();
-        Statement statement = null;
-        ResultSet resultSet = null;
         Long generatedkey = null;
-        try {
-            statement = connection.createStatement();
+        try (Connection connection = dataSource.getConnection();
+                Statement statement = connection.createStatement();) {
             int results = statement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
             if (results == 1) {
                 LOG.info("Succes");
             } else {
                 LOG.info("Fail");
             }
-            resultSet = statement.getGeneratedKeys();
+            ResultSet resultSet = statement.getGeneratedKeys();
             if (resultSet.next()) {
                 generatedkey = resultSet.getLong(1);
                 LOG.info("Auto Generated Primary Key " + generatedkey);
             }
+            connection.close();
+            statement.close();
+            resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            ConnectionHikari.CONNECTION.close(resultSet, statement);
         }
         return generatedkey;
     }
@@ -150,22 +173,19 @@ public class ComputerDAO {
         } else {
             query += c.getCompanyId() + " WHERE id = " + id;
         }
-        Connection connection = ConnectionHikari.CONNECTION.getConnection();
-        Statement statement = null;
-        try {
-            statement = connection.createStatement();
+        try (Connection connection = dataSource.getConnection();
+                Statement statement = connection.createStatement();) {
             int results = statement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
             if (results == 1) {
                 LOG.info("Succes");
             } else {
                 LOG.info("Fail");
             }
+            connection.close();
+            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            ConnectionHikari.CONNECTION.close(statement);
         }
-
     }
 
     /**
@@ -173,20 +193,18 @@ public class ComputerDAO {
      */
     public void deleteComputer(Long id) {
         String query = "DELETE FROM computer WHERE id = " + id;
-        Connection connection = ConnectionHikari.CONNECTION.getConnection();
-        Statement statement = null;
-        try {
-            statement = connection.createStatement();
+        try (Connection connection = dataSource.getConnection();
+                Statement statement = connection.createStatement();) {
             int results = statement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
             if (results == 1) {
                 LOG.info("Succes");
             } else {
                 LOG.info("Fail");
             }
+            connection.close();
+            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            ConnectionHikari.CONNECTION.close(statement);
         }
     }
 
@@ -202,6 +220,8 @@ public class ComputerDAO {
                 count = resultSet.getInt("nbOfComputers");
             }
             connection.close();
+            statement.close();
+            resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -216,16 +236,18 @@ public class ComputerDAO {
     public ArrayList<Computer> getComputerInRange(long idBegin, long idEnd) {
         String query = "SELECT * FROM computer LIMIT ?,?";
         ArrayList<Computer> computerList = new ArrayList<>();
-        try (Connection connection = ConnectionHikari.CONNECTION.getConnection();
+        try (Connection connection = dataSource.getConnection();
                 PreparedStatement selectPStatement = connection.prepareStatement(query);) {
             selectPStatement.setLong(1, idBegin);
             selectPStatement.setLong(2, idEnd);
             try (ResultSet resultSet = selectPStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    computerList.add(ResultSetMapper.INSTANCE.mapperComputer(resultSet));
+                    computerList.add(ResultSetMapper.mapperComputer(resultSet));
                 }
-                ConnectionHikari.CONNECTION.close(resultSet, selectPStatement);
+                resultSet.close();
             }
+            connection.close();
+            selectPStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -249,13 +271,11 @@ public class ComputerDAO {
             + " ,company.id as " + COMPANY_ID + " ,company.name as " + COMPANY_NAME
             + " FROM computer as c LEFT JOIN company ON c.company_id = company.id WHERE c.name LIKE ? OR company.name like ? LIMIT ?,?";
 
-    public List<Computer> getComputerInRangeNb(long idFirst, int number, Page.SortingBy sort, String search) {
-        List<Computer> computerList = new ArrayList<>();
-        Connection connection = null;
+    public ArrayList<Computer> getComputerInRangeNb(long idFirst, int number, Page.SortingBy sort, String search) {
+        ArrayList<Computer> computerList = new ArrayList<>();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        try {
-            connection = ConnectionHikari.CONNECTION.getConnection();
+        try (Connection connection = dataSource.getConnection();){
             if(sort != null ) {
                 String sql = String.format(SQL_SEARCH, sort.toString());
                 preparedStatement = connection.prepareStatement(sql);
@@ -269,13 +289,13 @@ public class ComputerDAO {
             preparedStatement.setInt(4, number);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                computerList.add(ResultSetMapper.INSTANCE.mapperComputer(resultSet));
+                computerList.add(ResultSetMapper.mapperComputer(resultSet));
             }
-
+            connection.close();
+            preparedStatement.close();
+            resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            ConnectionHikari.CONNECTION.close(resultSet, preparedStatement);
         }
         return computerList;
     }

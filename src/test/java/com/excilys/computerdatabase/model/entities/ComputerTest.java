@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 import org.junit.Test;
 
-import com.excilys.computerdatabase.persistance.dto.ComputerDTO;
+import com.excilys.computerdatabase.persistence.dto.ComputerDTO;
 
 public class ComputerTest {
 

@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.computerdatabase.persistance.dto.ComputerDTO;
+import com.excilys.computerdatabase.persistence.dto.ComputerDTO;
 
 public enum Validator {
     INSTANCE;

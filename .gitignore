@@ -1,27 +1,27 @@
 .metadata
-/bin/
-/target/
-
-# eclipse specific git ignore
-*.class
-*.pydevproject
-.project
-.metadata
-.settings/*
-bin/**
-tmp/**
-tmp/**/*
+bin/
+tmp/
 *.tmp
 *.bak
 *.swp
 *~.nib
 local.properties
-.classpath
 .settings/
 .loadpath
+.recommenders
+.classpath
+*.log
+.MF
+WebContent/
+target/
 
-# External tool builders
-.externalToolBuilders/
+# Eclipse Core
+.project
 
-# Locally stored "Eclipse launch configurations"
-*.launch
+# Package Files #
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar

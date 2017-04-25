@@ -10,23 +10,29 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 
 import com.excilys.computerdatabase.model.Computer;
-import com.excilys.computerdatabase.persistance.dto.ComputerDTO;
+import com.excilys.computerdatabase.persistence.dto.ComputerDTO;
 
 /**
  * @author Vitalie SOVA
  *
  */
+@ContextConfiguration({ "classpath:spring.xml" })
 public class ComputerServiceTest {
+
+    @Autowired
+    private ComputerService computerService;
 
     /**
      * Test - getComputerList
      */
     @Test
     public void testGetComputerList() {
-        int nb = ComputerService.INSTANCE.getNumberOfComputers();
-        ArrayList<Computer> list = ComputerService.INSTANCE.getComputerList();
+        int nb = computerService.getNumberOfComputers();
+        ArrayList<Computer> list = computerService.getComputerList();
         assertEquals(nb, list.size());
     }
 
@@ -35,7 +41,7 @@ public class ComputerServiceTest {
      */
     @Test
     public void testGetComputerByIDExistant() {
-        Computer c = ComputerService.INSTANCE.getComputerById(Long.valueOf(50));
+        Computer c = computerService.getComputerById(Long.valueOf(50));
         assertNotNull(c);
     }
 
@@ -45,7 +51,7 @@ public class ComputerServiceTest {
     @Test
     public void testGetComputerByIDNegative() {
         int randomNegative = ThreadLocalRandom.current().nextInt(-500, -1 + 1);
-        Computer c = ComputerService.INSTANCE.getComputerById(Long.valueOf(randomNegative));
+        Computer c = computerService.getComputerById(Long.valueOf(randomNegative));
         assertNull(c);
     }
 
@@ -55,12 +61,12 @@ public class ComputerServiceTest {
     @Test
     public void testCreate() {
         ComputerDTO c = new ComputerDTO.ComputerBuilder("New Computer Insert").build();
-        int numberofComputers = ComputerService.INSTANCE.getNumberOfComputers();
-        Long newId = ComputerService.INSTANCE.createComputer(c);
-        assertNotNull(ComputerService.INSTANCE.getComputerById(newId));
+        int numberofComputers = computerService.getNumberOfComputers();
+        Long newId = computerService.createComputer(c);
+        assertNotNull(computerService.getComputerById(newId));
         System.out.println("This is number of computers" + numberofComputers);
-        assertEquals(numberofComputers + 1, ComputerService.INSTANCE.getNumberOfComputers());
-        ComputerService.INSTANCE.deleteComputer(newId);
+        assertEquals(numberofComputers + 1, computerService.getNumberOfComputers());
+        computerService.deleteComputer(newId);
     }
 
     /**
@@ -69,14 +75,14 @@ public class ComputerServiceTest {
     @Test
     public void testDelete() {
         ComputerDTO c = new ComputerDTO.ComputerBuilder("New Computer Delete").build();
-        int numberofComputers = ComputerService.INSTANCE.getNumberOfComputers();
-        Long newId = ComputerService.INSTANCE.createComputer(c);
+        int numberofComputers = computerService.getNumberOfComputers();
+        Long newId = computerService.createComputer(c);
 
-        ComputerService.INSTANCE.deleteComputer(newId);
+        computerService.deleteComputer(newId);
 
-        assertNull(ComputerService.INSTANCE.getComputerById(newId));
+        assertNull(computerService.getComputerById(newId));
         assertEquals(numberofComputers,
-                ComputerService.INSTANCE.getNumberOfComputers());
+                computerService.getNumberOfComputers());
     }
 
     /**
@@ -86,15 +92,15 @@ public class ComputerServiceTest {
     public void testUpdate() {
         // Je cree un nouveau ordinateur que j'insere dans la base de donnee
         ComputerDTO c = new ComputerDTO.ComputerBuilder("New Computer Update").build();
-        Long newId = ComputerService.INSTANCE.createComputer(c);
-        int numberofComputers = ComputerService.INSTANCE.getNumberOfComputers();
+        Long newId = computerService.createComputer(c);
+        int numberofComputers = computerService.getNumberOfComputers();
         // Je modifie cet ordinateur
         ComputerDTO c1 = new ComputerDTO.ComputerBuilder("New Computer Update").build();
-        ComputerService.INSTANCE.updateComputer(newId, c1);
-        assertNotNull(ComputerService.INSTANCE.getComputerById(newId));
-        assertEquals(numberofComputers, ComputerService.INSTANCE.getNumberOfComputers());
+        computerService.updateComputer(newId, c1);
+        assertNotNull(computerService.getComputerById(newId));
+        assertEquals(numberofComputers, computerService.getNumberOfComputers());
         // Je supprime cet ordinateur
-        ComputerService.INSTANCE.deleteComputer(newId);
+        computerService.deleteComputer(newId);
     }
 
     /**
@@ -103,16 +109,16 @@ public class ComputerServiceTest {
     @Test
     public void testGetNumberOfComputers() {
         ComputerDTO c = new ComputerDTO.ComputerBuilder("New Computer Test Number").build();
-        int nb = ComputerService.INSTANCE.getNumberOfComputers();
-        Long newC = ComputerService.INSTANCE.createComputer(c);
-        ComputerService.INSTANCE.deleteComputer(newC);
-        int newNb = ComputerService.INSTANCE.getNumberOfComputers();
+        int nb = computerService.getNumberOfComputers();
+        Long newC = computerService.createComputer(c);
+        computerService.deleteComputer(newC);
+        int newNb = computerService.getNumberOfComputers();
         assertEquals(nb, newNb);
     }
 
     @Test
     public void testGetComputerInRange() throws SQLException, ConfigurationException {
-        ArrayList<ComputerDTO> listComputers = ComputerService.INSTANCE.getComputerInRange(1, 10);
+        ArrayList<ComputerDTO> listComputers = computerService.getComputerInRange(1, 10);
         assertEquals(10, listComputers.size());
     }
 

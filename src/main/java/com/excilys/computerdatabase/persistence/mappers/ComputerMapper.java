@@ -1,13 +1,12 @@
-package com.excilys.computerdatabase.persistance.mappers;
+package com.excilys.computerdatabase.persistence.mappers;
 
 import java.time.LocalDate;
 
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Computer;
-import com.excilys.computerdatabase.persistance.dto.ComputerDTO;
+import com.excilys.computerdatabase.persistence.dto.ComputerDTO;
 
-public enum ComputerMapper {
-    INSTANCE;
+public class ComputerMapper {
 
     public static ComputerDTO mapper(Computer c) {
         Long computerId = (c.getComputerId() == null ? null : c.getComputerId());

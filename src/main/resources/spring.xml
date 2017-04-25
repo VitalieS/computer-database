@@ -1,0 +1,58 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- Enable annotations -->
+	<context:annotation-config />
+	<context:component-scan base-package="com.excilys.computerdatabase" />
+
+	<!-- HikariCP configuration -->
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
+		<constructor-arg ref="hikariConfig" />
+	</bean>
+
+	<context:property-placeholder location="classpath:hikaridatabase.properties" />
+
+	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+		<property name="driverClassName" value="${driverClassName}" />
+		<property name="jdbcUrl" value="${jdbcUrl}" />
+		<property name="username" value="${usernameDB}" />
+		<property name="password" value="${password}" />
+		<property name="maximumPoolSize" value="${maximumPoolSize}" />
+		<property name="maxLifetime" value="${maxLifetime}" />
+		<property name="idleTimeout" value="${idleTimeout}" />
+		<property name="leakDetectionThreshold" value="${leakDetectionThreshold}" />
+	</bean>
+
+	<!-- Beans configuration -->
+	<bean id="computerDAO" name="computerDAO"
+		class="com.excilys.computerdatabase.persistence.dao.impl.ComputerDAO">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<bean id="computerService" name="computerService"
+		class="com.excilys.computerdatabase.service.ComputerService">
+		<property name="computerDAO" ref="computerDAO"></property>
+	</bean>
+
+	<bean id="companyDAO" name="companyDAO"
+		class="com.excilys.computerdatabase.persistence.dao.impl.CompanyDAO">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<bean id="companyService" name="companyService"
+		class="com.excilys.computerdatabase.service.CompanyService">
+		<property name="companyDAO" ref="companyDAO"></property>
+	</bean>
+
+	<!-- <bean id="computerDAO" class="com.excilys.computerdatabase.persistence.dao.impl.ComputerDAO"> 
+		</bean> <bean id="companyDAO" class="com.excilys.computerdatabase.persistence.dao.impl.CompanyDAO"> 
+		</bean> -->
+	<!--<bean id="companyService" class="com.excilys.computerdatabase.service.CompanyService"> 
+		</bean> <bean id="computerService" class="com.excilys.computerdatabase.service.ComputerService"> 
+		</bean> -->
+	<!-- <bean id="companyView" class="com.excilys.computerdatabase.presentation.cliui.CompanyView"> 
+		</bean> <bean id="computerView" class="com.excilys.computerdatabase.presentation.cliui.ComputerView"> 
+		</bean> -->
+</beans>

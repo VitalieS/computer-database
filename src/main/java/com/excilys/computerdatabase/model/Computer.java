@@ -14,31 +14,6 @@ public class Computer {
     private Company company;
 
     /**
-     * Instantiates a new Computer.
-     *
-     * @param computerName - The computer name
-     */
-    /* public Computer(String computerName) {
-        this.computerName = computerName;
-    }*/
-
-    /**
-     * Instantiates a new Computer.
-     *
-     * @param computerName - The computer name
-     * @param introducedDate - The introduced date
-     * @param discontinuedDate - The discontinued date
-     * @param companyId - The company id
-     */
-    /* public Computer(String computerName, LocalDate introducedDate,
-            LocalDate discontinuedDate, Company company) {
-        this.computerName = computerName;
-        this.introducedDate = introducedDate;
-        this.discontinuedDate = discontinuedDate;
-        this.company = company;
-    }*/
-
-    /**
      * Gets computerId.
      *
      * @return computerId - The company id

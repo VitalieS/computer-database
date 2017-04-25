@@ -2,25 +2,38 @@ package com.excilys.computerdatabase.service;
 
 import java.util.ArrayList;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.excilys.computerdatabase.model.Company;
-import com.excilys.computerdatabase.persistance.dao.impl.CompanyDAO;
+import com.excilys.computerdatabase.persistence.dao.impl.CompanyDAO;
 
 /**
  * @author Vitalie SOVA
- *
  */
+@Service("companyService")
 public class CompanyService {
 
+    private org.slf4j.Logger LOG = LoggerFactory.getLogger(CompanyService.class);
+
     @Autowired
-    private CompanyDAO companyDAO;
+    public CompanyDAO companyDAO;
+
+    public CompanyDAO getCompanyDAO() {
+        return companyDAO;
+    }
+
+    public void setCompanyDAO(CompanyDAO companyDAO) {
+        this.companyDAO = companyDAO;
+    }
 
     /**
      * @return companyList - An ArrayList of companies
      */
     public ArrayList<Company> getCompaniesList() {
-        ArrayList<Company> companyList = companyDAO.getCompaniesList();
+        ArrayList<Company> companyList = new ArrayList<Company>();
+        companyList = companyDAO.getCompaniesList();
         return companyList;
     }
 

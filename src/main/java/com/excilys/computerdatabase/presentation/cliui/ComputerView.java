@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Page;
-import com.excilys.computerdatabase.persistance.dto.ComputerDTO;
+import com.excilys.computerdatabase.persistence.dto.ComputerDTO;
 import com.excilys.computerdatabase.service.ComputerService;
 
 /**
@@ -15,11 +15,14 @@ import com.excilys.computerdatabase.service.ComputerService;
  */
 public class ComputerView {
 
+    private ComputerService computerService;
+
     /**
      *
      */
     protected void showComputersList() {
-        ArrayList<Computer> computerList = ComputerService.INSTANCE.getComputerList();
+        ArrayList<Computer> computerList = computerService.getComputerList();
+        System.out.println("View computer list" + computerList);
         for (Computer c : computerList) {
             System.out.println(c.toString());
         }
@@ -34,9 +37,9 @@ public class ComputerView {
         int number;
         try {
             number = Integer.parseInt(keyboardComputerId.nextLine());
-            Computer computer = ComputerService.INSTANCE.getComputerById(Long.valueOf(number));
+            Computer computer = computerService.getComputerById(Long.valueOf(number));
             System.out.println("Computer found:" + computer.toString());
-            keyboardComputerId.close();
+            //keyboardComputerId.close();
             return;
         } catch (Exception e) {
             System.out.println("No computer has this id. Try again.");
@@ -83,14 +86,14 @@ public class ComputerView {
 
         System.out.println(c.toString());
 
-        Long key = ComputerService.INSTANCE.createComputer(c);
-        Computer addedCompany = ComputerService.INSTANCE.getComputerById(key);
+        Long key = computerService.createComputer(c);
+        Computer addedCompany = computerService.getComputerById(key);
         System.out.println(addedCompany.toString());
 
-        keyboardNewComputername.close();
-        keyboardNewComputerIDate.close();
-        keyboardNewComputerDDate.close();
-        keyboardNewComputerManufacturer.close();
+        //keyboardNewComputername.close();
+        //keyboardNewComputerIDate.close();
+        //keyboardNewComputerDDate.close();
+        //keyboardNewComputerManufacturer.close();
     }
 
     /**
@@ -103,7 +106,7 @@ public class ComputerView {
         Computer computer;
         try {
             numberID = Integer.parseInt(keyboardID.nextLine());
-            computer = ComputerService.INSTANCE.getComputerById(Long.valueOf(numberID));
+            computer = computerService.getComputerById(Long.valueOf(numberID));
             System.out.println("This is the computer you want to edit:");
             System.out.println(computer.toString());
         } catch (Exception e) {
@@ -151,14 +154,14 @@ public class ComputerView {
         }
 
         System.out.println(c1.toString());
-        ComputerService.INSTANCE.updateComputer(Long.valueOf(numberID), c1);
-        System.out.println(ComputerService.INSTANCE.getComputerById(Long.valueOf(numberID)).toString());
+        computerService.updateComputer(Long.valueOf(numberID), c1);
+        System.out.println(computerService.getComputerById(Long.valueOf(numberID)).toString());
 
-        keyboardID.close();
-        keyboardNewComputername1.close();
-        keyboardNewComputerIDate1.close();
-        keyboardNewComputerDDate1.close();
-        keyboardNewComputerManufacturer1.close();
+        //keyboardID.close();
+        //keyboardNewComputername1.close();
+        //keyboardNewComputerIDate1.close();
+        //keyboardNewComputerDDate1.close();
+        //keyboardNewComputerManufacturer1.close();
     }
 
     /**
@@ -171,23 +174,23 @@ public class ComputerView {
         int numberDelete;
         try {
             numberDelete = Integer.parseInt(keyboardDelete.nextLine());
-            computerDelete = ComputerService.INSTANCE.getComputerById(Long.valueOf(numberDelete));
+            computerDelete = computerService.getComputerById(Long.valueOf(numberDelete));
             System.out.println("This is the computer you want to delete");
             System.out.println(computerDelete.toString());
-            ComputerService.INSTANCE.deleteComputer(Long.valueOf(numberDelete));
+            computerService.deleteComputer(Long.valueOf(numberDelete));
         } catch (Exception e) {
             System.out.println("That is not a valid id. Try again.");
             keyboardDelete.close();
             return;
         }
-        keyboardDelete.close();
+        //keyboardDelete.close();
     }
 
     /**
      *
      */
     protected void showComputersListPageCallingAll() {
-        Page<Computer> pageComputers = new Page<>(ComputerService.INSTANCE.getComputerList());
+        Page<Computer> pageComputers = new Page<>(computerService.getComputerList());
         System.out.println("There are currently " + pageComputers.getNumPage() + " pages");
         Scanner keyboardShowPage = new Scanner(System.in);
         System.out.print("Which page do you want to list ? ");
@@ -197,7 +200,7 @@ public class ComputerView {
         for (Computer c : newPage) {
             System.out.println(c.toString());
         }
-        keyboardShowPage.close();
+        //keyboardShowPage.close();
         while (true) {
             Scanner seeNext = new Scanner(System.in);
             System.out.print("Write 0 if you want to go to the previous page or 1 if you want to go to the next one. \n");
@@ -233,11 +236,11 @@ public class ComputerView {
         System.out.println(idBegin);
         System.out.println(idEnd);
 
-        Page<ComputerDTO> pageComputers = new Page<>(ComputerService.INSTANCE.getComputerInRange(idBegin, idEnd));
+        Page<ComputerDTO> pageComputers = new Page<>(computerService.getComputerInRange(idBegin, idEnd));
         List<ComputerDTO> newPages = pageComputers.getPage((int) idBegin, (int) idEnd);
         for (ComputerDTO c : newPages) {
             System.out.println(c.toString());
         }
-        keyboardShowPage.close();
+        //keyboardShowPage.close();
     }
 }

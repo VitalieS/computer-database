@@ -27,9 +27,9 @@
 		<servlet-class>com.excilys.computerdatabase.presentation.web.EditComputer</servlet-class>
 	</servlet>
 	<servlet>
-        <servlet-name>deleteComputer</servlet-name>
-        <servlet-class>com.excilys.computerdatabase.presentation.web.DeleteComputer</servlet-class>
-    </servlet>
+		<servlet-name>deleteComputer</servlet-name>
+		<servlet-class>com.excilys.computerdatabase.presentation.web.DeleteComputer</servlet-class>
+	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>dashboard</servlet-name>
@@ -43,10 +43,10 @@
 		<servlet-name>editComputer</servlet-name>
 		<url-pattern>/editComputer</url-pattern>
 	</servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>deleteComputer</servlet-name>
-        <url-pattern>/deleteComputer</url-pattern>
-    </servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>deleteComputer</servlet-name>
+		<url-pattern>/deleteComputer</url-pattern>
+	</servlet-mapping>
 
 	<error-page>
 		<error-code>404</error-code>
@@ -61,4 +61,13 @@
 		<location>/views/500.html</location>
 	</error-page>
 
+	<!-- Spring context and listener -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/classes/spring.xml</param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
 </web-app>

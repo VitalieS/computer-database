@@ -1,7 +1,4 @@
-package com.excilys.computerdatabase.persistance.dto;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+package com.excilys.computerdatabase.persistence.dto;
 
 /**
  * This class is the object version of a Computer from the Database.
@@ -16,8 +13,6 @@ public class ComputerDTO {
     private String discontinuedDate;
     private Long companyId;
     private String companyName;
-
-    static final Logger LOG = LoggerFactory.getLogger(ComputerDTO.class);
 
     /**
      * Gets computerId.
