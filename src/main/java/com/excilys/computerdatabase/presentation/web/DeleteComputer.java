@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -23,7 +24,7 @@ public class DeleteComputer extends HttpServlet {
 
     static final Logger LOG = LoggerFactory.getLogger(DeleteComputer.class);
 
-    //@Autowired
+    @Autowired
     public ComputerService computerService;
 
     @Override

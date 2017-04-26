@@ -28,7 +28,7 @@
 	</bean>
 
 	<!-- Beans configuration -->
-	<bean id="computerDAO" name="computerDAO"
+<!--	<bean id="computerDAO" name="computerDAO"
 		class="com.excilys.computerdatabase.persistence.dao.impl.ComputerDAO">
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
@@ -45,7 +45,7 @@
 		class="com.excilys.computerdatabase.service.CompanyService">
 		<property name="companyDAO" ref="companyDAO"></property>
 	</bean>
-
+-->
 	<!-- <bean id="computerDAO" class="com.excilys.computerdatabase.persistence.dao.impl.ComputerDAO"> 
 		</bean> <bean id="companyDAO" class="com.excilys.computerdatabase.persistence.dao.impl.CompanyDAO"> 
 		</bean> -->

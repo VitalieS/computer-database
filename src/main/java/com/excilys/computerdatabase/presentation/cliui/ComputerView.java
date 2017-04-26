@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Page;
 import com.excilys.computerdatabase.persistence.dto.ComputerDTO;
@@ -13,8 +16,10 @@ import com.excilys.computerdatabase.service.ComputerService;
  * @author Vitalie SOVA
  *
  */
+@Service("computerView")
 public class ComputerView {
 
+	@Autowired
     private ComputerService computerService;
 
     /**

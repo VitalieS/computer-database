@@ -8,17 +8,18 @@ import org.springframework.stereotype.Service;
 
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.persistence.dao.impl.CompanyDAO;
+import com.excilys.computerdatabase.persistence.dao.impl.ComputerDAO;
 
 /**
  * @author Vitalie SOVA
  */
-@Service("companyService")
+@Service/*("companyService")*/
 public class CompanyService {
 
     private org.slf4j.Logger LOG = LoggerFactory.getLogger(CompanyService.class);
 
     @Autowired
-    public CompanyDAO companyDAO;
+  	private CompanyDAO companyDAO;
 
     public CompanyDAO getCompanyDAO() {
         return companyDAO;
@@ -32,9 +33,9 @@ public class CompanyService {
      * @return companyList - An ArrayList of companies
      */
     public ArrayList<Company> getCompaniesList() {
-        ArrayList<Company> companyList = new ArrayList<Company>();
-        companyList = companyDAO.getCompaniesList();
-        return companyList;
+        //ArrayList<Company> companyList = new ArrayList<Company>();
+        //companyList = companyDAO.getCompaniesList();
+        return companyDAO.getCompaniesList();
     }
 
     /**

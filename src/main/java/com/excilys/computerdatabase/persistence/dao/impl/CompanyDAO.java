@@ -10,6 +10,8 @@ import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.persistence.mappers.ResultSetMapper;
@@ -18,9 +20,12 @@ import com.excilys.computerdatabase.persistence.mappers.ResultSetMapper;
  * @author Vitalie SOVA
  *
  */
+@Repository
 public class CompanyDAO {
 
+	@Autowired
     private DataSource dataSource;
+	
     private final static CompanyDAO COMPANY_DAO_INSTANCE;
     private final static Logger LOG;
 

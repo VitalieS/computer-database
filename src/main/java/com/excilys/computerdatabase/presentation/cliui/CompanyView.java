@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Page;
@@ -14,10 +16,12 @@ import com.excilys.computerdatabase.service.CompanyService;
  * @author Vitalie SOVA
  *
  */
+@Service("companyView")
 public class CompanyView {
 
     private org.slf4j.Logger LOG = LoggerFactory.getLogger(CompanyView.class);
 
+    @Autowired
     private CompanyService companyService;
 
     /**

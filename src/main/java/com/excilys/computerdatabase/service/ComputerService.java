@@ -15,7 +15,7 @@ import com.excilys.computerdatabase.persistence.mappers.ComputerMapper;
 /**
  * @author Vitalie SOVA
  */
-@Service("computerService")
+@Service/*("computerService")*/
 public class ComputerService {
 
     private org.slf4j.Logger LOG = LoggerFactory.getLogger(ComputerService.class);
