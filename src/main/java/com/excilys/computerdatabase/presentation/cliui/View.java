@@ -92,6 +92,9 @@ public class View {
 				System.out.println("Good bye !");
 				break inputloop;
 			case 13:
+				companyView.deleteCompany();
+				break;
+			case 14:
 				break;
 			default:
 				System.out.println("Invalid option, try again!");
@@ -119,6 +122,7 @@ public class View {
 		System.out.println("10. List specific page of computers");
 		System.out.println("11. List specific page of companies");
 		System.out.println("12. EXIT");
+		System.out.println("13. Delete a company");
 		System.out.println("------------------------");
 		System.out.println("What's your choice ?");
 	}

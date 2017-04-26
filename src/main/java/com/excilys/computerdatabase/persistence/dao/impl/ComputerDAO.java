@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.model.Computer;
@@ -51,36 +52,15 @@ public class ComputerDAO {
     public ArrayList<Computer> getComputerList() {
         ArrayList<Computer> computerList = new ArrayList<Computer>();
         ResultSet resultSet = null;
-        Connection connection = null;
-        try {
-            connection = dataSource.getConnection();
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-        }
-        Statement statement = null;
-        try {
-            statement = connection.createStatement();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        try {
+        try (Connection connection = DataSourceUtils.getConnection(dataSource);
+                Statement statement = connection.createStatement();) {
             resultSet = statement.executeQuery("SELECT * FROM computer");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        try {
             while (resultSet.next()) {
                 computerList.add(ResultSetMapper.mapperComputer(resultSet));
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try { if (resultSet != null) resultSet.close(); } catch (Exception e) {};
-            try { if (statement != null) statement.close(); } catch (Exception e) {};
-            try { if (connection != null) connection.close(); } catch (Exception e) {};
         }
-        LOG.info("Huh3" + computerList);
         return computerList;
     }
 
@@ -90,7 +70,7 @@ public class ComputerDAO {
      */
     public Computer getComputerById(Long choiceId) {
         Computer computer = null;
-        try (Connection connection = dataSource.getConnection();){
+        try (Connection connection = DataSourceUtils.getConnection(dataSource);){
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT c.id as id, c.name as name, c.introduced as introduced, c.discontinued as discontinued ,company.id as company_id ,company.name as company_name FROM computer as c LEFT JOIN company ON c.company_id=company.id WHERE c.id=?");
             preparedStatement.setLong(1, choiceId);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -134,7 +114,7 @@ public class ComputerDAO {
         }
 
         Long generatedkey = null;
-        try (Connection connection = dataSource.getConnection();
+        try (Connection connection = DataSourceUtils.getConnection(dataSource);
                 Statement statement = connection.createStatement();) {
             int results = statement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
             if (results == 1) {
@@ -178,7 +158,7 @@ public class ComputerDAO {
         } else {
             query += c.getCompanyId() + " WHERE id = " + id;
         }
-        try (Connection connection = dataSource.getConnection();
+        try (Connection connection = DataSourceUtils.getConnection(dataSource);
                 Statement statement = connection.createStatement();) {
             int results = statement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
             if (results == 1) {
@@ -198,7 +178,7 @@ public class ComputerDAO {
      */
     public void deleteComputer(Long id) {
         String query = "DELETE FROM computer WHERE id = " + id;
-        try (Connection connection = dataSource.getConnection();
+        try (Connection connection = DataSourceUtils.getConnection(dataSource);
                 Statement statement = connection.createStatement();) {
             int results = statement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
             if (results == 1) {
@@ -218,7 +198,7 @@ public class ComputerDAO {
      */
     public int getNumberOfComputers() {
         int count = 0;
-        try (Connection connection = dataSource.getConnection();
+        try (Connection connection = DataSourceUtils.getConnection(dataSource);
                 Statement statement = connection.createStatement();) {
             ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) AS nbOfComputers FROM computer");
             while (resultSet.next()) {
@@ -241,7 +221,7 @@ public class ComputerDAO {
     public ArrayList<Computer> getComputerInRange(long idBegin, long idEnd) {
         String query = "SELECT * FROM computer LIMIT ?,?";
         ArrayList<Computer> computerList = new ArrayList<>();
-        try (Connection connection = dataSource.getConnection();
+        try (Connection connection = DataSourceUtils.getConnection(dataSource);
                 PreparedStatement selectPStatement = connection.prepareStatement(query);) {
             selectPStatement.setLong(1, idBegin);
             selectPStatement.setLong(2, idEnd);
@@ -280,7 +260,7 @@ public class ComputerDAO {
         ArrayList<Computer> computerList = new ArrayList<>();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        try (Connection connection = dataSource.getConnection();){
+        try (Connection connection = DataSourceUtils.getConnection(dataSource);){
             if(sort != null ) {
                 String sql = String.format(SQL_SEARCH, sort.toString());
                 preparedStatement = connection.prepareStatement(sql);
@@ -303,5 +283,15 @@ public class ComputerDAO {
             e.printStackTrace();
         }
         return computerList;
+    }
+    
+    public void deleteByCompany(Connection cn, long id) {
+        try (PreparedStatement st = cn.prepareStatement("DELETE FROM computer WHERE company_id=?")) {
+            st.setLong(1, id);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            LOG.error("ComputerDAO : deleteByCompany() catched SQLException", e);
+            e.printStackTrace();
+        }
     }
 }

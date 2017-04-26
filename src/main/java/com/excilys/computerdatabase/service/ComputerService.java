@@ -21,7 +21,7 @@ public class ComputerService {
     private org.slf4j.Logger LOG = LoggerFactory.getLogger(ComputerService.class);
 
     @Autowired
-    public ComputerDAO computerDAO;
+    private ComputerDAO computerDAO;
 
     public ComputerDAO getComputerDAO() {
         return computerDAO;

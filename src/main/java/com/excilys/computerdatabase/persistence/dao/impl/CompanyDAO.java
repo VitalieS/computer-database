@@ -1,6 +1,7 @@
 package com.excilys.computerdatabase.persistence.dao.impl;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -11,6 +12,7 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.model.Company;
@@ -47,7 +49,7 @@ public class CompanyDAO {
     public ArrayList<Company> getCompaniesList() {
         ArrayList<Company> companyList = new ArrayList<Company>();
         ResultSet resultSet=null;
-        try (Connection connection = dataSource.getConnection();
+        try (Connection connection = DataSourceUtils.getConnection(dataSource);
                 Statement statement = connection.createStatement();) {
             resultSet = statement.executeQuery("SELECT * FROM company ORDER BY id ASC");
             while (resultSet.next()) {
@@ -68,7 +70,7 @@ public class CompanyDAO {
      */
     public Company getCompanyById(Long choiceId) {
         Company company = null;
-        try (Connection connection = dataSource.getConnection();
+        try (Connection connection = DataSourceUtils.getConnection(dataSource);
                 Statement statement = connection.createStatement();) {
             ResultSet resultSet = statement.executeQuery("SELECT * FROM company WHERE id = " + choiceId);
             while (resultSet.next()) {
@@ -90,7 +92,7 @@ public class CompanyDAO {
      */
     public ArrayList<Company> getCompanyInRange(long idBegin, long idEnd) {
         ArrayList<Company> listCompany = new ArrayList<>();
-        try (Connection connection = dataSource.getConnection();
+        try (Connection connection = DataSourceUtils.getConnection(dataSource);
                 Statement statement = connection.createStatement();) {
             ResultSet resultSet = statement.executeQuery("SELECT * FROM company ORDER BY id ASC LIMIT ?,?");
             while (resultSet.next()) {
@@ -110,7 +112,7 @@ public class CompanyDAO {
      */
     public int getNumberOfCompanies() {
         int count = 0;
-        try (Connection connection = dataSource.getConnection();
+        try (Connection connection = DataSourceUtils.getConnection(dataSource);
                 Statement statement = connection.createStatement();) {
             ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) AS nbCompanies FROM company");
             while (resultSet.next()) {
@@ -123,6 +125,23 @@ public class CompanyDAO {
             e.printStackTrace();
         }
         return count;
+    }
+    
+    /**
+     * delete - delete a Company
+     * 
+     * @param cn - Connection to use
+     * @param id - id of the Company to delete
+     * @throws SQLException 
+     */
+    public void delete(Connection cn, long id) {
+        try (PreparedStatement stCompany = cn.prepareStatement("DELETE FROM company WHERE id=?")) {
+            stCompany.setLong(1, id);
+            stCompany.executeUpdate();
+        } catch (SQLException e) {
+            LOG.error("Cannot delete company with ID ", id, e);	
+            e.printStackTrace();
+        }
     }
 
 }

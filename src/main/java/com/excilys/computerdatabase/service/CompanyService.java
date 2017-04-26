@@ -1,9 +1,14 @@
 package com.excilys.computerdatabase.service;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
+
+import javax.sql.DataSource;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Service;
 
 import com.excilys.computerdatabase.model.Company;
@@ -20,6 +25,12 @@ public class CompanyService {
 
     @Autowired
   	private CompanyDAO companyDAO;
+    
+    @Autowired
+    private ComputerDAO computerDAO;
+    
+    @Autowired
+    private DataSource dataSource;
 
     public CompanyDAO getCompanyDAO() {
         return companyDAO;
@@ -65,5 +76,22 @@ public class CompanyService {
             listCompany.add(company);
         });
         return listCompany;
+    }
+    
+    /**
+     * delete a Company and all related Computers. rollback if there is any problem in the transaction
+     * 
+     * @param id - id of the Company to delete
+     * @throws SQLException
+     */
+    public void delete(long id) {
+        Connection cn = DataSourceUtils.getConnection(dataSource);
+        //try {
+            computerDAO.deleteByCompany(cn, id);
+            companyDAO.delete(cn, id);
+        //} catch (SQLException e) {
+        //    cn.rollback();
+        //    LOG.error("delete() catched SQLException", e);
+        //}
     }
 }
