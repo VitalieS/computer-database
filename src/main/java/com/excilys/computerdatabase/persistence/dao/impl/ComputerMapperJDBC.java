@@ -1,29 +1,18 @@
-package com.excilys.computerdatabase.persistence.mappers;
+package com.excilys.computerdatabase.persistence.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import com.excilys.computerdatabase.model.Company;
-import com.excilys.computerdatabase.model.Company.CompanyBuilder;
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Computer.ComputerBuilder;
 
-// TODO Delete this class once JdbcTemplate is fully implemented
-public class ResultSetMapper {
+public class ComputerMapperJDBC implements RowMapper<Computer>  {
 
-    public static Company mapperCompany(ResultSet rs) {
-        CompanyBuilder company = new Company.CompanyBuilder();
-        try {
-            company.id(rs.getLong("id"));
-            company.name(rs.getString("name"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return company.build();
-    }
-    
-    public static Computer mapperComputer(ResultSet resultSet) {
+	public Computer mapRow(ResultSet resultSet, int rowNum) {
         ComputerBuilder computer = null;
         try {
             computer = new Computer.ComputerBuilder(resultSet.getString("name"));
@@ -45,5 +34,5 @@ public class ResultSetMapper {
             e.printStackTrace();
         }
         return computer.build();
-    }
+	}
 }

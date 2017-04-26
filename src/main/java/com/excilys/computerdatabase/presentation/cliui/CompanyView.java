@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.excilys.computerdatabase.model.Company;
-import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Page;
 import com.excilys.computerdatabase.service.CompanyService;
 
@@ -29,7 +28,7 @@ public class CompanyView {
 	 *
 	 */
 	protected void showCompaniesList() {
-		ArrayList<Company> companyList = new ArrayList<Company>();
+		List<Company> companyList = new ArrayList<Company>();
 		companyList = companyService.getCompaniesList();
 		for (Company e : companyList) {
 			System.out.println(e.toString());

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.excilys.computerdatabase</groupId>
 	<artifactId>computerdatabase</artifactId>
-	<version>0.5.1-SNAPSHOT</version>
+	<version>0.5.2-SNAPSHOT</version>
 	<name>Computer Database</name>
 
 	<url>http://maven.apache.org</url>
@@ -30,6 +30,8 @@
 		<tomcat.version>9.0.0.M17</tomcat.version>
 		<hikaricp.version>2.6.1</hikaricp.version>
 		<spring.version>4.3.8.RELEASE</spring.version>
+		<validation.api.version>1.1.0.Final</validation.api.version> <!-- Not on lib -->
+        <hibernate.validator.version>5.4.1.Final</hibernate.validator.version> <!-- Not on lib -->
 		<maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
 	</properties>
 
@@ -200,24 +202,25 @@
 			<artifactId>spring-web</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-aop</artifactId>
+			<artifactId>spring-webmvc</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
+		
+		 <!-- Validation -->
+         <dependency>
+             <groupId>javax.validation</groupId>
+             <artifactId>validation-api</artifactId>
+             <version>${validation.api.version}</version>
+         </dependency>
+         <dependency>
+             <groupId>org.hibernate</groupId>
+             <artifactId>hibernate-validator</artifactId>
+             <version>${hibernate.validator.version}</version>
+         </dependency>
 
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-aspects</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
 	</dependencies>
 
 	<build>

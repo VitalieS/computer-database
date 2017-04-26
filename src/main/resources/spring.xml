@@ -1,6 +1,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
     http://www.springframework.org/schema/context
@@ -8,16 +9,28 @@
     http://www.springframework.org/schema/tx
     http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
     http://www.springframework.org/schema/aop
-    http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+    http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
 	<!-- Enable annotations -->
 	<context:annotation-config />
 	<context:component-scan base-package="com.excilys.computerdatabase" />
 
+	<!-- Enable Spring MVC annotations -->
+	<mvc:annotation-driven enable-matrix-variables="true" />
+
 	<!-- HikariCP configuration -->
 	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
 		<constructor-arg ref="hikariConfig" />
 	</bean>
+		
+	<!-- JDBCTemplate configuration -->
+	<!-- 
+	 <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource" />
+    </bean> -->
+    
 
 	<context:property-placeholder location="classpath:hikaridatabase.properties" />
 
@@ -34,8 +47,9 @@
 
 	<!-- Transactions -->
 	<tx:annotation-driven transaction-manager="txManager" />
-	
-	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 

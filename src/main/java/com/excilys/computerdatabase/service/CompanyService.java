@@ -3,6 +3,7 @@ package com.excilys.computerdatabase.service;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -43,7 +44,7 @@ public class CompanyService {
     /**
      * @return companyList - An ArrayList of companies
      */
-    public ArrayList<Company> getCompaniesList() {
+    public List<Company> getCompaniesList() {
         //ArrayList<Company> companyList = new ArrayList<Company>();
         //companyList = companyDAO.getCompaniesList();
         return companyDAO.getCompaniesList();
@@ -88,7 +89,7 @@ public class CompanyService {
         Connection cn = DataSourceUtils.getConnection(dataSource);
         //try {
             computerDAO.deleteByCompany(cn, id);
-            companyDAO.delete(cn, id);
+            companyDAO.delete(id);
         //} catch (SQLException e) {
         //    cn.rollback();
         //    LOG.error("delete() catched SQLException", e);

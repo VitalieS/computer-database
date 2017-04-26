@@ -2,7 +2,6 @@ package com.excilys.computerdatabase.presentation.cliui;
 
 import java.util.Scanner;
 
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.excilys.computerdatabase.service.CompanyService;

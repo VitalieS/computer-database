@@ -1,6 +1,6 @@
 package com.excilys.computerdatabase.persistence.mappers;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,7 +14,7 @@ public class ServletMapper {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServletMapper.class);
 
-    public static ComputerDTO mapperToDTO(HttpServletRequest request, ArrayList<Company> list) {
+    public static ComputerDTO mapperToDTO(HttpServletRequest request, List<Company> list) {
         String computerId = request.getParameter("computerId");
         Long id = (computerId == null || computerId.trim().isEmpty() ? null : Long.parseLong(computerId.trim()));
         String computerName = request.getParameter("computerName");
