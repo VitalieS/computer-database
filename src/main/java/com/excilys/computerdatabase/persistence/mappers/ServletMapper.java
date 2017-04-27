@@ -30,4 +30,21 @@ public class ServletMapper {
         return new ComputerDTO.ComputerBuilder(name).id(id).introducedDate(introduced).discontinuedDate(discontinued)
                 .companyId(companyIdl).companyName(companyName).build();
     }
+
+    public static ComputerDTO mapperToDTO(String computerId1, String computerName1, String introducedDate1, String discontinuedDate1, String companyId1, List<Company> list) {
+        String computerId = computerId1;
+        Long id = (computerId == null || computerId.trim().isEmpty() ? null : Long.parseLong(computerId.trim()));
+        String computerName = computerName1;
+        String name = (computerName == null || computerName.trim().isEmpty() ? null : computerName.trim());
+        String introducedDate = introducedDate1;
+        String introduced = (introducedDate == null || introducedDate.trim().isEmpty() ? null : introducedDate.trim());
+        String discontinuedDate = discontinuedDate1;
+        String discontinued = (discontinuedDate == null || discontinuedDate.trim().isEmpty() ? null  : discontinuedDate.trim());
+        String companyId = companyId1;
+        Long companyIdl = (companyId == null || companyId.trim().isEmpty() ? null : Long.parseLong(companyId.trim()));
+        String companyName = (companyId == null ? null : list.get(Integer.parseInt(companyId.trim())).getCompanyName());
+        LOG.info("Trying to add: " + computerId + " " + computerName + " " + introducedDate + " " + discontinuedDate + " " + companyId);
+        return new ComputerDTO.ComputerBuilder(name).id(id).introducedDate(introduced).discontinuedDate(discontinued)
+                .companyId(companyIdl).companyName(companyName).build();
+    }
 }

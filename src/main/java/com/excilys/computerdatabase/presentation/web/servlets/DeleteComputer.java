@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.presentation.web;
+package com.excilys.computerdatabase.presentation.web.servlets;
 
 import java.io.IOException;
 

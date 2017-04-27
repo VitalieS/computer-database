@@ -20,7 +20,7 @@ import com.excilys.computerdatabase.persistence.dao.impl.PersistenceException;
 /**
  * @author Vitalie SOVA
  */
-@Service/*("companyService")*/
+@Service("companyService")
 public class CompanyService {
 
     private org.slf4j.Logger LOG = LoggerFactory.getLogger(CompanyService.class);

@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -34,7 +35,7 @@ public class DatabaseConnectioNTest {
     @Test
     public void test() {
         try {
-            assertNotNull("failed to connect to the database", dataSource.getConnection());
+            assertNotNull("failed to connect to the database", DataSourceUtils.getConnection(dataSource));
             Statement  statement = dataSource.getConnection().createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM computer");
             ArrayList<Computer> computerList = new ArrayList<Computer>();
