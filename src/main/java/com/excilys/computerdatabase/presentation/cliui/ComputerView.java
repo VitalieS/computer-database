@@ -1,6 +1,5 @@
 package com.excilys.computerdatabase.presentation.cliui;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -19,14 +18,14 @@ import com.excilys.computerdatabase.service.ComputerService;
 @Service("computerView")
 public class ComputerView {
 
-	@Autowired
+    @Autowired
     private ComputerService computerService;
 
     /**
      *
      */
     protected void showComputersList() {
-        ArrayList<Computer> computerList = computerService.getComputerList();
+        List<Computer> computerList = computerService.getComputerList();
         System.out.println("View computer list" + computerList);
         for (Computer c : computerList) {
             System.out.println(c.toString());

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -34,7 +35,7 @@ public class ComputerDAOTest {
     @Test
     public void testGetComputerList() {
         int nb = computerDAO.getNumberOfComputers();
-        ArrayList<Computer> list = computerDAO.getComputerList();
+        List<Computer> list = computerDAO.getComputerList();
         assertEquals(nb, list.size());
     }
 

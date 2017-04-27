@@ -1,6 +1,7 @@
 package com.excilys.computerdatabase.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class ComputerService {
     /**
      * @return computerList - An ArrayList of computers
      */
-    public ArrayList<Computer> getComputerList() {
+    public List<Computer> getComputerList() {
         LOG.info("HuhService" + computerDAO.getComputerList());
         return computerDAO.getComputerList();
     }

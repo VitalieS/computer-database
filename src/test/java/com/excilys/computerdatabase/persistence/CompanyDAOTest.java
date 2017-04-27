@@ -3,7 +3,7 @@ package com.excilys.computerdatabase.persistence;
 import static org.junit.Assert.assertEquals;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.junit.Test;
@@ -33,7 +33,7 @@ public class CompanyDAOTest {
      */
     @Test
     public void testGetCompaniesList() throws SQLException, ClassNotFoundException, ConfigurationException {
-        ArrayList<Company> listCompanies = companyDAO.getCompaniesList();
+        List<Company> listCompanies = companyDAO.getCompaniesList();
         int nb = companyDAO.getNumberOfCompanies();
         assertEquals(nb, listCompanies.size());
     }
@@ -47,7 +47,7 @@ public class CompanyDAOTest {
      */
     @Test
     public void testGetCompanyById() throws SQLException, ClassNotFoundException, ConfigurationException {
-        ArrayList<Company> listAllCompany = companyDAO.getCompaniesList();
+        List<Company> listAllCompany = companyDAO.getCompaniesList();
         Company randomCompany = listAllCompany.get((int) (Math.random() * listAllCompany.size()));
         Long idToTest = randomCompany.getCompanyId();
         Company selectCompany = companyDAO.getCompanyById(idToTest);
@@ -66,7 +66,7 @@ public class CompanyDAOTest {
         int nb = companyDAO.getNumberOfCompanies();
         // We assume the number of companies will always be 42 as it can't be
         // edited, inserted or deleted
-        assertEquals(42, nb);
+        assertEquals(41, nb);
     }
 
 

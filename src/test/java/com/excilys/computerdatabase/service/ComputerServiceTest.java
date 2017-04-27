@@ -6,25 +6,30 @@ import static org.junit.Assert.assertNull;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.excilys.computerdatabase.model.Computer;
+import com.excilys.computerdatabase.persistence.dao.impl.CompanyDAO;
+import com.excilys.computerdatabase.persistence.dao.impl.ComputerDAO;
 import com.excilys.computerdatabase.persistence.dto.ComputerDTO;
 
 /**
  * @author Vitalie SOVA
  *
  */
-@ContextConfiguration({ "classpath:spring.xml" })
 public class ComputerServiceTest {
 
-    @Autowired
-    private ComputerService computerService;
+    private static ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
+    private static ComputerDAO computerDAO = (ComputerDAO) context.getBean("computerDAO");
+    private static CompanyDAO companyDAO = (CompanyDAO) context.getBean("companyDAO");
+    private static ComputerService computerService = (ComputerService) context.getBean("computerService");
+    private static CompanyService companyService = (CompanyService) context.getBean("companyService");
 
     /**
      * Test - getComputerList
@@ -32,7 +37,7 @@ public class ComputerServiceTest {
     @Test
     public void testGetComputerList() {
         int nb = computerService.getNumberOfComputers();
-        ArrayList<Computer> list = computerService.getComputerList();
+        List<Computer> list = computerService.getComputerList();
         assertEquals(nb, list.size());
     }
 

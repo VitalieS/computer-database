@@ -2,12 +2,15 @@ package com.excilys.computerdatabase.service;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.excilys.computerdatabase.model.Company;
+import com.excilys.computerdatabase.persistence.dao.impl.CompanyDAO;
+import com.excilys.computerdatabase.persistence.dao.impl.ComputerDAO;
 
 /**
  * @author Vitalie SOVA
@@ -15,15 +18,18 @@ import com.excilys.computerdatabase.model.Company;
  */
 public class CompanyServiceTest {
 
-    @Autowired
-    private CompanyService companyService;
+    private static ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
+    private static ComputerDAO computerDAO = (ComputerDAO) context.getBean("computerDAO");
+    private static CompanyDAO companyDAO = (CompanyDAO) context.getBean("companyDAO");
+    private static ComputerService computerService = (ComputerService) context.getBean("computerService");
+    private static CompanyService companyService = (CompanyService) context.getBean("companyService");
 
     /**
      * Test - getCompanyList
      */
     @Test
     public void testGetCompanyList() {
-        ArrayList<Company> listCompanies = companyService.getCompaniesList();
+        List<Company> listCompanies = companyService.getCompaniesList();
         int nb = companyService.getNumberOfCompanies();
         assertEquals(nb, listCompanies.size());
     }
@@ -33,7 +39,7 @@ public class CompanyServiceTest {
      */
     @Test
     public void testGetCompanyById() {
-        ArrayList<Company> listAllCompany = companyService.getCompaniesList();
+        List<Company> listAllCompany = companyService.getCompaniesList();
         Company randomCompany = listAllCompany.get((int) (Math.random() * listAllCompany.size()));
         Long idToTest = randomCompany.getCompanyId();
         Company selectCompany = companyService.getCompanyById(idToTest);
@@ -46,8 +52,8 @@ public class CompanyServiceTest {
     @Test
     public void testGetNumberOfCompanies() {
         int nb = companyService.getNumberOfCompanies();
-        // We assume the number of companies will always be 42 as it can't be
+        // We assume the number of companies will always be 41 as it can't be
         // edited, inserted or deleted
-        assertEquals(42, nb);
+        assertEquals(41, nb);
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.persistence.dao.impl.CompanyDAO;
 import com.excilys.computerdatabase.persistence.dao.impl.ComputerDAO;
+import com.excilys.computerdatabase.persistence.dao.impl.PersistenceException;
 
 /**
  * @author Vitalie SOVA
@@ -25,11 +26,11 @@ public class CompanyService {
     private org.slf4j.Logger LOG = LoggerFactory.getLogger(CompanyService.class);
 
     @Autowired
-  	private CompanyDAO companyDAO;
-    
+    private CompanyDAO companyDAO;
+
     @Autowired
     private ComputerDAO computerDAO;
-    
+
     @Autowired
     private DataSource dataSource;
 
@@ -78,21 +79,25 @@ public class CompanyService {
         });
         return listCompany;
     }
-    
+
     /**
      * delete a Company and all related Computers. rollback if there is any problem in the transaction
-     * 
+     *
      * @param id - id of the Company to delete
      * @throws SQLException
      */
     public void delete(long id) {
         Connection cn = DataSourceUtils.getConnection(dataSource);
         //try {
-            computerDAO.deleteByCompany(cn, id);
-            companyDAO.delete(id);
+        try {
+            computerDAO.deleteByCompany(id);
+        } catch (PersistenceException e) {
+            LOG.error("delete() catched SQLException", e);
+            e.printStackTrace();
+        }
+        companyDAO.delete(id);
         //} catch (SQLException e) {
         //    cn.rollback();
-        //    LOG.error("delete() catched SQLException", e);
         //}
     }
 }
