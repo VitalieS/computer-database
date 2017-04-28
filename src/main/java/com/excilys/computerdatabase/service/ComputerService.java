@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Page.SortingBy;
@@ -35,6 +36,7 @@ public class ComputerService {
     /**
      * @return computerList - An ArrayList of computers
      */
+    @Transactional("txManager")
     public List<Computer> getComputerList() {
         LOG.info("HuhService" + computerDAO.getComputerList());
         return computerDAO.getComputerList();
@@ -44,6 +46,7 @@ public class ComputerService {
      * @param idToSelect - The id of the selected computer
      * @return computerById - The selected computer object
      */
+    @Transactional("txManager")
     public Computer getComputerById(Long idToSelect) {
         return computerDAO.getComputerById(idToSelect);
     }
@@ -52,6 +55,7 @@ public class ComputerService {
      * @param newComputer - The new computer object
      * @return generatedKey - The generated key
      */
+    @Transactional("txManager")
     public long createComputer(ComputerDTO newComputer) {
         return computerDAO.createComputer(newComputer);
     }
@@ -60,6 +64,7 @@ public class ComputerService {
      * @param id - The id
      * @param computer - The computer
      */
+    @Transactional("txManager")
     public void updateComputer(Long id, ComputerDTO computer) {
         computerDAO.updateComputer(id, computer);
     }
@@ -67,6 +72,7 @@ public class ComputerService {
     /**
      * @param idToDelete - The id of the computer to delete
      */
+    @Transactional("txManager")
     public void deleteComputer(long idToDelete) {
         computerDAO.deleteComputer(idToDelete);
     }
@@ -76,6 +82,7 @@ public class ComputerService {
      * @param idEnd - The id of the last computer
      * @return listAllComputer - An ArrayList of all computers
      */
+    @Transactional("txManager")
     public ArrayList<ComputerDTO> getComputerInRange(long idBegin, long idEnd) {
         ArrayList<ComputerDTO> listAllComputer = new ArrayList<>();
         computerDAO.getComputerInRange(idBegin, idEnd).forEach(computer -> { listAllComputer.add(ComputerMapper.mapper(computer));
@@ -83,6 +90,7 @@ public class ComputerService {
         return listAllComputer;
     }
 
+    @Transactional("txManager")
     public ArrayList<ComputerDTO> getComputerInRangeNb(Long debut, int nbId, SortingBy sort, String search) {
         LOG.info("Trying to get the computers - Service");
         ArrayList<ComputerDTO> listAllComputer = new ArrayList<>();
@@ -95,10 +103,12 @@ public class ComputerService {
     /**
      * @return nbOfComputers - The number of computers
      */
+    @Transactional("txManager")
     public int getNumberOfComputers() {
         return computerDAO.getNumberOfComputers();
     }
 
+    @Transactional("txManager")
     public int getNumberOfPages(int elementsByPage) {
         return computerDAO.getNumberOfComputers() / elementsByPage;
     }

@@ -12,7 +12,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.persistence.dao.impl.CompanyDAO;
-import com.excilys.computerdatabase.persistence.dao.impl.ComputerDAO;
 
 /**
  * @author Vitalie SOVA
@@ -21,7 +20,6 @@ import com.excilys.computerdatabase.persistence.dao.impl.ComputerDAO;
 public class CompanyDAOTest {
 
     private static ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
-    private static ComputerDAO computerDAO = (ComputerDAO) context.getBean("computerDAO");
     private static CompanyDAO companyDAO = (CompanyDAO) context.getBean("companyDAO");
 
     /**

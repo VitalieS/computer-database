@@ -32,7 +32,10 @@
 		<spring.version>4.3.8.RELEASE</spring.version>
 		<validation.api.version>1.1.0.Final</validation.api.version> <!-- Not on lib -->
 		<hibernate.validator.version>5.4.1.Final</hibernate.validator.version> <!-- Not on lib -->
+		<hibernate.version>5.2.10.Final</hibernate.version>
 		<maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
+		<querydsl.version>3.7.4</querydsl.version>
+
 	</properties>
 
 	<dependencies>
@@ -217,6 +220,18 @@
 			<version>${spring.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
 		<!-- Validation -->
 		<dependency>
 			<groupId>javax.validation</groupId>
@@ -227,6 +242,36 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
 			<version>${hibernate.validator.version}</version>
+		</dependency>
+
+		<!-- QueryDSL -->
+		<dependency>
+			<groupId>com.mysema.querydsl</groupId>
+			<artifactId>querydsl-apt</artifactId>
+			<version>${querydsl.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.mysema.querydsl</groupId>
+			<artifactId>querydsl-jpa</artifactId>
+			<version>${querydsl.version}</version>
+		</dependency>
+
+		<!-- Hibernate -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.0-api</artifactId>
+			<version>1.0.1.Final</version>
 		</dependency>
 
 	</dependencies>

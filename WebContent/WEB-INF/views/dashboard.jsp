@@ -1,10 +1,31 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="/WEB-INF/taglib.tld" prefix="pagination"%>
+<%@ taglib prefix="springTags" uri="http://www.springframework.org/tags"%>
+
+<!-- Spring translation references -->
+<springTags:message code="computer.tab" var="tabName"></springTags:message>
+<springTags:message code="computer.title" var="title"></springTags:message>
+<springTags:message code="computer.language_en" var="languageEn"></springTags:message>
+<springTags:message code="computer.language_fr" var="languageFr"></springTags:message>
+<springTags:message code="computer.computersFound" var="computersFound"></springTags:message>
+<springTags:message code="computer.searchName" var="searchName"></springTags:message>
+<springTags:message code="computer.filterByName" var="filterByName"></springTags:message>
+<springTags:message code="computer.addComputer" var="addComputer"></springTags:message>
+<springTags:message code="computer.editComputer" var="editComputer"></springTags:message>
+<springTags:message code="computer.edit" var="edit"></springTags:message>
+<springTags:message code="computer.name" var="name"></springTags:message>
+<springTags:message code="computer.introducedDate" var="introducedDate"></springTags:message>
+<springTags:message code="computer.discontinuedDate" var="discontinuedDate"></springTags:message>
+<springTags:message code="computer.company" var="company"></springTags:message>
+<springTags:message code="computer.add" var="add"></springTags:message>
+<springTags:message code="computer.or" var="or"></springTags:message>
+<springTags:message code="computer.cancel" var="cancel"></springTags:message>
+ 
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
+<title><c:out value="${tabName}"></c:out></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
@@ -14,27 +35,37 @@
 	rel="stylesheet" media="screen">
 <link href="${pageContext.request.contextPath}/resources/css/main.css"
 	rel="stylesheet" media="screen"> 
+
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
+			<a class="navbar-brand" href="dashboard"><c:out value="${title}"></c:out></a>
 		</div>
 	</header>
 
+	<span style="float: right"> 
+		<a href="?lang=en">
+			<c:out value="${languageEn}"></c:out>
+		</a>|
+		<a href="?lang=fr">
+			<c:out value="${languageFr}"></c:out>
+		</a>
+	</span>
+	
     <section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${requestScope.nbComputer} Computers found</h1>
+			<h1 id="homeTitle">${requestScope.nbComputer} <c:out value="${computersFound}"></c:out></h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="dashboard" method="GET" class="form-inline">
-						<input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${requestScope.search}"/> 
-						<input type="submit" id="searchsubmit" value="Filter by name" class="btn btn-primary" />
+						<input type="search" id="searchbox" name="search" class="form-control" placeholder="<c:out value="${searchName}"></c:out>" value="${requestScope.search}"/> 
+						<input type="submit" id="searchsubmit" value="<c:out value="${filterByName}"></c:out>" class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="addComputer">Add Computer</a> 
-					<a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
+					<a class="btn btn-success" id="addComputer" href="addComputer"><c:out value="${addComputer}"></c:out></a> 
+					<a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><c:out value="${editComputer}"></c:out></a>
 				</div>
 			</div>
 		</div>
@@ -57,12 +88,12 @@
                                 </a>
                             </span>
                         </th>
-                        <th><a href="${pageContext.request.contextPath}/dashboard?page=${currentPage}&submit=${submit}&sort=name&search=${requestScope.search}">Computer name</a></th>
-                        <th><a href="${pageContext.request.contextPath}/dashboard?page=${currentPage}&submit=${submit}&sort=introduced&search=${requestScope.search}">Introduced date</a></th>
+                        <th><a href="${pageContext.request.contextPath}/dashboard?page=${currentPage}&submit=${submit}&sort=name&search=${requestScope.search}"><c:out value="${name}"></c:out></a></th>
+                        <th><a href="${pageContext.request.contextPath}/dashboard?page=${currentPage}&submit=${submit}&sort=introduced&search=${requestScope.search}"><c:out value="${introducedDate}"></c:out></a></th>
                         <!-- Table header for Discontinued Date -->
-                        <th><a href="${pageContext.request.contextPath}/dashboard?page=${currentPage}&submit=${submit}&sort=discontinued&search=${requestScope.search}">Discontinued date</a></th>
+                        <th><a href="${pageContext.request.contextPath}/dashboard?page=${currentPage}&submit=${submit}&sort=discontinued&search=${requestScope.search}"><c:out value="${discontinuedDate}"></c:out></a></th>
                         <!-- Table header for Company -->
-                        <th><a href="${pageContext.request.contextPath}/dashboard?page=${currentPage}&submit=${submit}&sort=companyName&search=${requestScope.search}">Company</a></th>
+                        <th><a href="${pageContext.request.contextPath}/dashboard?page=${currentPage}&submit=${submit}&sort=companyName&search=${requestScope.search}"><c:out value="${company}"></c:out></a></th>
 					   </tr>
     			</thead>
                 

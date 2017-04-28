@@ -62,12 +62,22 @@
 	</bean>
 
 	<!-- Transactions -->
-	<tx:annotation-driven transaction-manager="txManager" />
-
-	<bean id="txManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
+     <bean id="txManager"
+         class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+         <property name="dataSource" ref="dataSource" />
+     </bean>
+ 
+     <tx:advice id="txAdvice" transaction-manager="txManager">
+         <tx:attributes>
+             <tx:method name="delete" />
+         </tx:attributes>
+     </tx:advice>
+     
+     <aop:config proxy-target-class="true">
+         <aop:pointcut id="deleteMethod"
+             expression="execution(* com.excilys.computerdatabase.service.CompanyService.*(..))" />
+         <aop:advisor advice-ref="txAdvice" pointcut-ref="deleteMethod" />
+     </aop:config>
 
 	<!-- Multilingual features i18n -->
 	<!-- Register the messages.properties files -->

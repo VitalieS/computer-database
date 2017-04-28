@@ -15,8 +15,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.excilys.computerdatabase.model.Computer;
-import com.excilys.computerdatabase.persistence.dao.impl.CompanyDAO;
-import com.excilys.computerdatabase.persistence.dao.impl.ComputerDAO;
 import com.excilys.computerdatabase.persistence.dto.ComputerDTO;
 
 /**
@@ -26,10 +24,7 @@ import com.excilys.computerdatabase.persistence.dto.ComputerDTO;
 public class ComputerServiceTest {
 
     private static ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
-    private static ComputerDAO computerDAO = (ComputerDAO) context.getBean("computerDAO");
-    private static CompanyDAO companyDAO = (CompanyDAO) context.getBean("companyDAO");
     private static ComputerService computerService = (ComputerService) context.getBean("computerService");
-    private static CompanyService companyService = (CompanyService) context.getBean("companyService");
 
     /**
      * Test - getComputerList

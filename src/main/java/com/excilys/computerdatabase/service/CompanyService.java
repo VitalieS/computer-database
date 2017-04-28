@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.persistence.dao.impl.CompanyDAO;
@@ -45,9 +46,8 @@ public class CompanyService {
     /**
      * @return companyList - An ArrayList of companies
      */
+    @Transactional("txManager")
     public List<Company> getCompaniesList() {
-        //ArrayList<Company> companyList = new ArrayList<Company>();
-        //companyList = companyDAO.getCompaniesList();
         return companyDAO.getCompaniesList();
     }
 
@@ -55,6 +55,7 @@ public class CompanyService {
      * @param idToSelect - The id of the selected company
      * @return companyById - The selected company object
      */
+    @Transactional("txManager")
     public Company getCompanyById(Long idToSelect) {
         Company companyById = companyDAO.getCompanyById(idToSelect);
         return companyById;
@@ -63,6 +64,7 @@ public class CompanyService {
     /**
      * @return nbOfCompanies - The number of companies
      */
+    @Transactional("txManager")
     public int getNumberOfCompanies() {
         return companyDAO.getNumberOfCompanies();
     }
@@ -72,6 +74,7 @@ public class CompanyService {
      * @param idEnd - The id of the last company
      * @return listCompany - An ArrayList of all companies
      */
+    @Transactional("txManager")
     public ArrayList<Company> getCompanyInRange(long idBegin, long idEnd) {
         ArrayList<Company> listCompany = new ArrayList<>();
         companyDAO.getCompanyInRange(idBegin, idEnd).forEach(company -> {
@@ -86,11 +89,13 @@ public class CompanyService {
      * @param id - id of the Company to delete
      * @throws SQLException
      */
+    @Transactional("txManager")
     public void delete(long id) {
         Connection cn = DataSourceUtils.getConnection(dataSource);
         //try {
         try {
             computerDAO.deleteByCompany(id);
+            companyDAO.delete(id);
         } catch (PersistenceException e) {
             LOG.error("delete() catched SQLException", e);
             e.printStackTrace();
