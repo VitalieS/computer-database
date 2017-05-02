@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.apache.commons.configuration.ConfigurationException;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -30,7 +29,7 @@ public class CompanyDAOTest {
      * @throws ConfigurationException
      */
     @Test
-    public void testGetCompaniesList() throws SQLException, ClassNotFoundException, ConfigurationException {
+    public void testGetCompaniesList(){
         List<Company> listCompanies = companyDAO.getCompaniesList();
         int nb = companyDAO.getNumberOfCompanies();
         assertEquals(nb, listCompanies.size());
@@ -44,7 +43,7 @@ public class CompanyDAOTest {
      * @throws ConfigurationException
      */
     @Test
-    public void testGetCompanyById() throws SQLException, ClassNotFoundException, ConfigurationException {
+    public void testGetCompanyById() {
         List<Company> listAllCompany = companyDAO.getCompaniesList();
         Company randomCompany = listAllCompany.get((int) (Math.random() * listAllCompany.size()));
         Long idToTest = randomCompany.getCompanyId();
@@ -60,7 +59,7 @@ public class CompanyDAOTest {
      * @throws ConfigurationException
      */
     @Test
-    public void testGetNumberOfCompanies() throws SQLException, ClassNotFoundException, ConfigurationException {
+    public void testGetNumberOfCompanies() {
         int nb = companyDAO.getNumberOfCompanies();
         // We assume the number of companies will always be 42 as it can't be
         // edited, inserted or deleted

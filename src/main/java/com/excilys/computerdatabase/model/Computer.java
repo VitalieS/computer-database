@@ -2,16 +2,44 @@ package com.excilys.computerdatabase.model;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
 /**
  * @author Vitalie SOVA
  */
+@Entity
+@Table(name="computer")
 public class Computer {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="id")
     private Long computerId;
+
+    @Column(name="name")
     private String computerName;
+
+    @Column(name="introduced")
+    //@Type(type="org.jadira.usertype.dateandtime.threeten.PersistentLocalDate")
     private LocalDate introducedDate;
+
+    @Column(name="discontinued")
+    //@Type(type="org.jadira.usertype.dateandtime.threeten.PersistentLocalDate")
     private LocalDate discontinuedDate;
+
+    @OneToOne
+    @JoinColumn(name="company_id")
     private Company company;
+
+    public Computer() {
+    }
 
     /**
      * Gets computerId.

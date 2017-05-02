@@ -45,10 +45,10 @@
 	</header>
 
 	<span style="float: right"> 
-		<a href="?lang=en">
+		<a href="?language=en">
 			<c:out value="${languageEn}"></c:out>
 		</a>|
-		<a href="?lang=fr">
+		<a href="?language=fr">
 			<c:out value="${languageFr}"></c:out>
 		</a>
 	</span>

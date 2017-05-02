@@ -236,7 +236,8 @@ public class ComputerView {
         int pageNb = keyboardShowPage.nextInt();
 
         long idBegin = pageNb * Page.elementsByPage;
-        long idEnd = pageNb * Page.elementsByPage + Page.elementsByPage;
+        //long idEnd = pageNb * Page.elementsByPage + Page.elementsByPage;
+        long idEnd = Page.elementsByPage;
         System.out.println(idBegin);
         System.out.println(idEnd);
 

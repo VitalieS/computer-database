@@ -25,20 +25,11 @@ public class ComputerService {
     @Autowired
     private ComputerDAO computerDAO;
 
-    public ComputerDAO getComputerDAO() {
-        return computerDAO;
-    }
-
-    public void setComputerDAO(ComputerDAO computerDAO) {
-        this.computerDAO = computerDAO;
-    }
-
     /**
      * @return computerList - An ArrayList of computers
      */
-    @Transactional("txManager")
+    @Transactional(readOnly=true)
     public List<Computer> getComputerList() {
-        LOG.info("HuhService" + computerDAO.getComputerList());
         return computerDAO.getComputerList();
     }
 
@@ -46,7 +37,7 @@ public class ComputerService {
      * @param idToSelect - The id of the selected computer
      * @return computerById - The selected computer object
      */
-    @Transactional("txManager")
+    @Transactional(readOnly=true)
     public Computer getComputerById(Long idToSelect) {
         return computerDAO.getComputerById(idToSelect);
     }
@@ -55,16 +46,18 @@ public class ComputerService {
      * @param newComputer - The new computer object
      * @return generatedKey - The generated key
      */
-    @Transactional("txManager")
-    public long createComputer(ComputerDTO newComputer) {
-        return computerDAO.createComputer(newComputer);
+    @Transactional
+    public Long createComputer(ComputerDTO computer) {
+        computer.setIntroducedDate(computer.getIntroducedDate());
+        computer.setDiscontinuedDate(computer.getDiscontinuedDate());
+        return computerDAO.createComputer(computer);
     }
 
     /**
      * @param id - The id
      * @param computer - The computer
      */
-    @Transactional("txManager")
+    @Transactional
     public void updateComputer(Long id, ComputerDTO computer) {
         computerDAO.updateComputer(id, computer);
     }
@@ -72,7 +65,7 @@ public class ComputerService {
     /**
      * @param idToDelete - The id of the computer to delete
      */
-    @Transactional("txManager")
+    @Transactional
     public void deleteComputer(long idToDelete) {
         computerDAO.deleteComputer(idToDelete);
     }
@@ -82,33 +75,29 @@ public class ComputerService {
      * @param idEnd - The id of the last computer
      * @return listAllComputer - An ArrayList of all computers
      */
-    @Transactional("txManager")
+    @Transactional(readOnly = true)
     public ArrayList<ComputerDTO> getComputerInRange(long idBegin, long idEnd) {
         ArrayList<ComputerDTO> listAllComputer = new ArrayList<>();
-        computerDAO.getComputerInRange(idBegin, idEnd).forEach(computer -> { listAllComputer.add(ComputerMapper.mapper(computer));
-        });
+        computerDAO.getComputerInRange(idBegin, idEnd).forEach(computer -> { listAllComputer.add(ComputerMapper.mapper(computer)); });
         return listAllComputer;
     }
 
-    @Transactional("txManager")
+    @Transactional(readOnly = true)
     public ArrayList<ComputerDTO> getComputerInRangeNb(Long debut, int nbId, SortingBy sort, String search) {
-        LOG.info("Trying to get the computers - Service");
         ArrayList<ComputerDTO> listAllComputer = new ArrayList<>();
-        LOG.info("The list is empty" + listAllComputer);
         computerDAO.getComputerInRangeNb(debut, nbId, sort, search).forEach(computer -> { listAllComputer.add(ComputerMapper.mapper(computer)); });
-        LOG.info("The returned list is empty" + listAllComputer);
         return listAllComputer;
     };
 
     /**
      * @return nbOfComputers - The number of computers
      */
-    @Transactional("txManager")
+    @Transactional(readOnly = true)
     public int getNumberOfComputers() {
         return computerDAO.getNumberOfComputers();
     }
 
-    @Transactional("txManager")
+    @Transactional(readOnly = true)
     public int getNumberOfPages(int elementsByPage) {
         return computerDAO.getNumberOfComputers() / elementsByPage;
     }

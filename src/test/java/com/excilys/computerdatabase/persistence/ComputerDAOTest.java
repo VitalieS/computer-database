@@ -4,12 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.apache.commons.configuration.ConfigurationException;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -95,8 +92,7 @@ public class ComputerDAOTest {
      * Test - Delete a computer
      */
     @Test
-    public void testDeleteComputer()
-            throws SQLException, ClassNotFoundException, ConfigurationException {
+    public void testDeleteComputer() {
         ComputerDTO c = new ComputerDTO.ComputerBuilder("New computer delete").build();;
         int numberofComputers = computerDAO.getNumberOfComputers();
 
@@ -124,7 +120,7 @@ public class ComputerDAOTest {
 
     @Test
     public void testgetComputerInRange() {
-        ArrayList<Computer> listComputers = computerDAO.getComputerInRange(1, 10);
+        List<Computer> listComputers = computerDAO.getComputerInRange(1, 10);
         assertEquals(10, listComputers.size());
     }
 

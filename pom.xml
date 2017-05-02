@@ -18,9 +18,11 @@
 		<slf4j.version>1.7.25</slf4j.version>
 		<logback.version>1.2.1</logback.version>
 		<mysql.version>5.1.41</mysql.version>
-		<apacheCommonsConfiguration.version>2.1.1</apacheCommonsConfiguration.version>
-		<apacheCommonsConfiguration2.version>1.6</apacheCommonsConfiguration2.version>
-		<mysql-connector-java.version>5.1.41</mysql-connector-java.version>
+
+		<apacheCommonsConfiguration.version>2.0</apacheCommonsConfiguration.version>
+		<apacheCommonsBeanutils.version>1.9.3</apacheCommonsBeanutils.version>
+
+		<mysql-connector-java.version>6.0.5</mysql-connector-java.version>
 		<apacheCommonsBeanutils.version>1.9.3</apacheCommonsBeanutils.version>
 		<junit.version>4.12</junit.version>
 		<servlet.version>3.0.1</servlet.version>
@@ -29,13 +31,12 @@
 		<selenium.version>3.3.1</selenium.version>
 		<tomcat.version>9.0.0.M17</tomcat.version>
 		<hikaricp.version>2.6.1</hikaricp.version>
-		<spring.version>4.3.8.RELEASE</spring.version>
-		<validation.api.version>1.1.0.Final</validation.api.version> <!-- Not on lib -->
-		<hibernate.validator.version>5.4.1.Final</hibernate.validator.version> <!-- Not on lib -->
-		<hibernate.version>5.2.10.Final</hibernate.version>
+		<spring.version>4.3.7.RELEASE</spring.version>
+		<validation.api.version>1.1.0.Final</validation.api.version>
+		<hibernate.version>5.1.3.Final</hibernate.version>
 		<maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
 		<querydsl.version>3.7.4</querydsl.version>
-
+		<version.plugin.tomcat>2.2</version.plugin.tomcat>
 	</properties>
 
 	<dependencies>
@@ -44,20 +45,6 @@
 			<groupId>org.apache.taglibs</groupId>
 			<artifactId>taglibs-standard-impl</artifactId>
 			<version>${taglibs.version}</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/commons-collections/commons-collections -->
-		<dependency>
-			<groupId>commons-collections</groupId>
-			<artifactId>commons-collections</artifactId>
-			<version>${commons-collections.version}</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/commons-lang/commons-lang -->
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>${commons-lang.version}</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-configuration2 -->
@@ -73,20 +60,6 @@
 			<version>${apacheCommonsBeanutils.version}</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
-		<dependency>
-			<groupId>commons-fileupload</groupId>
-			<artifactId>commons-fileupload</artifactId>
-			<version>1.3.2</version>
-		</dependency>
-
-
-		<!-- https://mvnrepository.com/artifact/commons-configuration/commons-configuration -->
-		<dependency>
-			<groupId>commons-configuration</groupId>
-			<artifactId>commons-configuration</artifactId>
-			<version>${apacheCommonsConfiguration2.version}</version>
-		</dependency>
 
 		<!-- http://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 		<dependency>
@@ -174,61 +147,78 @@
 			<version>${hikaricp.version}</version>
 		</dependency>
 
-		<!-- Spring and Transactions -->
+		<!-- Spring -->
+		<!-- Security -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>4.2.2.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>4.2.2.RELEASE</version>
+		</dependency>
+		<!-- Core -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!-- Context -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>${spring.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
-
+		<!-- Beans -->
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-tx</artifactId>
+			<artifactId>spring-beans</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-
-		<!-- Spring JDBC Support -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.springframework/spring-test -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${spring.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-
+		<!-- AOP -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-
+		<!-- Web -->
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-aspects</artifactId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!-- Web MVC -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!-- ORM -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<!-- Transactions -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!-- Jdbc (used for JdbcTemplate) -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!-- Test -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
 
@@ -237,11 +227,6 @@
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
 			<version>${validation.api.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>${hibernate.validator.version}</version>
 		</dependency>
 
 		<!-- QueryDSL -->
@@ -257,21 +242,24 @@
 			<version>${querydsl.version}</version>
 		</dependency>
 
-		<!-- Hibernate -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
-		<dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-java8 -->
+	<!--<dependency>
 			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
+			<artifactId>hibernate-java8</artifactId>
 			<version>${hibernate.version}</version>
-		</dependency>
+		</dependency> -->
+
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-orm -->
 		<dependency>
-			<groupId>org.hibernate.javax.persistence</groupId>
-			<artifactId>hibernate-jpa-2.0-api</artifactId>
-			<version>1.0.1.Final</version>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>4.3.8.RELEASE</version>
 		</dependency>
 
 	</dependencies>
@@ -302,9 +290,41 @@
 					<failsOnError>false</failsOnError>
 					<linkXRef>false</linkXRef>
 				</configuration>
+			</plugin>
 
+			<plugin>
+				<groupId>com.mysema.maven</groupId>
+				<artifactId>apt-maven-plugin</artifactId>
+				<version>1.1.3</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>process</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/generated-sources/java</outputDirectory>
+							<processor>com.mysema.query.apt.jpa.JPAAnnotationProcessor</processor>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Tomcat plugin To redeploy : mvn tomcat7:redeploy ( -Dmaven.test.skip=true) -->
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>${version.plugin.tomcat}</version>
+				<configuration>
+					<url>http://localhost:8080/manager/text</url>
+					<server>tomcatserver</server>
+					<path>/computerdatabase</path>
+					<username>admin</username>
+					<password>admin</password>
+				</configuration>
 			</plugin>
 		</plugins>
+
+
 	</build>
 
 	<reporting>

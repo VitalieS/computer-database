@@ -50,8 +50,6 @@ public class DashboardController extends HttpServlet {
     }
 
     private ModelAndView getDashboard(Long submit, String page, String search, String sort) {
-        System.out.println(submit + " " + page + " " + search  + " " + sort);
-
         int number = 10;
         if (submit != null) {
             number = submit.intValue();

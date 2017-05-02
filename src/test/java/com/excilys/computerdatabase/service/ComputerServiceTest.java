@@ -4,12 +4,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.apache.commons.configuration.ConfigurationException;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -117,7 +115,7 @@ public class ComputerServiceTest {
     }
 
     @Test
-    public void testGetComputerInRange() throws SQLException, ConfigurationException {
+    public void testGetComputerInRange() {
         ArrayList<ComputerDTO> listComputers = computerService.getComputerInRange(1, 10);
         assertEquals(10, listComputers.size());
     }

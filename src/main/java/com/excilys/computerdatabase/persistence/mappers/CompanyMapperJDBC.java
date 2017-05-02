@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.persistence.dao.impl;
+package com.excilys.computerdatabase.persistence.mappers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
