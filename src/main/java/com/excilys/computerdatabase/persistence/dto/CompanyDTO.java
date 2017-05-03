@@ -1,5 +1,7 @@
 package com.excilys.computerdatabase.persistence.dto;
 
+import javax.validation.constraints.Size;
+
 /**
  * This class is the object version of a Company from the Database.
  *
@@ -8,6 +10,8 @@ package com.excilys.computerdatabase.persistence.dto;
 public class CompanyDTO {
 
     private Long companyId;
+
+    @Size(min=0, max=100)
     private String companyName;
 
     /**

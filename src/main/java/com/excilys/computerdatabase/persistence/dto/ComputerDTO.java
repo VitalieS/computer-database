@@ -1,5 +1,9 @@
 package com.excilys.computerdatabase.persistence.dto;
 
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * This class is the object version of a Computer from the Database.
  *
@@ -8,10 +12,18 @@ package com.excilys.computerdatabase.persistence.dto;
 public class ComputerDTO {
 
     private Long computerId;
+
+    @NotBlank
+    @Size(min=0, max=100)
     private String computerName;
+
     private String introducedDate;
+
     private String discontinuedDate;
+
     private Long companyId;
+
+    @Size(min=0, max=100)
     private String companyName;
 
     /**

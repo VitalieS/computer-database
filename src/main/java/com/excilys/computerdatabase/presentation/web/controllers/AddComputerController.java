@@ -39,7 +39,7 @@ public class AddComputerController extends HttpServlet {
     @Autowired
     public CompanyService companyService;
 
-    @RequestMapping(path = "/addComputer", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     private ModelAndView getAddController() {
         LOG.info("Entering AddServlet - GET");
         return getAdd();

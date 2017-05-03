@@ -7,6 +7,8 @@
 	<session-factory>
 		<mapping class="com.excilys.computerdatabase.model.Company" />
 		<mapping class="com.excilys.computerdatabase.model.Computer" />
+		<mapping class="com.excilys.computerdatabase.persistence.dto.CompanyDTO" />
+		<mapping class="com.excilys.computerdatabase.persistence.dto.ComputerDTO" />
 		<!-- <mapping class="com.excilys.computerdatabase.model.User" /> -->
 	</session-factory>
 </hibernate-configuration>
