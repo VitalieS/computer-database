@@ -2,8 +2,6 @@ package com.excilys.computerdatabase.persistence.dao.impl;
 
 import java.util.List;
 
-import javax.sql.DataSource;
-
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +23,6 @@ import com.mysema.query.jpa.hibernate.HibernateQuery;
  */
 @Repository
 public class ComputerDAO {
-
-    @Autowired
-    private DataSource dataSource;
 
     @Autowired
     private SessionFactory sessionFactory;

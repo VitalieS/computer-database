@@ -2,8 +2,6 @@ package com.excilys.computerdatabase.persistence.dao.impl;
 
 import java.util.List;
 
-import javax.sql.DataSource;
-
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +23,6 @@ import com.mysema.query.jpa.hibernate.HibernateQuery;
 public class CompanyDAO {
 
     @Autowired
-    private DataSource dataSource;
-
-    @Autowired
     private SessionFactory sessionFactory;
 
     @Autowired
@@ -35,27 +30,7 @@ public class CompanyDAO {
         this.sessionFactory = sessionFactory;
     }
 
-    //private JdbcTemplate jdbcTemplate;
-
-    // private final static CompanyDAO COMPANY_DAO_INSTANCE;
     private final static Logger LOG = LoggerFactory.getLogger(CompanyDAO.class);
-
-    // TODO Implement company creation
-    // private final static String SQL_CREATE = "INSERT INTO company (name) VALUES ('?')";
-    private final static String SQL_GET_NUMBER_COMPANIES = "SELECT COUNT(*) FROM company";
-
-    /* static {
-        COMPANY_DAO_INSTANCE = new CompanyDAO();
-        LOG = LoggerFactory.getLogger(CompanyDAO.class);
-    }
-
-    public static CompanyDAO getInstance() {
-        return COMPANY_DAO_INSTANCE;
-    }
-
-    public void setDataSource(DataSource ds) {
-        this.dataSource = ds;
-    }*/
 
     /**
      * @return companyList - The list of companies
@@ -95,8 +70,7 @@ public class CompanyDAO {
         QComputer qComputer = QComputer.computer;
         QCompany qCompany = QCompany.company;
         JPQLQuery query = new HibernateQuery(sessionFactory.getCurrentSession());
-        //return query.from(qComputer).leftJoin(qComputer.company, qCompany).limit(idEnd).offset(idBegin).list(qComputer);
-        return query.from(qCompany)/*.leftJoin(qComputer.company, qCompany)*/.limit(idEnd).offset(idBegin).list(qCompany);
+        return query.from(qCompany).leftJoin(qComputer.company, qCompany).limit(idEnd).offset(idBegin).list(qCompany);
     }
 
     /**
