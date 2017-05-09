@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Page;
 import com.excilys.computerdatabase.persistence.dto.ComputerDTO;
+import com.excilys.computerdatabase.persistence.mappers.ObjectMappers;
 import com.excilys.computerdatabase.service.ComputerService;
 
 /**
@@ -89,8 +90,8 @@ public class ComputerView {
         }
 
         System.out.println(c.toString());
-
-        Long key = computerService.createComputer(c);
+        Computer coo = ObjectMappers.mapper(c);
+        Long key = computerService.createComputer(coo);
         Computer addedCompany = computerService.getComputerById(key);
         System.out.println(addedCompany.toString());
 
@@ -158,7 +159,7 @@ public class ComputerView {
         }
 
         System.out.println(c1.toString());
-        computerService.updateComputer(Long.valueOf(numberID), c1);
+        computerService.updateComputer(ObjectMappers.mapper(c1));
         System.out.println(computerService.getComputerById(Long.valueOf(numberID)).toString());
 
         //keyboardID.close();

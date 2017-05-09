@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.persistence.dto.ComputerDTO;
-import com.excilys.computerdatabase.persistence.mappers.ComputerMapper;
+import com.excilys.computerdatabase.persistence.mappers.ObjectMappers;
 import com.excilys.computerdatabase.persistence.mappers.ServletMapper;
 import com.excilys.computerdatabase.service.CompanyService;
 import com.excilys.computerdatabase.service.ComputerService;
@@ -61,14 +61,14 @@ public class EditComputerController extends HttpServlet {
             mav.addObject("exception", errors.toString());
             getEdit(computerId);
         } else {
-            computerService.updateComputer(computer.getComputerId(), computer);
+            computerService.updateComputer(ObjectMappers.mapper(computer));
             mav = new ModelAndView("redirect:dashboard");
         }
         return mav;
     }
 
     public ModelAndView getEdit(String computerId) {
-        ComputerDTO computerToEdit = ComputerMapper.mapper(computerService.getComputerById(Long.valueOf(computerId)));
+        ComputerDTO computerToEdit = ObjectMappers.mapper(computerService.getComputerById(Long.valueOf(computerId)));
         List<Company> companyList = companyService.getCompaniesList();
         Company companyOfTheEditedComputer = companyService.getCompanyById(computerToEdit.getCompanyId());
 
@@ -79,7 +79,4 @@ public class EditComputerController extends HttpServlet {
         mav.setViewName("editComputer");
         return mav;
     }
-
-
-
 }

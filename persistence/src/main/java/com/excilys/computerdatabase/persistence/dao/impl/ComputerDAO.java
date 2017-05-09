@@ -59,7 +59,7 @@ public class ComputerDAO {
      * @param c - The computer object to create
      * @return
      */
-    public Long createComputer(ComputerDTO computer) {
+    public Long createComputer(Computer computer) {
         sessionFactory.getCurrentSession().save(computer);
         LOG.info("The generated key is" + computer.getComputerId());
         return computer.getComputerId();
@@ -69,7 +69,7 @@ public class ComputerDAO {
      * @param id - The id of the computer to update
      * @param c - The computer object to update with
      */
-    public void updateComputer(Long id, ComputerDTO computer) {
+    public void updateComputer(Computer computer) {
         sessionFactory.getCurrentSession().update(computer);
     }
 

@@ -1,9 +1,15 @@
 package com.excilys.computerdatabase.persistence.mappers;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Computer;
+import com.excilys.computerdatabase.persistence.dto.CompanyDTO;
 import com.excilys.computerdatabase.persistence.dto.ComputerDTO;
 
-public class ComputerMapper {
+public class ObjectMappers {
 
     public static ComputerDTO mapper(Computer c) {
         Long computerId = (c.getComputerId() == null ? null : c.getComputerId());
@@ -16,8 +22,8 @@ public class ComputerMapper {
         return c_dto;
     }
 
-    /*
-    public Computer mapper(ComputerDTO c_dto) {
+    
+    public static Computer mapper(ComputerDTO c_dto) {
         Long computerId = (c_dto.getComputerId() == null ? null : c_dto.getComputerId());
         String computerName = c_dto.getComputerName();
         LocalDate introducedDate = (c_dto.getIntroducedDate() == null ? null : LocalDate.parse(c_dto.getIntroducedDate()));
@@ -27,5 +33,25 @@ public class ComputerMapper {
         Company company = new Company.CompanyBuilder().id(companyId).name(companyName).build();
         Computer c = new Computer.ComputerBuilder(computerName).id(computerId).introducedDate(introducedDate).discontinuedDate(discontinuedDate).company(company).build();
         return c;
-    }*/
+    }
+
+    public static List<ComputerDTO> mapperComputers(List<Computer> computers) {
+        List<ComputerDTO> computersEdit = new ArrayList<>();
+        for (Computer c : computers) {
+            computersEdit.add(mapper(c));
+        }
+        return computersEdit;
+    }
+
+    public static CompanyDTO mapper(Company c) {
+        return new CompanyDTO.CompanyBuilder().id(c.getCompanyId()).name(c.getCompanyName()).build();
+    }
+
+    public static List<CompanyDTO> mapperCompanies(List<Company> companies) {
+        List<CompanyDTO> companiesDTO = new ArrayList<>();
+        for (Company c : companies) {
+            companiesDTO.add(mapper(c));
+        }
+        return companiesDTO;
+    }
 }

@@ -1,7 +1,7 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="/WEB-INF/taglib.tld" prefix="pagination"%>
-<!-- <%@ taglib prefix="springTags" uri="http://www.springframework.org/tags"%> -->
+<%@ taglib prefix="springTags" uri="http://www.springframework.org/tags"%> 
 
 <!-- Spring translation references -->
 <springTags:message code="computer.tab" var="tabName"></springTags:message>

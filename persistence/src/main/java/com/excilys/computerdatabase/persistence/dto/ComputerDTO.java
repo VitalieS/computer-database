@@ -1,8 +1,10 @@
 package com.excilys.computerdatabase.persistence.dto;
 
+import javax.persistence.Entity;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.stereotype.Component;
 
 /**
  * This class is the object version of a Computer from the Database.
@@ -13,8 +15,6 @@ public class ComputerDTO {
 
     private Long computerId;
 
-    @NotBlank
-    @Size(min=0, max=100)
     private String computerName;
 
     private String introducedDate;
@@ -23,7 +23,6 @@ public class ComputerDTO {
 
     private Long companyId;
 
-    @Size(min=0, max=100)
     private String companyName;
 
     /**

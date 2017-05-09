@@ -12,12 +12,12 @@ import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Page.SortingBy;
 import com.excilys.computerdatabase.persistence.dao.impl.ComputerDAO;
 import com.excilys.computerdatabase.persistence.dto.ComputerDTO;
-import com.excilys.computerdatabase.persistence.mappers.ComputerMapper;
+import com.excilys.computerdatabase.persistence.mappers.ObjectMappers;
 
 /**
  * @author Vitalie SOVA
  */
-@Service("computerService")
+@Service
 public class ComputerService {
 
     private org.slf4j.Logger LOG = LoggerFactory.getLogger(ComputerService.class);
@@ -47,7 +47,7 @@ public class ComputerService {
      * @return generatedKey - The generated key
      */
     @Transactional
-    public Long createComputer(ComputerDTO computer) {
+    public Long createComputer(Computer computer) {
         computer.setIntroducedDate(computer.getIntroducedDate());
         computer.setDiscontinuedDate(computer.getDiscontinuedDate());
         return computerDAO.createComputer(computer);
@@ -58,8 +58,8 @@ public class ComputerService {
      * @param computer - The computer
      */
     @Transactional
-    public void updateComputer(Long id, ComputerDTO computer) {
-        computerDAO.updateComputer(id, computer);
+    public void updateComputer(Computer computer) {
+        computerDAO.updateComputer(computer);
     }
 
     /**
@@ -78,14 +78,14 @@ public class ComputerService {
     @Transactional(readOnly = true)
     public ArrayList<ComputerDTO> getComputerInRange(long idBegin, long idEnd) {
         ArrayList<ComputerDTO> listAllComputer = new ArrayList<>();
-        computerDAO.getComputerInRange(idBegin, idEnd).forEach(computer -> { listAllComputer.add(ComputerMapper.mapper(computer)); });
+        computerDAO.getComputerInRange(idBegin, idEnd).forEach(computer -> { listAllComputer.add(ObjectMappers.mapper(computer)); });
         return listAllComputer;
     }
 
     @Transactional(readOnly = true)
     public ArrayList<ComputerDTO> getComputerInRangeNb(Long debut, int nbId, SortingBy sort, String search) {
         ArrayList<ComputerDTO> listAllComputer = new ArrayList<>();
-        computerDAO.getComputerInRangeNb(debut, nbId, sort, search).forEach(computer -> { listAllComputer.add(ComputerMapper.mapper(computer)); });
+        computerDAO.getComputerInRangeNb(debut, nbId, sort, search).forEach(computer -> { listAllComputer.add(ObjectMappers.mapper(computer)); });
         return listAllComputer;
     };
 

@@ -1,15 +1,11 @@
 package com.excilys.computerdatabase.service;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sql.DataSource;
-
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +17,7 @@ import com.excilys.computerdatabase.persistence.dao.impl.ComputerDAO;
 /**
  * @author Vitalie SOVA
  */
-@Service("companyService")
+@Service
 public class CompanyService {
 
     private org.slf4j.Logger LOG = LoggerFactory.getLogger(CompanyService.class);

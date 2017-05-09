@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.persistence.dto.ComputerDTO;
+import com.excilys.computerdatabase.persistence.mappers.ObjectMappers;
 import com.excilys.computerdatabase.persistence.mappers.ServletMapper;
 import com.excilys.computerdatabase.service.CompanyService;
 import com.excilys.computerdatabase.service.ComputerService;
@@ -60,7 +61,7 @@ public class AddComputerController extends HttpServlet {
             mav.addObject("exception", errors.toString());
             getAddController();
         } else {
-            computerService.createComputer(computer);
+            computerService.createComputer(ObjectMappers.mapper(computer));
             mav = new ModelAndView("redirect:dashboard");
         }
         return mav;

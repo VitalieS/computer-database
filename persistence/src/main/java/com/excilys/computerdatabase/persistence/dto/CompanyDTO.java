@@ -1,6 +1,9 @@
 package com.excilys.computerdatabase.persistence.dto;
 
+import javax.persistence.Entity;
 import javax.validation.constraints.Size;
+
+import org.springframework.stereotype.Component;
 
 /**
  * This class is the object version of a Company from the Database.
@@ -11,7 +14,6 @@ public class CompanyDTO {
 
     private Long companyId;
 
-    @Size(min=0, max=100)
     private String companyName;
 
     /**
